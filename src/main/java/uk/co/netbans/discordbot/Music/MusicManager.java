@@ -114,9 +114,9 @@ public class MusicManager extends ListenerAdapter {
                 } else if (playlist.isSearchResult()) {
                     trackLoaded(playlist.getTracks().get(0));
                 } else {
-                    sendEmbed(channel, String.format(QUEUE_TITLE, Util.userDiscrimSet(author.getUser()), Math.min(playlist.getTracks().size(), 200), "s"),
+                    sendEmbed(channel, String.format(QUEUE_TITLE, Util.userDiscrimSet(author.getUser()), Math.min(playlist.getTracks().size(), 1000), "s"),
                             String.format(QUEUE_DESCRIPTION, DVD, getOrNull(playlist.getName()), "", "", "", ""));
-                    for (int i = 0; i < Math.min(playlist.getTracks().size(), 200); i++) {
+                    for (int i = 0; i < Math.min(playlist.getTracks().size(), 1000); i++) {
                         getTrackManager(guild).queue(playlist.getTracks().get(i), author);
                     }
                 }

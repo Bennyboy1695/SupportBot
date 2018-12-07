@@ -18,7 +18,8 @@ public class CommandListener extends ListenerAdapter {
                 new Current(),
                 new Shuffle(),
                 new Reset(),
-                new Volume()
+                new Volume(),
+                new Proximity()
         );
     }
 
