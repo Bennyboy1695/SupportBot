@@ -1,5 +1,6 @@
 package uk.co.netbans.discordbot;
 
+import com.fasterxml.jackson.core.JsonParser;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -25,6 +26,7 @@ public class NetBansBot {
 
     private Path directory;
     private JSONObject conf;
+    private JSONObject perms;
 
     public NetBansBot(Path directory) throws Exception {
         this.directory = directory;
@@ -34,6 +36,13 @@ public class NetBansBot {
             initConfig();
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize config!", e);
+        }
+
+        System.out.println("Initializing Perms!");
+        try {
+            initPerms();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to initialize perms!", e);
         }
 
         if (conf.get("token") == "add_me") {
@@ -91,6 +100,30 @@ public class NetBansBot {
             JSONParser parser = new JSONParser();
             this.conf = (JSONObject) parser.parse(reader);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void initPerms() throws Exception {
+        Path perms = directory.resolve("perms.json");
+        if (!Files.exists(perms)) {
+            Files.createFile(perms);
+
+            JSONObject jo = new JSONObject();
+
+            try (BufferedWriter writer = Files.newBufferedWriter(perms)) {
+                writer.write(jo.toJSONString());
+                writer.flush();
+            }
+        }
+
+        try (BufferedReader reader = Files.newBufferedReader(perms)) {
+            JSONParser parser = new JSONParser();
+            this.perms = (JSONObject) parser.parse(reader);
+        }
+    }
+
+    public JSONObject getPerms() {
+        return perms;
     }
 
     // potentially un necessary.
