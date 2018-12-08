@@ -13,7 +13,11 @@ public class Volume implements Command {
             return CommandResult.INVALIDARGS;
         try {
             int vol = Integer.valueOf(args[0]);
-            bot.getMusicManager().setVolume(channel.getGuild(), channel, vol);
+            if (vol > 100) {
+            channel.sendMessage("\uD83D\uDEAB" + " Max Volume is 100!").complete();
+            } else {
+                bot.getMusicManager().setVolume(channel.getGuild(), channel, vol);
+            }
             return CommandResult.SUCCESS;
         } catch (NumberFormatException e) {
             return CommandResult.INVALIDARGS;

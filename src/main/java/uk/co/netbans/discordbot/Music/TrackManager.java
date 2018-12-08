@@ -54,7 +54,7 @@ public class TrackManager extends AudioEventAdapter {
         List<TrackInfo> tQueue = new ArrayList<>(getQueuedTracks());
         TrackInfo current = tQueue.get(0);
         tQueue.remove(0);
-        Collections.shuffle(tQueue);
+        if (!queue.isEmpty()) Collections.shuffle(tQueue);
         tQueue.add(0, current);
         purgeQueue();
         queue.addAll(tQueue);
