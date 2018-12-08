@@ -7,15 +7,21 @@ import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 
+import java.time.Instant;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Messenger {
     private final ScheduledExecutorService executor;
+    private EmbedBuilder commonEmbed;
 
     public Messenger() {
         this.executor = Executors.newScheduledThreadPool(2);
+    }
+
+    public EmbedBuilder getCommonEmbed() {
+        return commonEmbed.setTimestamp(Instant.now());
     }
 
     public void sendMessage(TextChannel channel, String message) {
