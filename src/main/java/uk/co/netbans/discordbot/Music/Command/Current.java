@@ -1,11 +1,10 @@
-package uk.co.netbans.discordbot.Command.MusicCommands;
+package uk.co.netbans.discordbot.Music.Command;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import uk.co.netbans.discordbot.Command.Command;
-import uk.co.netbans.discordbot.Command.CommandResult;
+import uk.co.netbans.discordbot.Support.Command.Command;
+import uk.co.netbans.discordbot.Support.Command.CommandResult;
 import uk.co.netbans.discordbot.Music.MusicManager;
 import uk.co.netbans.discordbot.NetBansBot;
 import uk.co.netbans.discordbot.Util;

@@ -1,4 +1,4 @@
-package uk.co.netbans.discordbot.Command;
+package uk.co.netbans.discordbot.Support.Command;
 
 public enum CommandResult {
     SUCCESS(),

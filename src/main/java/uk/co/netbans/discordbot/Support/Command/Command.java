@@ -1,4 +1,4 @@
-package uk.co.netbans.discordbot.Command;
+package uk.co.netbans.discordbot.Support.Command;
 
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;

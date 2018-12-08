@@ -1,39 +1,42 @@
-package uk.co.netbans.discordbot.Command.MusicCommands;
+package uk.co.netbans.discordbot.Music.Command;
 
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import uk.co.netbans.discordbot.Command.Command;
-import uk.co.netbans.discordbot.Command.CommandResult;
+import uk.co.netbans.discordbot.Support.Command.Command;
+import uk.co.netbans.discordbot.Support.Command.CommandResult;
 import uk.co.netbans.discordbot.Music.MusicManager;
 import uk.co.netbans.discordbot.NetBansBot;
 
-public class Proximity implements Command {
+public class Shuffle implements Command {
     @Override
     public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
         MusicManager music = bot.getMusicManager();
-        music.loadTrack("https://www.youtube.com/playlist?list=PLZb6kNIh9TrHokGyJZrvJEhMpO78UMiQM", sender, channel);
+
+        if (music.isIdle(channel.getGuild()))
+            return CommandResult.SUCCESS;
+
         music.getTrackManager(channel.getGuild()).shuffleQueue();
+        bot.getMessenger().sendMessage(channel, "\u2705 Shuffled the queue!", 10);
         return CommandResult.SUCCESS;
     }
 
     @Override
     public String name() {
-        return "proximity";
+        return "shuffle";
     }
 
     @Override
     public String desc() {
-        return "Add the proximity playlist and shuffle the queue.";
+        return "Shuffle the current play queue.";
     }
 
     @Override
     public String usage() {
-        return "!proximity";
+        return "!shuffle";
     }
 
     @Override
     public String[] aliases() {
-        return new String[]{"pp"};
+        return new String[0];
     }
 }

@@ -1,18 +1,16 @@
 package uk.co.netbans.discordbot;
 
-import com.fasterxml.jackson.core.JsonParser;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.hooks.InterfacedEventManager;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import uk.co.netbans.discordbot.Message.Messenger;
-import uk.co.netbans.discordbot.Command.CommandListener;
+import uk.co.netbans.discordbot.Support.Command.CommandListener;
 import uk.co.netbans.discordbot.Music.MusicManager;
-import uk.co.netbans.discordbot.New_Command.CommandParser;
+import uk.co.netbans.discordbot.Support.Listeners.PrivateMessageListener;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -65,8 +63,7 @@ public class NetBansBot {
         System.out.println("Registering Commands...");
         // old
         this.jda.addEventListener(new CommandListener(this));
-        // new
-        this.jda.addEventListener(new CommandParser(this));
+        this.jda.addEventListener(new PrivateMessageListener());
 
         System.out.println("Loading Music Manager...");
         this.music = new MusicManager();

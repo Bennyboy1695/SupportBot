@@ -1,32 +1,31 @@
-package uk.co.netbans.discordbot.Command.SupportCommands;
+package uk.co.netbans.discordbot.Support.Command.Admin;
 
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import uk.co.netbans.discordbot.Command.Command;
-import uk.co.netbans.discordbot.Command.CommandResult;
+import uk.co.netbans.discordbot.Support.Command.Command;
+import uk.co.netbans.discordbot.Support.Command.CommandResult;
 import uk.co.netbans.discordbot.NetBansBot;
 
-public class Ticket implements Command {
+public class Perm implements Command {
 
     @Override
     public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
-        return CommandResult.SUCCESS;
+        return null;
     }
 
     @Override
     public String name() {
-        return "ticket";
+        return null;
     }
 
     @Override
     public String desc() {
-        return "Provides you with information on how to create a ticket!";
+        return null;
     }
 
     @Override
     public String usage() {
-        return "!ticket";
+        return null;
     }
 
     @Override

@@ -1,9 +1,10 @@
-package uk.co.netbans.discordbot.Command;
+package uk.co.netbans.discordbot.Support.Command;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import uk.co.netbans.discordbot.NetBansBot;
-import uk.co.netbans.discordbot.Command.MusicCommands.*;
+import uk.co.netbans.discordbot.Music.Command.*;
+import uk.co.netbans.discordbot.Support.Command.Support.Ticket;
 
 public class CommandListener extends ListenerAdapter {
     private CommandRouter main;
@@ -19,7 +20,8 @@ public class CommandListener extends ListenerAdapter {
                 new Shuffle(),
                 new Reset(),
                 new Volume(),
-                new Proximity()
+                new Proximity(),
+                new Ticket()
         );
     }
 

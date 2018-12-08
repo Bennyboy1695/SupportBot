@@ -2,10 +2,7 @@ package uk.co.netbans.discordbot.Message;
 
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageEmbed;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.*;
 
 import java.time.Instant;
 import java.util.concurrent.Executors;
@@ -21,37 +18,46 @@ public class Messenger {
     }
 
     public EmbedBuilder getCommonEmbed() {
-        return commonEmbed.setTimestamp(Instant.now());
+        commonEmbed = new EmbedBuilder().setTimestamp(Instant.now());
+        return commonEmbed;
     }
 
-    public void sendMessage(TextChannel channel, String message) {
-        this.sendMessage(channel, new MessageBuilder().append(message).build(), 0);
+    public Message sendMessage(TextChannel channel, String message) {
+        return this.sendMessage(channel, new MessageBuilder().append(message).build(), 0);
     }
 
-    public void sendMessage(TextChannel channel, String message, int lifetime) {
-        this.sendMessage(channel, new MessageBuilder().append(message).build(), lifetime);
+    public Message sendMessage(TextChannel channel, String message, int lifetime) {
+        return this.sendMessage(channel, new MessageBuilder().append(message).build(), lifetime);
     }
 
-    public void sendEmbed(TextChannel channel, MessageEmbed embed) {
-        this.sendMessage(channel, new MessageBuilder().setEmbed(embed).build(), 0);
+    public Message sendEmbed(TextChannel channel, MessageEmbed embed) {
+        return this.sendMessage(channel, new MessageBuilder().setEmbed(embed).build(), 0);
     }
 
-    public void sendEmbed(TextChannel channel, MessageEmbed embed, int lifetime) {
-        this.sendMessage(channel, new MessageBuilder().setEmbed(embed).build(), lifetime);
+    public Message sendEmbed(TextChannel channel, MessageEmbed embed, int lifetime) {
+       return this.sendMessage(channel, new MessageBuilder().setEmbed(embed).build(), lifetime);
     }
 
-    public void sendMessage(TextChannel channel, Message message, int lifetime) {
+    public Message sendMessage(TextChannel channel, Message message, int lifetime) {
         final Message completedMessage = channel.sendMessage(message).complete();
 
         if (lifetime != 0)
             this.executor.schedule(() -> message.delete().reason("netbans_message_autoremoval").complete(), lifetime, TimeUnit.SECONDS);
+        return completedMessage;
     }
 
-    public void sendPrivateMessage(User user, MessageEmbed embed) {
-        user.openPrivateChannel().queue( (channel) -> channel.sendMessage(embed).complete() );
+    public Message sendPrivateMessage(User user, MessageEmbed embed) {
+        PrivateChannel channel = user.openPrivateChannel().complete();
+        return channel.sendMessage(new MessageBuilder().setEmbed(embed).build()).complete();
     }
 
-    public void sendPrivateMessage(User user, Message message) {
-        user.openPrivateChannel().queue( (channel) -> channel.sendMessage(message).complete() );
+    public Message sendPrivateMessage(User user, Message message) {
+        PrivateChannel channel = user.openPrivateChannel().complete();
+        return channel.sendMessage(message).complete();
+    }
+
+    public Message sendPrivateMessage(User user, String message) {
+        PrivateChannel channel = user.openPrivateChannel().complete();
+        return channel.sendMessage(new MessageBuilder().append(message).build()).complete();
     }
 }
