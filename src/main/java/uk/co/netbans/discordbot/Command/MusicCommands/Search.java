@@ -3,17 +3,17 @@ package uk.co.netbans.discordbot.Command.MusicCommands;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
 import uk.co.netbans.discordbot.Command.Command;
-import uk.co.netbans.discordbot.Command.CommandCode;
+import uk.co.netbans.discordbot.Command.CommandResult;
 import uk.co.netbans.discordbot.NetBansBot;
 
 public class Search implements Command {
     @Override
-    public CommandCode onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
+    public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
         if (args.length == 0)
-            return CommandCode.INVALIDARGS;
+            return CommandResult.INVALIDARGS;
         String input = "ytsearch: " + String.join(" ", args);
         bot.getMusicManager().loadTrack(input, sender, channel);
-        return CommandCode.OK;
+        return CommandResult.SUCCESS;
     }
 
     @Override

@@ -24,10 +24,10 @@ public class CommandRouter {
         this.aliases = aliases;
     }
 
-    public CommandCode onCommand(Member sender, TextChannel channel, String[] args) {
+    public CommandResult onCommand(Member sender, TextChannel channel, String[] args) {
         if (args.length == 0) {
             Util.sendMessage(channel, "You have not entered a valid command!"); //todo send help
-            return CommandCode.INVALIDARGS;
+            return CommandResult.INVALIDARGS;
         }
 
         Command command = getCommand(args[0]);
@@ -45,7 +45,7 @@ public class CommandRouter {
         }
 
         Util.sendMessage(channel, "You have not entered a valid command!"); //todo send help
-        return CommandCode.INVALIDARGS;
+        return CommandResult.INVALIDARGS;
     }
 
     private Command getCommand(String name) {

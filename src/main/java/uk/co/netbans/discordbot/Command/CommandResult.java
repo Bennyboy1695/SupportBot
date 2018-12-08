@@ -1,7 +1,7 @@
 package uk.co.netbans.discordbot.Command;
 
-public enum CommandCode {
-    OK(),
+public enum CommandResult {
+    SUCCESS(),
     INVALIDARGS(),
     TARGETNOTFOUND(),
     NOPERMS(),

@@ -1,4 +1,4 @@
-package uk.co.netbans.discordbot.Command.MusicCommands;
+package uk.co.netbans.discordbot.Command.SupportCommands;
 
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -6,29 +6,26 @@ import uk.co.netbans.discordbot.Command.Command;
 import uk.co.netbans.discordbot.Command.CommandResult;
 import uk.co.netbans.discordbot.NetBansBot;
 
-public class Play implements Command {
+public class Ticket implements Command {
+
     @Override
     public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
-        if (args.length == 0)
-            return CommandResult.INVALIDARGS;
-        String input = args[0];
-        bot.getMusicManager().loadTrack(input, sender, channel);
         return CommandResult.SUCCESS;
     }
 
     @Override
     public String name() {
-        return "play";
+        return "ticket";
     }
 
     @Override
     public String desc() {
-        return "Play a song or playlist!";
+        return "Provides you with information on how to create a ticket!";
     }
 
     @Override
     public String usage() {
-        return "!play <url>";
+        return "!ticket";
     }
 
     @Override

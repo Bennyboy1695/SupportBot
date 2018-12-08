@@ -4,14 +4,14 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
 import uk.co.netbans.discordbot.Command.Command;
-import uk.co.netbans.discordbot.Command.CommandCode;
+import uk.co.netbans.discordbot.Command.CommandResult;
 import uk.co.netbans.discordbot.Music.MusicManager;
 import uk.co.netbans.discordbot.NetBansBot;
 import uk.co.netbans.discordbot.Util;
 
 public class Current implements Command {
     @Override
-    public CommandCode onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
+    public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
         MusicManager music = bot.getMusicManager();
 
         if (!music.hasPlayer(channel.getGuild()) || music.getPlayer(channel.getGuild()).getPlayingTrack() == null) { // No song is playing
@@ -23,7 +23,7 @@ public class Current implements Command {
                     "\n" + music.MIC, music.getOrNull(track.getInfo().author),
                     "\n\uD83C\uDFA7 **|>**  " + Util.userDiscrimSet(music.getTrackManager(channel.getGuild()).getTrackInfo(track).getAuthor().getUser())));
         }
-        return CommandCode.OK;
+        return CommandResult.SUCCESS;
     }
 
     @Override

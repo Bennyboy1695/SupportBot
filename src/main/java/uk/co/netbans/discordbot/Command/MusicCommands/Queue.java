@@ -7,7 +7,7 @@ import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
 import org.json.JSONObject;
 import uk.co.netbans.discordbot.Command.Command;
-import uk.co.netbans.discordbot.Command.CommandCode;
+import uk.co.netbans.discordbot.Command.CommandResult;
 import uk.co.netbans.discordbot.Music.TrackInfo;
 import uk.co.netbans.discordbot.Music.MusicManager;
 import uk.co.netbans.discordbot.NetBansBot;
@@ -16,11 +16,11 @@ import java.util.Set;
 
 public class Queue implements Command {
     @Override
-    public CommandCode onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
+    public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
         MusicManager music = bot.getMusicManager();
         if (!music.hasPlayer(channel.getGuild()) || music.getTrackManager(channel.getGuild()).getQueuedTracks().isEmpty()) {
             bot.getMessenger().sendMessage(channel, "The music queue is empty!", 10);
-            return CommandCode.OK;
+            return CommandResult.SUCCESS;
         }
         StringBuilder sb = new StringBuilder();
         Set<TrackInfo> queue = music.getTrackManager(channel.getGuild()).getQueuedTracks();
@@ -39,7 +39,7 @@ public class Queue implements Command {
                 ex.printStackTrace();
             }
         }
-        return CommandCode.OK;
+        return CommandResult.SUCCESS;
     }
 
     @Override
