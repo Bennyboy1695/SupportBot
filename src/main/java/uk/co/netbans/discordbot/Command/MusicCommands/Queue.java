@@ -5,6 +5,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.json.JSONObject;
 import uk.co.netbans.discordbot.Command.Command;
 import uk.co.netbans.discordbot.Command.CommandResult;

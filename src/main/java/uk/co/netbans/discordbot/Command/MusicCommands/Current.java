@@ -3,6 +3,7 @@ package uk.co.netbans.discordbot.Command.MusicCommands;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import uk.co.netbans.discordbot.Command.Command;
 import uk.co.netbans.discordbot.Command.CommandResult;
 import uk.co.netbans.discordbot.Music.MusicManager;
