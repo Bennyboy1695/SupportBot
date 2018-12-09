@@ -2,6 +2,8 @@ package uk.co.netbans.discordbot.Support.Command.Admin;
 
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
+import org.json.simple.JSONArray;
+import uk.co.netbans.discordbot.Message.Messenger;
 import uk.co.netbans.discordbot.Support.Command.Command;
 import uk.co.netbans.discordbot.Support.Command.CommandResult;
 import uk.co.netbans.discordbot.NetBansBot;
@@ -10,8 +12,52 @@ public class Perm implements Command {
 
     @Override
     public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
-        bot.getMessenger().sendMessage(channel, "Allowed users: <@" + bot.getPerms().get(0) + "> <@" + bot.getPerms().get(1) + ">");
-        return null;
+        JSONArray admin = (JSONArray) bot.getPerms().get("admin");
+        JSONArray mod = (JSONArray) bot.getPerms().get("mod");
+        bot.getMessenger().sendMessage(channel, "<@" + admin.get(0) + ">");
+        bot.getMessenger().sendMessage(channel, String.valueOf(admin.contains(sender.getUser().getIdLong())));
+        if (admin.contains(sender.getUser().getIdLong())) {
+            if (args.length == 1) {
+                if (args[0].toLowerCase().equals("reload")) {
+                    bot.reloadPerms();
+                } else {
+                    return CommandResult.INVALIDARGS;
+                }
+            } else if (args.length < 3) {
+                return CommandResult.INVALIDARGS;
+            } else {
+                Long user = bot.getJDA().getUserById(Long.valueOf(args[1].replace("!", ""))).getIdLong();
+                switch (args[0].toLowerCase()) {
+                    case "add":
+                        switch (args[2].toLowerCase()) {
+                            case "admin":
+                                admin.add(user);
+                                bot.reloadPerms();
+                                break;
+                            case "mod":
+                                mod.add(user);
+                                bot.reloadPerms();
+                                break;
+                        }
+                        break;
+                    case "remove":
+                        switch (args[2].toLowerCase()) {
+                            case "admin":
+                                admin.remove(user);
+                                bot.reloadPerms();
+                                break;
+                            case "mod":
+                                mod.remove(user);
+                                bot.reloadPerms();
+                                break;
+                        }
+                            break;
+                }
+            }
+            } else{
+                bot.getMessenger().sendEmbed(channel, Messenger.NO_PERMS);
+            }
+        return CommandResult.SUCCESS;
     }
 
     @Override
@@ -26,11 +72,11 @@ public class Perm implements Command {
 
     @Override
     public String usage() {
-        return "!perm";
+        return "!perm <add|remove> user <admin|mod>";
     }
 
     @Override
     public String[] aliases() {
-        return new String[0];
+        return new String[]{"perms"};
     }
 }

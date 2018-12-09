@@ -27,7 +27,7 @@ public class NetBansBot {
 
     private Path directory;
     private JSONObject conf;
-    private JSONArray perms;
+    private JSONObject perms;
 
     public NetBansBot(Path directory) throws Exception {
         this.directory = directory;
@@ -125,12 +125,21 @@ public class NetBansBot {
 
         try (BufferedReader reader = Files.newBufferedReader(perms)) {
             JSONParser parser = new JSONParser();
-            this.perms = (JSONArray) parser.parse(reader);
+            this.perms = (JSONObject) parser.parse(reader);
         }
     }
 
-    public JSONArray getPerms() {
+    public JSONObject getPerms() {
         return perms;
+    }
+
+    public void reloadPerms() {
+        try {
+            System.out.println("Reloading perms!");
+            initPerms();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // potentially un necessary.

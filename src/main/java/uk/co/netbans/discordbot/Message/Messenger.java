@@ -4,6 +4,7 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.*;
 
+import java.awt.*;
 import java.time.Instant;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -60,4 +61,7 @@ public class Messenger {
         PrivateChannel channel = user.openPrivateChannel().complete();
         return channel.sendMessage(new MessageBuilder().append(message).build()).complete();
     }
+
+    public static MessageEmbed NO_PERMS = new EmbedBuilder().setColor(Color.RED).setDescription("You do not have permission to run this command!").build();
+
 }
