@@ -43,7 +43,7 @@ public class Messenger {
         final long messageID = channel.sendMessage(message).complete().getIdLong();
 
         if (lifetime != 0)
-            this.executor.schedule(() -> channel.getMessageById(messageID).queue(m -> m.delete().reason("netbans_auto_deletion").queue()), lifetime, TimeUnit.SECONDS);
+            this.executor.schedule(() -> channel.getMessageById(messageID).queue(m -> m.delete().queue()), lifetime, TimeUnit.SECONDS);
 
         return channel.getMessageById(messageID).complete();
     }
