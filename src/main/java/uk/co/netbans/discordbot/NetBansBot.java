@@ -1,5 +1,6 @@
 package uk.co.netbans.discordbot;
 
+import com.google.common.collect.ImmutableList;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -17,6 +18,9 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -27,7 +31,7 @@ public class NetBansBot {
 
     private Path directory;
     private JSONObject conf;
-    private JSONObject perms;
+    private EnumMap<PermType, List<Long>> perms;
 
     public NetBansBot(Path directory) throws Exception {
         this.directory = directory;
@@ -125,11 +129,30 @@ public class NetBansBot {
 
         try (BufferedReader reader = Files.newBufferedReader(perms)) {
             JSONParser parser = new JSONParser();
-            this.perms = (JSONObject) parser.parse(reader);
+            JSONObject file = (JSONObject) parser.parse(reader);
+
+            this.perms = new EnumMap<>(PermType.class);
+
+            List<Long> admins = new ArrayList<>();
+            for (Object obj : (JSONArray) file.get("admin"))
+                admins.add(Long.valueOf(obj.toString()));
+            //this.perms.put(PermType.ADMIN, ImmutableList.copyOf(admins)); //this is the immutable version
+            this.perms.put(PermType.ADMIN, admins);
+            //todo same for mods and any other group (friends?)
         }
     }
 
-    public JSONObject getPerms() {
+    @SuppressWarnings("unchecked")
+    private void nothing() {
+        JSONArray admins = new JSONArray();
+
+        List<Long> cached = new ArrayList<>(); //this would be the cached one
+        admins.addAll(cached);
+
+        // ...
+    }
+
+    public EnumMap<PermType, List<Long>> getPerms() {
         return perms;
     }
 
