@@ -13,6 +13,7 @@ public class CommandListener extends ListenerAdapter {
     private NetBansBot bot;
 
     public CommandListener(NetBansBot bot) {
+        this.bot = bot;
         this.main = new CommandRouter(bot, null, null);
         main.addCommand(
                 new Play(),
