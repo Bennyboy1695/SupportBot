@@ -10,7 +10,7 @@ import uk.co.netbans.discordbot.Support.Command.Support.Ticket;
 
 public class CommandListener extends ListenerAdapter {
     private CommandRouter main;
-    private NetBansBot bot;
+    private NetBansBot bot; //
 
     public CommandListener(NetBansBot bot) {
         this.bot = bot;
