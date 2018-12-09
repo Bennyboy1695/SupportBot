@@ -79,6 +79,7 @@ public class NetBansBot {
     public void shutdown() {
         System.out.println("Initiating Shutdown...");
         // shutdown code here.
+        getJDA().shutdown();
 
         System.out.println("Shutdown Complete.");
     }
