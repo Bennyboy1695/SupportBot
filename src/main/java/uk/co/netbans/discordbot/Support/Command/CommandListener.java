@@ -33,7 +33,7 @@ public class CommandListener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent e) {
-        if (!e.getMessage().getContentRaw().startsWith("!") || e.getAuthor().isBot() || e.getMessage().getContentRaw().length() <= 1)
+        if (!e.getMessage().getContentRaw().startsWith(bot.getCommandPrefix()) || e.getAuthor().isBot() || e.getMessage().getContentRaw().length() <= 1)
             return;
 
         String[] args = e.getMessage().getContentRaw().split(" ");

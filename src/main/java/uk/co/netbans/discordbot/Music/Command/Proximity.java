@@ -8,8 +8,11 @@ import uk.co.netbans.discordbot.Music.MusicManager;
 import uk.co.netbans.discordbot.NetBansBot;
 
 public class Proximity implements Command {
+    private NetBansBot bot;
+
     @Override
     public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
+        this.bot = bot;
         MusicManager music = bot.getMusicManager();
         music.loadTrack("https://www.youtube.com/playlist?list=PLZb6kNIh9TrHokGyJZrvJEhMpO78UMiQM", sender, channel);
         music.getTrackManager(channel.getGuild()).shuffleQueue();
@@ -28,7 +31,7 @@ public class Proximity implements Command {
 
     @Override
     public String usage() {
-        return "!proximity";
+        return bot.getCommandPrefix() + "proximity";
     }
 
     @Override

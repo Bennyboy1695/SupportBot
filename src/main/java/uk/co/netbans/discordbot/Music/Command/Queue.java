@@ -15,8 +15,11 @@ import uk.co.netbans.discordbot.NetBansBot;
 import java.util.Set;
 
 public class Queue implements Command {
+    private NetBansBot bot;
+
     @Override
     public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
+        this.bot = bot;
         MusicManager music = bot.getMusicManager();
         if (!music.hasPlayer(channel.getGuild()) || music.getTrackManager(channel.getGuild()).getQueuedTracks().isEmpty()) {
             bot.getMessenger().sendMessage(channel, "The music queue is empty!", 10);
@@ -54,7 +57,7 @@ public class Queue implements Command {
 
     @Override
     public String usage() {
-        return "!queue";
+        return bot.getCommandPrefix() + "queue";
     }
 
     @Override

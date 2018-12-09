@@ -7,8 +7,11 @@ import uk.co.netbans.discordbot.Support.Command.CommandResult;
 import uk.co.netbans.discordbot.NetBansBot;
 
 public class Volume implements Command {
+    private NetBansBot bot;
+
     @Override
     public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
+        this.bot = bot;
         if (args.length == 0)
             return CommandResult.INVALIDARGS;
         try {
@@ -36,7 +39,7 @@ public class Volume implements Command {
 
     @Override
     public String usage() {
-        return "!volume 1";
+        return bot.getCommandPrefix() + "volume 1";
     }
 
     @Override

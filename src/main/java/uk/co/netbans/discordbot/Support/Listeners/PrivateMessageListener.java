@@ -5,6 +5,7 @@ import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.core.requests.Route;
 import uk.co.netbans.discordbot.NetBansBot;
 
 import java.awt.*;
@@ -31,6 +32,10 @@ public class PrivateMessageListener extends ListenerAdapter {
 
         Member member = bot.getJDA().getGuildById(Long.valueOf((String)bot.getConf().get("guildID"))).getMember(event.getAuthor());
 
+        if (member.getRoles().contains(bot.getJDA().getGuildById(Long.valueOf((String)bot.getConf().get("guildID"))).getRoleById((String)bot.getConf().get("noHelpRoleID")))) {
+            member.getUser().openPrivateChannel().complete().sendMessage("No channel has been created because you have the NoHelp role!").complete();
+            return;
+        }
         TextChannel supportChannel = (TextChannel) bot.getJDA().getCategoryById(Long.valueOf((String) bot.getConf().get("category")))
                 .createTextChannel(ThreadLocalRandom.current().nextInt(99999) + "-" + event.getAuthor().getName()).complete();
 

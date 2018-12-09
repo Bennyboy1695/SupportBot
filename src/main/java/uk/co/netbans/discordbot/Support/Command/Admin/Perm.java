@@ -13,9 +13,11 @@ import java.util.List;
 
 public class Perm implements Command {
 
-    @SuppressWarnings("unchecked")
+    private NetBansBot bot;
+
     @Override
     public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
+        this.bot = bot;
         List<Long> admin = bot.getPerms().get(PermType.ADMIN);
         List<Long> mod = bot.getPerms().get(PermType.MOD);
             if (args.length == 1) {
@@ -40,7 +42,7 @@ public class Perm implements Command {
             } else if (args.length < 3) {
                 return CommandResult.INVALIDARGS;
             } else {
-                Long user = bot.getJDA().getUserById(Long.valueOf(args[1].replace("<@!", "").replace(">", ""))).getIdLong();
+                Long user = bot.getJDA().getUserById(Long.valueOf(args[1].replace("<@", "").replace(">", ""))).getIdLong();
                 switch (args[0].toLowerCase()) {
                     case "add":
                         switch (args[2].toLowerCase()) {
@@ -84,7 +86,7 @@ public class Perm implements Command {
 
     @Override
     public String usage() {
-        return "!perm <add|remove|reload|list> [user <admin|mod>]";
+        return bot.getCommandPrefix() +  "perm <add|remove|reload|list> [user <admin|mod>]";
     }
 
     @Override

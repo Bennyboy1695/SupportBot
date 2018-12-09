@@ -8,8 +8,11 @@ import uk.co.netbans.discordbot.Music.MusicManager;
 import uk.co.netbans.discordbot.NetBansBot;
 
 public class Shuffle implements Command {
+    private NetBansBot bot;
+
     @Override
     public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
+        this.bot = bot;
         MusicManager music = bot.getMusicManager();
 
         if (music.isIdle(channel.getGuild()))
@@ -32,7 +35,7 @@ public class Shuffle implements Command {
 
     @Override
     public String usage() {
-        return "!shuffle";
+        return bot.getCommandPrefix() + "shuffle";
     }
 
     @Override

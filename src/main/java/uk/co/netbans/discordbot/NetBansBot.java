@@ -18,8 +18,10 @@ import uk.co.netbans.discordbot.Support.Listeners.ReactionAddEvent;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -32,7 +34,9 @@ public class NetBansBot {
     private MusicManager music;
 
     private Path directory;
+    private Path logDirectory;
     private JSONObject conf;
+    private String commandPrefix;
     private EnumMap<PermType, List<Long>> perms;
 
     public void init(Path directory) throws Exception {
@@ -51,6 +55,18 @@ public class NetBansBot {
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize perms!", e);
         }
+
+        try {
+            Path path = Paths.get(directory + "/logs");
+            if (!path.toFile().exists()) {
+                path.toFile().mkdir();
+                logDirectory = path;
+            }
+            logDirectory = path;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         if (conf.get("token") == "add_me") {
             System.out.println("Found unedited config. Please add the token.");
@@ -116,6 +132,7 @@ public class NetBansBot {
             jo.put("token", "add_me");
             jo.put("category","add_me");
             jo.put("guildID", "add_me");
+            jo.put("commandPrefix", "!");
 
             try (BufferedWriter writer = Files.newBufferedWriter(config)) {
                 writer.write(jo.toJSONString());
@@ -201,6 +218,14 @@ public class NetBansBot {
 
     public JSONObject getConf() {
         return conf;
+    }
+
+    public String getCommandPrefix() {
+        return (String) getConf().get("commandPrefix");
+    }
+
+    public Path getLogDirectory() {
+        return logDirectory;
     }
 
     public PermType getPermForPlayer(long user) {

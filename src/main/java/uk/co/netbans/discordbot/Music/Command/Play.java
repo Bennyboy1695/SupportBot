@@ -7,8 +7,11 @@ import uk.co.netbans.discordbot.Support.Command.CommandResult;
 import uk.co.netbans.discordbot.NetBansBot;
 
 public class Play implements Command {
+    private NetBansBot bot;
+
     @Override
     public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
+        this.bot = bot;
         if (args.length == 0)
             return CommandResult.INVALIDARGS;
         String input = args[0];
@@ -28,7 +31,7 @@ public class Play implements Command {
 
     @Override
     public String usage() {
-        return "!play <url>";
+        return bot.getCommandPrefix() + "play <url>";
     }
 
     @Override

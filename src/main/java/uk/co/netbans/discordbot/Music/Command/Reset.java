@@ -7,8 +7,11 @@ import uk.co.netbans.discordbot.Support.Command.CommandResult;
 import uk.co.netbans.discordbot.NetBansBot;
 
 public class Reset implements Command {
+    private NetBansBot bot;
+
     @Override
     public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
+        this.bot = bot;
         bot.getMusicManager().reset(channel.getGuild());
         bot.getMessenger().sendMessage(channel, "\uD83D\uDD04 Resetting the music player..", 10);
         return CommandResult.SUCCESS;
@@ -26,11 +29,11 @@ public class Reset implements Command {
 
     @Override
     public String usage() {
-        return "!reset";
+        return bot.getCommandPrefix() + "reset";
     }
 
     @Override
     public String[] aliases() {
-        return new String[0];
+        return new String[]{"leave"};
     }
 }

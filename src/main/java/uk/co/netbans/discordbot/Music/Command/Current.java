@@ -10,8 +10,11 @@ import uk.co.netbans.discordbot.NetBansBot;
 import uk.co.netbans.discordbot.Util;
 
 public class Current implements Command {
+    private NetBansBot bot;
+
     @Override
     public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
+        this.bot = bot;
         MusicManager music = bot.getMusicManager();
 
         if (!music.hasPlayer(channel.getGuild()) || music.getPlayer(channel.getGuild()).getPlayingTrack() == null) { // No song is playing
@@ -38,7 +41,7 @@ public class Current implements Command {
 
     @Override
     public String usage() {
-        return "!current";
+        return bot.getCommandPrefix() + "current";
     }
 
     @Override

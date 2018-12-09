@@ -7,8 +7,11 @@ import uk.co.netbans.discordbot.Support.Command.CommandResult;
 import uk.co.netbans.discordbot.NetBansBot;
 
 public class Skip implements Command {
+    private NetBansBot bot;
+
     @Override
     public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
+        this.bot = bot;
         bot.getMusicManager().skipTrack(sender.getGuild(), channel);
         bot.getMessenger().sendMessage(channel, "\u23E9 Skipping current track.", 10);
         return CommandResult.SUCCESS;
@@ -26,7 +29,7 @@ public class Skip implements Command {
 
     @Override
     public String usage() {
-        return "!skip";
+        return bot.getCommandPrefix() + "skip";
     }
 
     @Override

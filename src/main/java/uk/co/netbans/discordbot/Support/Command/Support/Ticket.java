@@ -1,7 +1,5 @@
 package uk.co.netbans.discordbot.Support.Command.Support;
 
-import com.vdurmont.emoji.EmojiManager;
-import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -14,8 +12,11 @@ import java.awt.*;
 
 public class Ticket implements Command {
 
+    private NetBansBot bot;
+
     @Override
     public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
+        this.bot = bot;
         RestAction<PrivateChannel> pmChannel = sender.getUser().openPrivateChannel();
         bot.getMessenger().sendEmbed(channel, bot.getMessenger().getCommonEmbed()
                 .setColor(new Color(127, 255, 212))
@@ -42,7 +43,7 @@ public class Ticket implements Command {
 
     @Override
     public String usage() {
-        return "!ticket";
+        return bot.getCommandPrefix() + "ticket";
     }
 
     @Override
