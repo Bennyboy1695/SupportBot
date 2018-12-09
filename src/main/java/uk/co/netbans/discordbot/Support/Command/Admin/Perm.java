@@ -3,7 +3,6 @@ package uk.co.netbans.discordbot.Support.Command.Admin;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
-import uk.co.netbans.discordbot.Message.Messenger;
 import uk.co.netbans.discordbot.PermType;
 import uk.co.netbans.discordbot.Support.Command.Command;
 import uk.co.netbans.discordbot.Support.Command.CommandResult;
