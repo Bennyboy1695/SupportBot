@@ -19,7 +19,6 @@ public class Perm implements Command {
     public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
         List<Long> admin = bot.getPerms().get(PermType.ADMIN);
         List<Long> mod = bot.getPerms().get(PermType.MOD);
-        if (admin.contains(sender.getUser().getIdLong())) {
             if (args.length == 1) {
                 if (args[0].toLowerCase().equals("reload")) {
                     bot.reloadPerms();
@@ -71,9 +70,6 @@ public class Perm implements Command {
                             break;
                 }
             }
-            } else{
-                bot.getMessenger().sendEmbed(channel, Messenger.NO_PERMS);
-            }
         return CommandResult.SUCCESS;
     }
 
@@ -95,5 +91,10 @@ public class Perm implements Command {
     @Override
     public String[] aliases() {
         return new String[]{"perms"};
+    }
+
+    @Override
+    public PermType getPermission() {
+        return PermType.ADMIN;
     }
 }

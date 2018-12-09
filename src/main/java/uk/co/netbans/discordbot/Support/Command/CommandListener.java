@@ -2,6 +2,7 @@ package uk.co.netbans.discordbot.Support.Command;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import uk.co.netbans.discordbot.Message.Messenger;
 import uk.co.netbans.discordbot.NetBansBot;
 import uk.co.netbans.discordbot.Music.Command.*;
 import uk.co.netbans.discordbot.Support.Command.Admin.Perm;
@@ -9,6 +10,7 @@ import uk.co.netbans.discordbot.Support.Command.Support.Ticket;
 
 public class CommandListener extends ListenerAdapter {
     private CommandRouter main;
+    private NetBansBot bot;
 
     public CommandListener(NetBansBot bot) {
         this.main = new CommandRouter(bot, null, null);
@@ -34,6 +36,9 @@ public class CommandListener extends ListenerAdapter {
 
         String[] args = e.getMessage().getContentRaw().split(" ");
         args[0] = args[0].substring(1);
-        main.onCommand(e.getMember(), e.getTextChannel(), args);
+        if (main.onCommand(e.getMember(), e.getTextChannel(), args).equals(CommandResult.NOPERMS)) {
+            bot.getMessenger().sendEmbed(e.getTextChannel(), Messenger.NO_PERMS, 10);
+        }
+
     }
 }
