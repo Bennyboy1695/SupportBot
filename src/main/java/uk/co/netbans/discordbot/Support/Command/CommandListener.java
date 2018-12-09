@@ -7,6 +7,7 @@ import uk.co.netbans.discordbot.NetBansBot;
 import uk.co.netbans.discordbot.Music.Command.*;
 import uk.co.netbans.discordbot.Support.Command.Admin.Perm;
 import uk.co.netbans.discordbot.Support.Command.Support.Ticket;
+import uk.co.netbans.discordbot.Test;
 
 public class CommandListener extends ListenerAdapter {
     private CommandRouter main;
@@ -28,6 +29,10 @@ public class CommandListener extends ListenerAdapter {
                 new Ticket(),
                 new Perm()
         );
+
+        CommandRouter parent = new CommandRouter(bot, "parent", null);
+        parent.addCommand(new Test());
+        this.main.addSubRouter(parent);
     }
 
     @Override
