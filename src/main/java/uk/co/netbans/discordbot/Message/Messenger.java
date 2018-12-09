@@ -39,12 +39,13 @@ public class Messenger {
        return this.sendMessage(channel, new MessageBuilder().setEmbed(embed).build(), lifetime);
     }
 
-    public Message sendMessage(TextChannel channel, Message message, int lifetime) {
-        final Message completedMessage = channel.sendMessage(message).complete();
+    public Message sendMessage(final TextChannel channel, Message message, int lifetime) {
+        final long messageID = channel.sendMessage(message).complete().getIdLong();
 
         if (lifetime != 0)
-            this.executor.schedule(() -> message.delete().reason("netbans_message_autoremoval").complete(), lifetime, TimeUnit.SECONDS);
-        return completedMessage;
+            this.executor.schedule(() -> channel.getMessageById(messageID).queue(m -> m.delete().reason("netbans_auto_deletion").queue()), lifetime, TimeUnit.SECONDS);
+
+        return channel.getMessageById(messageID).complete();
     }
 
     public Message sendPrivateMessage(User user, MessageEmbed embed) {
