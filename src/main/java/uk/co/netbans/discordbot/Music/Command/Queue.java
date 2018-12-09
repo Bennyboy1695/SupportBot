@@ -6,11 +6,13 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
 import org.json.JSONObject;
+import uk.co.netbans.discordbot.Message.Messenger;
 import uk.co.netbans.discordbot.Support.Command.Command;
 import uk.co.netbans.discordbot.Support.Command.CommandResult;
 import uk.co.netbans.discordbot.Music.TrackInfo;
 import uk.co.netbans.discordbot.Music.MusicManager;
 import uk.co.netbans.discordbot.NetBansBot;
+import uk.co.netbans.discordbot.Util;
 
 import java.util.Set;
 
@@ -21,6 +23,16 @@ public class Queue implements Command {
     public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
         this.bot = bot;
         MusicManager music = bot.getMusicManager();
+        if (sender.getVoiceState().getChannel() == null) {
+            bot.getMessenger().sendEmbed(channel, Messenger.NOT_VOICE, 10);
+            return CommandResult.TARGETNOTFOUND;
+        }
+        Member botMember = bot.getJDA().getGuildById(Long.valueOf((String)bot.getConf().get("guildID"))).getMemberById(bot.getJDA().asBot().getApplicationInfo().complete().getIdLong());
+        if (botMember.getVoiceState().inVoiceChannel() && !sender.getVoiceState().getChannel().getMembers().contains(bot.getJDA().getGuildById(Long.valueOf((String)bot.getConf().get("guildID"))).getMemberById(bot.getJDA().asBot().getApplicationInfo().complete().getIdLong()))) {
+            bot.getMessenger().sendEmbed(channel, Messenger.NOT_SAME_VOICE, 10);
+            return CommandResult.TARGETNOTFOUND;
+        }
+
         if (!music.hasPlayer(channel.getGuild()) || music.getTrackManager(channel.getGuild()).getQueuedTracks().isEmpty()) {
             bot.getMessenger().sendMessage(channel, "The music queue is empty!", 10);
             return CommandResult.SUCCESS;

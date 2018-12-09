@@ -18,7 +18,6 @@ import uk.co.netbans.discordbot.Support.Listeners.ReactionAddEvent;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,7 +35,6 @@ public class NetBansBot {
     private Path directory;
     private Path logDirectory;
     private JSONObject conf;
-    private String commandPrefix;
     private EnumMap<PermType, List<Long>> perms;
 
     public void init(Path directory) throws Exception {

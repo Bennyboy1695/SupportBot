@@ -36,6 +36,10 @@ public class PrivateMessageListener extends ListenerAdapter {
             member.getUser().openPrivateChannel().complete().sendMessage("No channel has been created because you have the NoHelp role!").complete();
             return;
         }
+        for (Guild.Ban bans : bot.getJDA().getGuildById(Long.valueOf((String)bot.getConf().get("guildID"))).getBanList().complete()) {
+            if (bans.getUser().getIdLong() == member.getUser().getIdLong())
+                return;
+        }
         TextChannel supportChannel = (TextChannel) bot.getJDA().getCategoryById(Long.valueOf((String) bot.getConf().get("category")))
                 .createTextChannel(ThreadLocalRandom.current().nextInt(99999) + "-" + event.getAuthor().getName()).complete();
 

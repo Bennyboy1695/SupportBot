@@ -3,6 +3,7 @@ package uk.co.netbans.discordbot.Music.Command;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
+import uk.co.netbans.discordbot.Message.Messenger;
 import uk.co.netbans.discordbot.Support.Command.Command;
 import uk.co.netbans.discordbot.Support.Command.CommandResult;
 import uk.co.netbans.discordbot.Music.MusicManager;
@@ -16,6 +17,16 @@ public class Current implements Command {
     public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
         this.bot = bot;
         MusicManager music = bot.getMusicManager();
+
+        if (sender.getVoiceState().getChannel() == null) {
+            bot.getMessenger().sendEmbed(channel, Messenger.NOT_VOICE, 10);
+            return CommandResult.TARGETNOTFOUND;
+        }
+        Member botMember = bot.getJDA().getGuildById(Long.valueOf((String)bot.getConf().get("guildID"))).getMemberById(bot.getJDA().asBot().getApplicationInfo().complete().getIdLong());
+        if (botMember.getVoiceState().inVoiceChannel() && !sender.getVoiceState().getChannel().getMembers().contains(bot.getJDA().getGuildById(Long.valueOf((String)bot.getConf().get("guildID"))).getMemberById(bot.getJDA().asBot().getApplicationInfo().complete().getIdLong()))) {
+            bot.getMessenger().sendEmbed(channel, Messenger.NOT_SAME_VOICE, 10);
+            return CommandResult.TARGETNOTFOUND;
+        }
 
         if (!music.hasPlayer(channel.getGuild()) || music.getPlayer(channel.getGuild()).getPlayingTrack() == null) { // No song is playing
             bot.getMessenger().sendMessage(channel, "No song is being played at the moment! *It's your time to shine..*", 10);

@@ -140,7 +140,6 @@ public class MusicManager extends ListenerAdapter {
 
     public void skipTrack(Guild guild, TextChannel channel) {
         getPlayer(guild).stopTrack();
-        Util.sendMessage(channel, "\u23E9 Skipping track!");
     }
 
     public void setVolume(Guild guild, TextChannel channel, int volume) {
