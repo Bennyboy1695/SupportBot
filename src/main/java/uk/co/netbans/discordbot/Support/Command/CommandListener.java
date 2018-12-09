@@ -45,5 +45,7 @@ public class CommandListener extends ListenerAdapter {
                 bot.getMessenger().sendEmbed(e.getTextChannel(), Messenger.INVALID_ARGS, 10);
                 break;
         }
+
+        bot.getMessenger().delMessage(e.getTextChannel(), e.getMessageIdLong(), 2);
     }
 }
