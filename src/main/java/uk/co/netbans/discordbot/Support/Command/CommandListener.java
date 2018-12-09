@@ -4,6 +4,7 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import uk.co.netbans.discordbot.NetBansBot;
 import uk.co.netbans.discordbot.Music.Command.*;
+import uk.co.netbans.discordbot.Support.Command.Admin.Perm;
 import uk.co.netbans.discordbot.Support.Command.Support.Ticket;
 
 public class CommandListener extends ListenerAdapter {
@@ -21,7 +22,8 @@ public class CommandListener extends ListenerAdapter {
                 new Reset(),
                 new Volume(),
                 new Proximity(),
-                new Ticket()
+                new Ticket(),
+                new Perm()
         );
     }
 

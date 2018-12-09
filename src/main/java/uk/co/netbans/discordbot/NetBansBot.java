@@ -5,6 +5,7 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.hooks.InterfacedEventManager;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import uk.co.netbans.discordbot.Message.Messenger;
@@ -26,7 +27,7 @@ public class NetBansBot {
 
     private Path directory;
     private JSONObject conf;
-    private JSONObject perms;
+    private JSONArray perms;
 
     public NetBansBot(Path directory) throws Exception {
         this.directory = directory;
@@ -111,6 +112,10 @@ public class NetBansBot {
             Files.createFile(perms);
 
             JSONObject jo = new JSONObject();
+            JSONArray array = new JSONArray();
+            array.add("97995963137802240");
+            array.add("138051041529692161");
+            jo.put("admin", array);
 
             try (BufferedWriter writer = Files.newBufferedWriter(perms)) {
                 writer.write(jo.toJSONString());
@@ -120,11 +125,11 @@ public class NetBansBot {
 
         try (BufferedReader reader = Files.newBufferedReader(perms)) {
             JSONParser parser = new JSONParser();
-            this.perms = (JSONObject) parser.parse(reader);
+            this.perms = (JSONArray) parser.parse(reader);
         }
     }
 
-    public JSONObject getPerms() {
+    public JSONArray getPerms() {
         return perms;
     }
 
