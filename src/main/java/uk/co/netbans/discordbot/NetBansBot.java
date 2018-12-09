@@ -25,15 +25,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class NetBansBot {
-    private final JDA jda;
-    private final Messenger messenger;
-    private final MusicManager music;
+    private JDA jda;
+    private Messenger messenger;
+    private MusicManager music;
 
     private Path directory;
     private JSONObject conf;
     private EnumMap<PermType, List<Long>> perms;
 
-    public NetBansBot(Path directory) throws Exception {
+    public void init(Path directory) throws Exception {
         this.directory = directory;
 
         System.out.println("Initializing Config!");
@@ -73,7 +73,14 @@ public class NetBansBot {
         System.out.println("Loading Music Manager...");
         this.music = new MusicManager();
 
-        System.out.println("Finished Loading.");
+        System.out.println("Finished Loading | Now accepting input.");
+    }
+
+    public void shutdown() {
+        System.out.println("Initiating Shutdown...");
+        // shutdown code here.
+
+        System.out.println("Shutdown Complete.");
     }
 
     public JDA getJDA() {
