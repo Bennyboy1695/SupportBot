@@ -37,7 +37,10 @@ public class CommandRouter {
                     return CommandResult.NOPERMS;
                 String[] argsNew = new String[args.length-1];
                 System.arraycopy(args, 1, argsNew, 0, args.length - 1);
-                return command.onExecute(this.bot, sender, channel, args[0], argsNew);
+                CommandResult result = command.onExecute(this.bot, sender, channel, args[0], argsNew);
+                if (result == CommandResult.INVALIDARGS)
+                    bot.getMessenger().sendMessage(channel, "Attempted: " + Arrays.asList(args).toString() + " Usage: " + command.usage(), 10);
+                return result;
             }
 
             CommandRouter router = getRouter(args[0]);
@@ -62,7 +65,7 @@ public class CommandRouter {
         }
 
 
-        Util.sendMessage(channel, "You have not entered a valid command!"); //todo send help
+
         return CommandResult.INVALIDARGS;
     }
 
