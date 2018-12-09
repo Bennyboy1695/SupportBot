@@ -17,4 +17,8 @@ public interface Command {
     default PermType getPermission() {
         return PermType.DEFAULT;
     }
+
+    default boolean hasPermission(NetBansBot bot, long user) {
+        return bot.getPermForPlayer(user).getPriority() >= this.getPermission().getPriority();
+    }
 }

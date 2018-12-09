@@ -193,6 +193,14 @@ public class NetBansBot {
         return perms;
     }
 
+    public PermType getPermForPlayer(long user) {
+        if (this.perms.get(PermType.ADMIN).contains(user))
+            return PermType.ADMIN;
+        if (this.perms.get(PermType.MOD).contains(user))
+            return PermType.MOD;
+        return PermType.DEFAULT;
+    }
+
     // potentially un necessary.
     private final class ThreadedEventManager extends InterfacedEventManager {
         private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()+1);
