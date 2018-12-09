@@ -12,7 +12,9 @@ import org.json.simple.parser.JSONParser;
 import uk.co.netbans.discordbot.Message.Messenger;
 import uk.co.netbans.discordbot.Support.Command.CommandListener;
 import uk.co.netbans.discordbot.Music.MusicManager;
+import uk.co.netbans.discordbot.Support.Listeners.MessageReceivedEvent;
 import uk.co.netbans.discordbot.Support.Listeners.PrivateMessageListener;
+import uk.co.netbans.discordbot.Support.Listeners.ReactionAddEvent;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -68,7 +70,9 @@ public class NetBansBot {
         System.out.println("Registering Commands...");
         // old
         this.jda.addEventListener(new CommandListener(this));
-        this.jda.addEventListener(new PrivateMessageListener());
+        this.jda.addEventListener(new PrivateMessageListener(this));
+        this.jda.addEventListener(new MessageReceivedEvent(this));
+        this.jda.addEventListener(new ReactionAddEvent(this));
 
         System.out.println("Loading Music Manager...");
         this.music = new MusicManager();
@@ -110,6 +114,8 @@ public class NetBansBot {
 
             JSONObject jo = new JSONObject();
             jo.put("token", "add_me");
+            jo.put("category","add_me");
+            jo.put("guildID", "add_me");
 
             try (BufferedWriter writer = Files.newBufferedWriter(config)) {
                 writer.write(jo.toJSONString());
@@ -191,6 +197,10 @@ public class NetBansBot {
 
     public EnumMap<PermType, List<Long>> getPerms() {
         return perms;
+    }
+
+    public JSONObject getConf() {
+        return conf;
     }
 
     public PermType getPermForPlayer(long user) {

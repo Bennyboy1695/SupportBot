@@ -41,7 +41,6 @@ public class Messenger {
 
     public Message sendMessage(TextChannel channel, Message message, int lifetime) {
         Message sentMessage = channel.sendMessage(message).complete();
-
         if (lifetime != 0)
             this.delMessage(channel, sentMessage.getIdLong(), lifetime);
 
@@ -68,6 +67,9 @@ public class Messenger {
     }
 
     public static MessageEmbed NO_PERMS = new EmbedBuilder().setColor(Color.RED).setDescription("You do not have permission to run this command!").build();
-    public static MessageEmbed INVALID_ARGS = new EmbedBuilder().setColor(Color.RED).setDescription("Those args are incorrect!").build();
+    public static MessageEmbed INVALID_ARGS(String usage) {
+        return new EmbedBuilder().setTitle("Invalid Args!").setDescription("Correct Usage: \n " + usage).setColor(Color.RED).build();
+    }
+
 
 }

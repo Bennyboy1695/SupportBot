@@ -5,6 +5,7 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import uk.co.netbans.discordbot.Message.Messenger;
 import uk.co.netbans.discordbot.NetBansBot;
 import uk.co.netbans.discordbot.Music.Command.*;
+import uk.co.netbans.discordbot.PermType;
 import uk.co.netbans.discordbot.Support.Command.Admin.Perm;
 import uk.co.netbans.discordbot.Support.Command.Support.Ticket;
 
@@ -37,15 +38,9 @@ public class CommandListener extends ListenerAdapter {
 
         String[] args = e.getMessage().getContentRaw().split(" ");
         args[0] = args[0].substring(1);
-        switch (main.onCommand(e.getMember(), e.getTextChannel(), args)) {
-            case NOPERMS:
-                bot.getMessenger().sendEmbed(e.getTextChannel(), Messenger.NO_PERMS, 10);
-                break;
-            case INVALIDARGS:
-                bot.getMessenger().sendEmbed(e.getTextChannel(), Messenger.INVALID_ARGS, 10);
-                break;
+        if (main.onCommand(e.getMember(), e.getTextChannel(), args).equals(CommandResult.NOPERMS)) {
+            bot.getMessenger().sendEmbed(e.getTextChannel(), Messenger.NO_PERMS, 10);
         }
-
-        bot.getMessenger().delMessage(e.getTextChannel(), e.getMessageIdLong(), 2);
+        bot.getMessenger().delMessage(e.getTextChannel(), e.getMessageIdLong(), 5);
     }
 }

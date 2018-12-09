@@ -2,10 +2,13 @@ package uk.co.netbans.discordbot.Support.Command;
 
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
+import uk.co.netbans.discordbot.Message.Messenger;
 import uk.co.netbans.discordbot.NetBansBot;
 import uk.co.netbans.discordbot.Util;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class CommandRouter {
     private final NetBansBot bot;
@@ -39,7 +42,7 @@ public class CommandRouter {
                 System.arraycopy(args, 1, argsNew, 0, args.length - 1);
                 CommandResult result = command.onExecute(this.bot, sender, channel, args[0], argsNew);
                 if (result == CommandResult.INVALIDARGS)
-                    bot.getMessenger().sendMessage(channel, "Attempted: " + Arrays.asList(args).toString() + " Usage: " + command.usage(), 10);
+                    bot.getMessenger().sendEmbed(channel, Messenger.INVALID_ARGS(command.usage()), 20);
                 return result;
             }
 
@@ -63,8 +66,6 @@ public class CommandRouter {
             }
 
         }
-
-
 
         return CommandResult.INVALIDARGS;
     }
