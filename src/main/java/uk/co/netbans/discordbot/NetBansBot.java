@@ -80,6 +80,12 @@ public class NetBansBot {
         System.out.println("Initiating Shutdown...");
         // shutdown code here.
 
+        try {
+            this.writePerms();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         System.out.println("Shutdown Complete.");
     }
 
@@ -127,6 +133,8 @@ public class NetBansBot {
             array.add("97995963137802240");
             array.add("138051041529692161");
             jo.put("admin", array);
+            JSONArray modsArray = new JSONArray();
+            jo.put("mod", modsArray);
 
             try (BufferedWriter writer = Files.newBufferedWriter(perms)) {
                 writer.write(jo.toJSONString());
@@ -143,33 +151,45 @@ public class NetBansBot {
             List<Long> admins = new ArrayList<>();
             for (Object obj : (JSONArray) file.get("admin"))
                 admins.add(Long.valueOf(obj.toString()));
-            //this.perms.put(PermType.ADMIN, ImmutableList.copyOf(admins)); //this is the immutable version
             this.perms.put(PermType.ADMIN, admins);
-            //todo same for mods and any other group (friends?)
+            List<Long> mods = new ArrayList<>();
+            for (Object obj : (JSONArray) file.get("mod"))
+                mods.add(Long.valueOf(obj.toString()));
+            this.perms.put(PermType.MOD, mods);
+            // friends perm group?
         }
     }
 
     @SuppressWarnings("unchecked")
-    private void nothing() {
-        JSONArray admins = new JSONArray();
+    public void writePerms() throws Exception {
+        Path perms = this.directory.resolve("perms.json");
 
-        List<Long> cached = new ArrayList<>(); //this would be the cached one
-        admins.addAll(cached);
+        JSONObject jo = new JSONObject();
+        JSONArray admin = new JSONArray();
+        admin.addAll(this.perms.get(PermType.ADMIN));
+        jo.put("admin", admin);
 
-        // ...
-    }
+        JSONArray mod = new JSONArray();
+        mod.addAll(this.perms.get(PermType.MOD));
+        jo.put("mod", mod);
 
-    public EnumMap<PermType, List<Long>> getPerms() {
-        return perms;
+        try (BufferedWriter writer = Files.newBufferedWriter(perms)) {
+            writer.write(jo.toJSONString());
+            writer.flush();
+        }
     }
 
     public void reloadPerms() {
         try {
-            System.out.println("Reloading perms!");
-            initPerms();
+            this.writePerms();
+            this.initPerms();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public EnumMap<PermType, List<Long>> getPerms() {
+        return perms;
     }
 
     // potentially un necessary.
