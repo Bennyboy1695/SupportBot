@@ -37,9 +37,13 @@ public class CommandListener extends ListenerAdapter {
 
         String[] args = e.getMessage().getContentRaw().split(" ");
         args[0] = args[0].substring(1);
-        if (main.onCommand(e.getMember(), e.getTextChannel(), args).equals(CommandResult.NOPERMS)) {
-            bot.getMessenger().sendEmbed(e.getTextChannel(), Messenger.NO_PERMS, 10);
+        switch (main.onCommand(e.getMember(), e.getTextChannel(), args)) {
+            case NOPERMS:
+                bot.getMessenger().sendEmbed(e.getTextChannel(), Messenger.NO_PERMS, 10);
+                break;
+            case INVALIDARGS:
+                bot.getMessenger().sendEmbed(e.getTextChannel(), Messenger.INVALID_ARGS, 10);
+                break;
         }
-
     }
 }

@@ -68,5 +68,6 @@ public class Messenger {
     }
 
     public static MessageEmbed NO_PERMS = new EmbedBuilder().setColor(Color.RED).setDescription("You do not have permission to run this command!").build();
+    public static MessageEmbed INVALID_ARGS = new EmbedBuilder().setColor(Color.RED).setDescription("Those args are incorrect!").build();
 
 }
