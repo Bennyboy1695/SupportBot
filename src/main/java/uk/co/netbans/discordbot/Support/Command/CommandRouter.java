@@ -25,26 +25,42 @@ public class CommandRouter {
     }
 
     public CommandResult onCommand(Member sender, TextChannel channel, String[] args) {
-        if (args.length == 0) {
-            Util.sendMessage(channel, "You have not entered a valid command!"); //todo send help
-            return CommandResult.INVALIDARGS;
-        }
+//        if (args.length == 0) {
+//            Util.sendMessage(channel, "You have not entered a valid command!"); //todo send help
+//            return CommandResult.INVALIDARGS;
+//        }
 
-        Command command = getCommand(args[0]);
-        if (command != null) {
-            if (!command.hasPermission(bot, sender.getUser().getIdLong()))
+        if (args.length > 0) {
+            Command command = getCommand(args[0]);
+            if (command != null) {
+                if (!command.hasPermission(bot, sender.getUser().getIdLong()))
+                    return CommandResult.NOPERMS;
+                String[] argsNew = new String[args.length-1];
+                System.arraycopy(args, 1, argsNew, 0, args.length - 1);
+                return command.onExecute(this.bot, sender, channel, args[0], argsNew);
+            }
+
+            CommandRouter router = getRouter(args[0]);
+            if (router != null) {
+                String[] argsNew = new String[args.length-1];
+                System.arraycopy(args, 1, argsNew, 0, args.length - 1);
+                return router.onCommand(sender, channel, argsNew);
+            }
+        }
+        Command dft = getCommand("~");
+        if (dft != null) {
+            if (!dft.hasPermission(bot, sender.getUser().getIdLong()))
                 return CommandResult.NOPERMS;
-            String[] argsNew = new String[args.length-1];
-            System.arraycopy(args, 1, argsNew, 0, args.length - 1);
-            return command.onExecute(this.bot, sender, channel, args[0], argsNew);
+            if (args.length > 0) {
+                String[] argsNew = new String[args.length-1];
+                System.arraycopy(args, 1, argsNew, 0, args.length - 1);
+                return dft.onExecute(this.bot, sender, channel, args[0], argsNew);
+            } else {
+                return dft.onExecute(this.bot, sender, channel, "~", new String[]{});
+            }
+
         }
 
-        CommandRouter router = getRouter(args[0]);
-        if (router != null) {
-            String[] argsNew = new String[args.length-1];
-            System.arraycopy(args, 1, argsNew, 0, args.length - 1);
-            return router.onCommand(sender, channel, argsNew);
-        }
 
         Util.sendMessage(channel, "You have not entered a valid command!"); //todo send help
         return CommandResult.INVALIDARGS;

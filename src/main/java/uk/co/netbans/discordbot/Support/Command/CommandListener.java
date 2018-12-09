@@ -2,6 +2,8 @@ package uk.co.netbans.discordbot.Support.Command;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import uk.co.netbans.discordbot.Default;
+import uk.co.netbans.discordbot.LevelTwo;
 import uk.co.netbans.discordbot.Message.Messenger;
 import uk.co.netbans.discordbot.NetBansBot;
 import uk.co.netbans.discordbot.Music.Command.*;
@@ -32,6 +34,12 @@ public class CommandListener extends ListenerAdapter {
 
         CommandRouter parent = new CommandRouter(bot, "parent", null);
         parent.addCommand(new Test());
+        parent.addCommand(new Default());
+
+        CommandRouter l2 = new CommandRouter(bot, "two", null);
+        l2.addCommand(new LevelTwo());
+
+        parent.addSubRouter(l2);
         this.main.addSubRouter(parent);
     }
 
