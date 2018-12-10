@@ -41,7 +41,7 @@ public class Skip implements Command {
 
     @Override
     public String usage() {
-        return bot.getCommandPrefix() + "skip";
+        return "skip";
     }
 
     @Override

@@ -52,7 +52,7 @@ public class Current implements Command {
 
     @Override
     public String usage() {
-        return bot.getCommandPrefix() + "current";
+        return "current";
     }
 
     @Override

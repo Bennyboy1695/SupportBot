@@ -9,9 +9,12 @@ import net.dv8tion.jda.core.requests.Route;
 import uk.co.netbans.discordbot.NetBansBot;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
-import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class PrivateMessageListener extends ListenerAdapter {
@@ -40,6 +43,7 @@ public class PrivateMessageListener extends ListenerAdapter {
             if (bans.getUser().getIdLong() == member.getUser().getIdLong())
                 return;
         }
+
         TextChannel supportChannel = (TextChannel) bot.getJDA().getCategoryById(Long.valueOf((String) bot.getConf().get("category")))
                 .createTextChannel(ThreadLocalRandom.current().nextInt(99999) + "-" + event.getAuthor().getName()).complete();
 
@@ -54,6 +58,17 @@ public class PrivateMessageListener extends ListenerAdapter {
                 .append("_To close this ticket please react with a \u2705 to this message!_")
                 .build();
         Message supportMessage = bot.getMessenger().sendMessage(supportChannel, message, 0);
+        for (Message.Attachment attachment : event.getMessage().getAttachments()) {
+                try {
+                    if (!new File(bot.getLogDirectory().toFile(), "tmp").exists()) {
+                        new File(bot.getLogDirectory().toFile(), "tmp").mkdir();
+                    }
+                    attachment.download(new File(bot.getLogDirectory().toFile() + "/tmp/", supportChannel.getName() + ".log"));
+                    supportChannel.sendFile(new File(bot.getLogDirectory().toFile() + "/tmp/", supportChannel.getName() + ".log")).complete();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+        }
         supportMessage.pin().complete();
         supportChannel.getHistory().retrievePast(1).queue(l -> l.forEach(m -> m.delete().queue()));
         supportMessage.addReaction("\u2705").complete();

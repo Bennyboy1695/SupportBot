@@ -1,5 +1,7 @@
 package uk.co.netbans.discordbot.Support.Command.Support;
 
+import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -27,7 +29,13 @@ public class Ticket implements Command {
                 .addField("Private Message", "https://discordapp.com/channels/@me/" + pmChannel.complete().getIdLong(), false)
                 .build(), 30);
 
-        bot.getMessenger().sendPrivateMessage(sender.getUser(), "instructions!").addReaction("\u2705").complete();
+        bot.getMessenger().sendPrivateMessage(sender.getUser(), new EmbedBuilder()
+                .setTitle("Ticket Creation Instructions!")
+                .setColor(new Color(127, 255, 212))
+                .setDescription("To create a ticket simply type a message here and it will be used to create a ticket containing that message you provided! \n" +
+                        "Please note: Multiple message will not be combined together so your message needs to be one message NOT multiple little ones! \n" +
+                        "Also if you upload a file we will take the file and put it into the support channel too!").build()
+                ).addReaction("\u2705").complete();
         return CommandResult.SUCCESS;
     }
 
@@ -43,7 +51,7 @@ public class Ticket implements Command {
 
     @Override
     public String usage() {
-        return bot.getCommandPrefix() + "ticket";
+        return "ticket";
     }
 
     @Override

@@ -51,7 +51,7 @@ public class Volume implements Command {
 
     @Override
     public String usage() {
-        return bot.getCommandPrefix() + "volume 1";
+        return "volume 1";
     }
 
     @Override

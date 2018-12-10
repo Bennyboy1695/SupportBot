@@ -42,7 +42,7 @@ public class CommandRouter {
                 System.arraycopy(args, 1, argsNew, 0, args.length - 1);
                 CommandResult result = command.onExecute(this.bot, sender, channel, args[0], argsNew);
                 if (result == CommandResult.INVALIDARGS)
-                    bot.getMessenger().sendEmbed(channel, Messenger.INVALID_ARGS(command.usage()), 20);
+                    bot.getMessenger().sendEmbed(channel, Messenger.INVALID_ARGS(bot.getCommandPrefix() + command.usage()), 20);
                 return result;
             }
 
@@ -107,6 +107,10 @@ public class CommandRouter {
     public CommandRouter addSubRouter(CommandRouter router) {
         this.routers.add(router);
         return this;
+    }
+
+    public Set<Command> getCommands() {
+        return commands;
     }
 
     public void addCommand(Command... command) {

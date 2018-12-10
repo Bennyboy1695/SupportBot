@@ -1,17 +1,21 @@
 package uk.co.netbans.discordbot;
 
 import com.google.common.collect.ImmutableList;
+import net.dv8tion.jda.client.events.relationship.FriendRequestReceivedEvent;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.hooks.InterfacedEventManager;
+import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import uk.co.netbans.discordbot.Message.Messenger;
 import uk.co.netbans.discordbot.Support.Command.CommandListener;
 import uk.co.netbans.discordbot.Music.MusicManager;
+import uk.co.netbans.discordbot.Support.Command.CommandRouter;
 import uk.co.netbans.discordbot.Support.Listeners.MessageReceivedEvent;
 import uk.co.netbans.discordbot.Support.Listeners.PrivateMessageListener;
 import uk.co.netbans.discordbot.Support.Listeners.ReactionAddEvent;
@@ -36,6 +40,7 @@ public class NetBansBot {
     private Path logDirectory;
     private JSONObject conf;
     private EnumMap<PermType, List<Long>> perms;
+    private CommandListener listener;
 
     public void init(Path directory) throws Exception {
         this.directory = directory;
@@ -83,7 +88,7 @@ public class NetBansBot {
 
         System.out.println("Registering Commands...");
         // old
-        this.jda.addEventListener(new CommandListener(this));
+        this.jda.addEventListener(listener = new CommandListener(this));
         this.jda.addEventListener(new PrivateMessageListener(this));
         this.jda.addEventListener(new MessageReceivedEvent(this));
         this.jda.addEventListener(new ReactionAddEvent(this));
@@ -92,6 +97,7 @@ public class NetBansBot {
         this.music = new MusicManager();
 
         System.out.println("Finished Loading | Now accepting input.");
+
     }
 
     public void shutdown() {
@@ -120,6 +126,14 @@ public class NetBansBot {
         return this.music;
     }
 
+    public CommandRouter getCommandRouter() {
+        return getListener().getRouter();
+    }
+
+    public CommandListener getListener() {
+        return listener;
+    }
+
     @SuppressWarnings("unchecked")
     private void initConfig() throws Exception {
         Path config = directory.resolve("config.json");
@@ -129,6 +143,7 @@ public class NetBansBot {
             JSONObject jo = new JSONObject();
             jo.put("token", "add_me");
             jo.put("category","add_me");
+            jo.put("logChannelID", "add_me");
             jo.put("guildID", "add_me");
             jo.put("commandPrefix", "!");
 
@@ -205,6 +220,14 @@ public class NetBansBot {
         try {
             this.writePerms();
             this.initPerms();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void reloadConfig() {
+        try {
+            this.initConfig();
         } catch (Exception e) {
             e.printStackTrace();
         }

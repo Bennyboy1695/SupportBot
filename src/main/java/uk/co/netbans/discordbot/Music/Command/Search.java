@@ -43,7 +43,7 @@ public class Search implements Command {
 
     @Override
     public String usage() {
-        return bot.getCommandPrefix() + "search We Are Number One";
+        return "search We Are Number One";
     }
 
     @Override

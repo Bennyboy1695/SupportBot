@@ -69,7 +69,7 @@ public class Queue implements Command {
 
     @Override
     public String usage() {
-        return bot.getCommandPrefix() + "queue";
+        return "queue";
     }
 
     @Override

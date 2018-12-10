@@ -43,7 +43,7 @@ public class Play implements Command {
 
     @Override
     public String usage() {
-        return bot.getCommandPrefix() + "play <url>";
+        return "play <url>";
     }
 
     @Override

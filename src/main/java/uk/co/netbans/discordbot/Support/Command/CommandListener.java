@@ -5,18 +5,19 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import uk.co.netbans.discordbot.Message.Messenger;
 import uk.co.netbans.discordbot.NetBansBot;
 import uk.co.netbans.discordbot.Music.Command.*;
-import uk.co.netbans.discordbot.PermType;
+import uk.co.netbans.discordbot.Support.Command.Admin.ConfigReload;
 import uk.co.netbans.discordbot.Support.Command.Admin.Perm;
+import uk.co.netbans.discordbot.Support.Command.Support.Help;
 import uk.co.netbans.discordbot.Support.Command.Support.Ticket;
 
 public class CommandListener extends ListenerAdapter {
-    private CommandRouter main;
+    private CommandRouter router;
     private NetBansBot bot; //
 
     public CommandListener(NetBansBot bot) {
         this.bot = bot;
-        this.main = new CommandRouter(bot, null, null);
-        main.addCommand(
+        this.router = new CommandRouter(bot, null, null);
+        router.addCommand(
                 new Play(),
                 new Search(),
                 new Queue(),
@@ -27,7 +28,9 @@ public class CommandListener extends ListenerAdapter {
                 new Volume(),
                 new Proximity(),
                 new Ticket(),
-                new Perm()
+                new Perm(),
+                new ConfigReload(),
+                new Help()
         );
     }
 
@@ -38,9 +41,13 @@ public class CommandListener extends ListenerAdapter {
 
         String[] args = e.getMessage().getContentRaw().split(" ");
         args[0] = args[0].substring(1);
-        if (main.onCommand(e.getMember(), e.getTextChannel(), args).equals(CommandResult.NOPERMS)) {
+        if (router.onCommand(e.getMember(), e.getTextChannel(), args).equals(CommandResult.NOPERMS)) {
             bot.getMessenger().sendEmbed(e.getTextChannel(), Messenger.NO_PERMS, 10);
         }
         bot.getMessenger().delMessage(e.getTextChannel(), e.getMessageIdLong(), 5);
+    }
+
+    public CommandRouter getRouter() {
+        return router;
     }
 }

@@ -46,7 +46,7 @@ public class Shuffle implements Command {
 
     @Override
     public String usage() {
-        return bot.getCommandPrefix() + "shuffle";
+        return "shuffle";
     }
 
     @Override

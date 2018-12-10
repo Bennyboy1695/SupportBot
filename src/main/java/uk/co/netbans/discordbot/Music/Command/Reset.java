@@ -41,7 +41,7 @@ public class Reset implements Command {
 
     @Override
     public String usage() {
-        return bot.getCommandPrefix() + "reset";
+        return "reset";
     }
 
     @Override

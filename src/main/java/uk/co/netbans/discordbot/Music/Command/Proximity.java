@@ -30,8 +30,8 @@ public class Proximity implements Command {
         MusicManager music = bot.getMusicManager();
 
         try {
-            music.loadTrack("https://www.youtube.com/playlist?list=PLZb6kNIh9TrHokGyJZrvJEhMpO78UMiQM", sender, channel);
-            TimeUnit.SECONDS.sleep(5);
+            music.loadTrack("https://www.youtube.com/playlist?list=PL3osQJLUr9gL42vxYKssd62eng5MV_1WM", sender, channel);
+            TimeUnit.SECONDS.sleep(10);
             music.getTrackManager(channel.getGuild()).shuffleQueue();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -52,7 +52,7 @@ public class Proximity implements Command {
 
     @Override
     public String usage() {
-        return bot.getCommandPrefix() + "proximity";
+        return ("proximity");
     }
 
     @Override
