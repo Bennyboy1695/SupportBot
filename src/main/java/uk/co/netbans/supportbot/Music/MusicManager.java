@@ -29,12 +29,10 @@ public class MusicManager extends ListenerAdapter {
     public final String QUEUE_INFO = "Info about the Queue: (Size - %d)";
     public final String ERROR = "Error while loading \"%s\"";
 
-    private NetBansBot bot;
     private final AudioPlayerManager myManager = new DefaultAudioPlayerManager();
     private final Map<String, Map.Entry<AudioPlayer, TrackManager>> players = new HashMap<>();
 
-    public MusicManager(NetBansBot bot) {
-        this.bot = bot;
+    public MusicManager() {
         AudioSourceManagers.registerRemoteSources(myManager);
     }
 

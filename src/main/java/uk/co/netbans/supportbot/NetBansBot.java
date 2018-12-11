@@ -8,6 +8,7 @@ import net.dv8tion.jda.core.hooks.InterfacedEventManager;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import uk.co.netbans.supportbot.Message.Messenger;
 import uk.co.netbans.supportbot.Support.Command.CommandListener;
 import uk.co.netbans.supportbot.Music.MusicManager;
@@ -19,6 +20,7 @@ import uk.co.netbans.supportbot.Support.Listeners.SupportCategoryReactionListene
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -110,6 +112,22 @@ public class NetBansBot {
         }
 
         System.out.println("Shutdown Complete.");
+    }
+
+    public List<String[]> getTips() throws IOException, ParseException {
+        BufferedReader reader = Files.newBufferedReader(directory.resolve("config.json"));
+        JSONParser jsonParser = new JSONParser();
+        JSONObject result = (JSONObject) jsonParser.parse(reader);
+        JSONArray tips = (JSONArray) result.get("tips");
+        List<String[]> tipArray = new ArrayList<>();
+        for (Object obj : tips) {
+            JSONObject jsonObject = (JSONObject) obj;
+            String word = (String) jsonObject.get("word");
+            String suggestion = (String) jsonObject.get("suggestion");
+            String[] put = new String[]{word, suggestion};
+            tipArray.add(put);
+        }
+        return tipArray;
     }
 
     public JDA getJDA() {
