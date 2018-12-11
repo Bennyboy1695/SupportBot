@@ -10,7 +10,6 @@ import uk.co.netbans.supportbot.Support.Command.CommandResult;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Help implements Command {
@@ -23,58 +22,79 @@ public class Help implements Command {
         if (bot.getPerms().get(PermType.ADMIN).contains(sender.getUser().getIdLong())) {
             StringBuilder adminCommands = new StringBuilder();
             StringBuilder modCommands = new StringBuilder();
-            StringBuilder defaultCommands = new StringBuilder();
+            StringBuilder commands = new StringBuilder();
+            List<String> temp = new ArrayList<String>();
             for (Command command : bot.getCommandRouter().getCommands()) {
                 if (command.getPermission() == PermType.ADMIN) {
                     String output = command.name().substring(0, 1).toUpperCase() + command.name().substring(1);
                     adminCommands.append("**" + output + ":**" + "\n" +
                             "**Description:** " + command.desc() + "\n" +
-                            "**Usage:** " + bot.getCommandPrefix() + command.usage() + "\n"+ "\n");
+                            "**Usage:** " + bot.getCommandPrefix() + command.usage() + "\n"+
+                            "\u00A0\u00A0\u00A0\u00A0\u00A0**Perm:** " + command.getPermission().toString().toLowerCase() + "\n" + "\n");
                 }
                 if (command.getPermission() == PermType.MOD) {
                     String output = command.name().substring(0, 1).toUpperCase() + command.name().substring(1);
                     modCommands.append("**" + output + ":**" + "\n" +
                             "**Description:** " + command.desc() + "\n" +
-                            "**Usage:** " + bot.getCommandPrefix() + command.usage() + "\n"+ "\n");
+                            "**Usage:** " + bot.getCommandPrefix() + command.usage() + "\n"+
+                            "\u00A0\u00A0\u00A0\u00A0\u00A0**Perm:** " + command.getPermission().toString().toLowerCase() + "\n" + "\n");
                 }
                 if (command.getPermission() != PermType.ADMIN || command.getPermission() != PermType.MOD) {
+                    System.out.println("Running ?");
+                    final Integer limit = 800;
                     String output = command.name().substring(0, 1).toUpperCase() + command.name().substring(1);
-                    defaultCommands.append("**" + output + ":**" + "\n" +
-                            "**Description:** " + command.desc() + "\n" +
-                            "**Usage:** " + bot.getCommandPrefix() + command.usage() + "\n"+ "\n");
+                    commands.append("**" + output + ":**" + "\n" +
+                            "\u00A0\u00A0\u00A0\u00A0\u00A0**Description:** " + command.desc() + "\n" +
+                            "\u00A0\u00A0\u00A0\u00A0\u00A0**Usage:** " + bot.getCommandPrefix() + command.usage() + "\n" +
+                            "\u00A0\u00A0\u00A0\u00A0\u00A0**Perm:** " + command.getPermission().toString().toLowerCase() + "\n" + "\n");
+                    if (commands.length() > limit) {
+                        temp.add(commands.toString());
+                        commands.setLength(0);
+                    }
                 }
             }
-            bot.getMessenger().sendEmbed(channel, new EmbedBuilder()
-                    .setTitle("Command Help")
-                    .addField("Admin Commands:", adminCommands.toString(), false)
-                    .addField("Mod Commands:", modCommands.toString(), false)
-                    .addField("Default Commands:", defaultCommands.toString(), false)
-                    .setColor(Color.ORANGE).build());
+            if (commands.length() != 0) {
+                temp.add(commands.toString());
+                commands.setLength(0);
+            }
+            for (String str : temp) {
+                System.out.println(str);
+                bot.getMessenger().sendEmbed(channel, new EmbedBuilder().setTitle("Help").setColor(Color.ORANGE).addField("Commands:", str + "\n", false).build(), 30);
+            }
             return CommandResult.SUCCESS;
         } else if (bot.getPerms().get(PermType.MOD).contains(sender.getUser().getIdLong())) {
             StringBuilder modCommands = new StringBuilder();
-            StringBuilder defaultCommands = new StringBuilder();
+            List<String> temp = new ArrayList<String>();
+            StringBuilder commands = new StringBuilder();
             for (Command command : bot.getCommandRouter().getCommands()) {
-            if (command.getPermission() == PermType.MOD) {
-                String output = command.name().substring(0, 1).toUpperCase() + command.name().substring(1);
-                modCommands.append("**" + output + ":**" + "\n" +
-                        "**Description:** " + command.desc() + "\n" +
-                        "**Perm Needed:**" + command.getPermission().name().toLowerCase() + "\n" +
-                        "**Usage:** " + bot.getCommandPrefix() + command.usage() + "\n"+ "\n");
+                if (command.getPermission() == PermType.MOD) {
+                    String output = command.name().substring(0, 1).toUpperCase() + command.name().substring(1);
+                    modCommands.append("**" + output + ":**" + "\n" +
+                            "**Description:** " + command.desc() + "\n" +
+                            "**Perm Needed:**" + command.getPermission().name().toLowerCase() + "\n" +
+                            "**Usage:** " + bot.getCommandPrefix() + command.usage() + "\n" +
+                            "\u00A0\u00A0\u00A0\u00A0\u00A0**Perm:** " + command.getPermission().toString().toLowerCase() + "\n" + "\n");
+                }
+                if (command.getPermission() != PermType.ADMIN || command.getPermission() != PermType.MOD) {
+                    final Integer limit = 800;
+                    String output = command.name().substring(0, 1).toUpperCase() + command.name().substring(1);
+                    commands.append("**" + output + ":**" + "\n" +
+                            "\u00A0\u00A0\u00A0\u00A0\u00A0**Description:** " + command.desc() + "\n" +
+                            "\u00A0\u00A0\u00A0\u00A0\u00A0**Usage:** " + bot.getCommandPrefix() + command.usage() + "\n" +
+                            "\u00A0\u00A0\u00A0\u00A0\u00A0**Perm:** " + command.getPermission().toString().toLowerCase() + "\n" + "\n");
+                        if (commands.length() > limit) {
+                            temp.add(commands.toString());
+                            commands.setLength(0);
+                        }
+                    }
             }
-            if (command.getPermission() != PermType.ADMIN || command.getPermission() != PermType.MOD) {
-                String output = command.name().substring(0, 1).toUpperCase() + command.name().substring(1);
-                defaultCommands.append("**" + output + ":**" + "\n" +
-                        "**Description:** " + command.desc() + "\n" +
-                        "**Usage:** " + bot.getCommandPrefix() + command.usage() + "\n"+ "\n");
+            if (commands.length() != 0) {
+                temp.add(commands.toString());
+                commands.setLength(0);
             }
+            for (String str : temp) {
+                bot.getMessenger().sendEmbed(channel, new EmbedBuilder().setTitle("Help").setColor(Color.ORANGE).addField("Commands:", str + "\n", false).build(), 30);
             }
-            bot.getMessenger().sendEmbed(channel, new EmbedBuilder()
-                    .setTitle("Command Help")
-                    .addField("Mod Commands:", modCommands.toString(), false)
-                    .addField("Default Commands:", defaultCommands.toString(), false)
-                    .setColor(Color.ORANGE).build());
-            return CommandResult.SUCCESS;
         } else {
             final Integer limit = 800;
             List<String> temp = new ArrayList<String>();
@@ -83,23 +103,19 @@ public class Help implements Command {
                 if (command.getPermission() != PermType.ADMIN || command.getPermission() != PermType.MOD) {
                     String output = command.name().substring(0, 1).toUpperCase() + command.name().substring(1);
                     commands.append("**" + output + ":**" + "\n" +
-                            "**Description:** " + command.desc() + "\n" +
-                                    "**Usage:** " + bot.getCommandPrefix() + command.usage() + "\n");
+                            "\u00A0\u00A0\u00A0\u00A0\u00A0**Description:** " + command.desc() + "\n" +
+                            "\u00A0\u00A0\u00A0\u00A0\u00A0**Usage:** " + bot.getCommandPrefix() + command.usage() + "\n" + "\n");
                 }
                 if (commands.length() > limit) {
                     temp.add(commands.toString());
                     commands.setLength(0);
                 }
-                System.out.println("Hi");
             }
             for (String str : temp) {
-                System.out.println("Hello");
-                //System.out.println(str);
-                //bot.getMessenger().sendEmbed(channel, new EmbedBuilder().setTitle("Help").setColor(Color.ORANGE).addField("Commands:", str, false).build(), 20);
+                bot.getMessenger().sendEmbed(channel, new EmbedBuilder().setTitle("Help").setColor(Color.ORANGE).addField("Commands:", str + "\n", false).build(), 30);
             }
-
-        return CommandResult.SUCCESS;
         }
+        return CommandResult.SUCCESS;
 
     }
 

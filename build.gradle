@@ -37,6 +37,6 @@ shadowJar {
 
 jar {
     manifest {
-        attributes 'Main-Class':'uk.co.netbans.discordbot.Main'
+        attributes 'Main-Class':'uk.co.netbans.supportbot.Main'
     }
 }
