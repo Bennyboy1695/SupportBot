@@ -10,6 +10,7 @@ import uk.co.netbans.supportbot.Support.Command.CommandResult;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Help implements Command {
@@ -84,15 +85,17 @@ public class Help implements Command {
                     commands.append("**" + output + ":**" + "\n" +
                             "**Description:** " + command.desc() + "\n" +
                                     "**Usage:** " + bot.getCommandPrefix() + command.usage() + "\n");
-                    if (commands.length() > limit) {
-                        temp.add(commands.toString());
-                        commands = new StringBuilder();
-                    }
                 }
-                for (String str : temp) {
-                    System.out.println(str);
-                    //bot.getMessenger().sendEmbed(channel, new EmbedBuilder().setTitle("Help").setColor(Color.ORANGE).addField("Commands:", str, false).build(), 20);
+                if (commands.length() > limit) {
+                    temp.add(commands.toString());
+                    commands.setLength(0);
                 }
+                System.out.println("Hi");
+            }
+            for (String str : temp) {
+                System.out.println("Hello");
+                //System.out.println(str);
+                //bot.getMessenger().sendEmbed(channel, new EmbedBuilder().setTitle("Help").setColor(Color.ORANGE).addField("Commands:", str, false).build(), 20);
             }
 
         return CommandResult.SUCCESS;
