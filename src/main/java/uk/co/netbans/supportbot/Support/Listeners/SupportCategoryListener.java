@@ -11,11 +11,11 @@ import java.nio.file.StandardOpenOption;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class MessageReceivedEvent extends ListenerAdapter {
+public class SupportCategoryListener extends ListenerAdapter {
 
     private NetBansBot bot;
 
-    public MessageReceivedEvent(NetBansBot bot) {
+    public SupportCategoryListener(NetBansBot bot) {
         this.bot = bot;
     }
 

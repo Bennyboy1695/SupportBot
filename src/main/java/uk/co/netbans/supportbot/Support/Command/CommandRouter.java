@@ -11,7 +11,7 @@ import java.util.List;
 public class CommandRouter {
     private final NetBansBot bot;
     private final Set<CommandRouter> routers;
-    private final Set<Command> commands;
+    private final List<Command> commands;
     private final List<Long> allowedChannels;
     private final String name;
     private final String[] aliases;
@@ -19,7 +19,7 @@ public class CommandRouter {
     public CommandRouter(NetBansBot bot, String name, List<Long> allowedChannels, String... aliases) {
         this.bot = bot;
         this.routers = new HashSet<>();
-        this.commands = new HashSet<>();
+        this.commands = new ArrayList<>();
         this.allowedChannels = allowedChannels;
         this.name = name;
         this.aliases = aliases;
@@ -107,7 +107,7 @@ public class CommandRouter {
         return this;
     }
 
-    public Set<Command> getCommands() {
+    public List<Command> getCommands() {
         return commands;
     }
 

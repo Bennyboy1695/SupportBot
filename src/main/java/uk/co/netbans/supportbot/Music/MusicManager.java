@@ -14,6 +14,7 @@ import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import uk.co.netbans.supportbot.NetBansBot;
 import uk.co.netbans.supportbot.Util;
 
 import java.util.*;
@@ -28,12 +29,12 @@ public class MusicManager extends ListenerAdapter {
     public final String QUEUE_INFO = "Info about the Queue: (Size - %d)";
     public final String ERROR = "Error while loading \"%s\"";
 
-
-
+    private NetBansBot bot;
     private final AudioPlayerManager myManager = new DefaultAudioPlayerManager();
     private final Map<String, Map.Entry<AudioPlayer, TrackManager>> players = new HashMap<>();
 
-    public MusicManager() {
+    public MusicManager(NetBansBot bot) {
+        this.bot = bot;
         AudioSourceManagers.registerRemoteSources(myManager);
     }
 

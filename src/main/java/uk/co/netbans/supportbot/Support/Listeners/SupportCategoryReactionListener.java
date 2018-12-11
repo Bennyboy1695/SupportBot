@@ -12,11 +12,11 @@ import uk.co.netbans.supportbot.NetBansBot;
 import uk.co.netbans.supportbot.PermType;
 
 
-public class ReactionAddEvent extends ListenerAdapter {
+public class SupportCategoryReactionListener extends ListenerAdapter {
 
     private NetBansBot bot;
 
-    public ReactionAddEvent(NetBansBot bot) {
+    public SupportCategoryReactionListener(NetBansBot bot) {
         this.bot = bot;
     }
 

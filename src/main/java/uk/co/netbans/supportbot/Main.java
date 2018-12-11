@@ -32,7 +32,7 @@ public class Main extends ListenerAdapter {
     }
 
 //    @Override
-//    public void onMessageReceived(MessageReceivedEvent event) {
+//    public void onMessageReceived(SupportCategoryListener event) {
 //        if (event.getChannel().getIdLong() == 516019424747061249L && event.getMessage().getContentStripped().startsWith("!embed")) {
 //            String[] args = getBetweenQuotes(event.getMessage().getContentRaw().substring(event.getMessage().getContentRaw().indexOf(' ')+1).split(" "));
 //

@@ -10,6 +10,7 @@ import uk.co.netbans.supportbot.Support.Command.CommandResult;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Help implements Command {
@@ -19,6 +20,7 @@ public class Help implements Command {
     @Override
     public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
         this.bot = bot;
+        Collections.sort(bot.getCommandRouter().getCommands());
         if (bot.getPerms().get(PermType.ADMIN).contains(sender.getUser().getIdLong())) {
             StringBuilder adminCommands = new StringBuilder();
             StringBuilder modCommands = new StringBuilder();
@@ -58,7 +60,6 @@ public class Help implements Command {
                 commands.setLength(0);
             }
             for (String str : temp) {
-                System.out.println(str);
                 bot.getMessenger().sendEmbed(channel, new EmbedBuilder().setTitle("Help").setColor(Color.ORANGE).addField("Commands:", str + "\n", false).build(), 30);
             }
             return CommandResult.SUCCESS;
@@ -131,7 +132,7 @@ public class Help implements Command {
 
     @Override
     public String usage() {
-        return "help [page]";
+        return "help";
     }
 
     @Override
