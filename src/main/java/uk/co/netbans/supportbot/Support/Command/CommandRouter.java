@@ -65,7 +65,7 @@ public class CommandRouter {
 
         }
 
-        return CommandResult.INVALIDARGS;
+        return CommandResult.INVALIDCOMMAND;
     }
 
     private Command getCommand(String name) {

@@ -6,9 +6,13 @@ import uk.co.netbans.supportbot.Message.Messenger;
 import uk.co.netbans.supportbot.NetBansBot;
 import uk.co.netbans.supportbot.Music.Command.*;
 import uk.co.netbans.supportbot.Support.Command.Admin.ConfigReload;
+import uk.co.netbans.supportbot.Support.Command.Admin.Embedify;
 import uk.co.netbans.supportbot.Support.Command.Admin.Perm;
+import uk.co.netbans.supportbot.Support.Command.Admin.Tips;
 import uk.co.netbans.supportbot.Support.Command.Support.Help;
 import uk.co.netbans.supportbot.Support.Command.Support.Ticket;
+
+import java.util.ArrayList;
 
 public class CommandListener extends ListenerAdapter {
     private CommandRouter router;
@@ -30,7 +34,9 @@ public class CommandListener extends ListenerAdapter {
                 new Ticket(),
                 new Perm(),
                 new ConfigReload(),
-                new Help()
+                new Help(),
+                new Tips(),
+                new Embedify()
         );
     }
 
@@ -39,9 +45,14 @@ public class CommandListener extends ListenerAdapter {
         if (!e.getMessage().getContentRaw().startsWith(bot.getCommandPrefix()) || e.getAuthor().isBot() || e.getMessage().getContentRaw().length() <= 1)
             return;
 
-        String[] args = e.getMessage().getContentRaw().split(" ");
+        String[] args = quotesOrSpaceSplits(e.getMessage().getContentRaw());
         args[0] = args[0].substring(1);
-        if (router.onCommand(e.getMember(), e.getTextChannel(), args).equals(CommandResult.NOPERMS)) {
+
+        CommandResult result = router.onCommand(e.getMember(), e.getTextChannel(), args);
+        if (result.equals(CommandResult.INVALIDCOMMAND)) {
+            bot.getMessenger().sendEmbed(e.getTextChannel(), Messenger.INVALID_COMMAND, 10);
+        }
+        if (result.equals(CommandResult.NOPERMS)) {
             bot.getMessenger().sendEmbed(e.getTextChannel(), Messenger.NO_PERMS, 10);
         }
         bot.getMessenger().delMessage(e.getTextChannel(), e.getMessageIdLong(), 5);
@@ -49,5 +60,25 @@ public class CommandListener extends ListenerAdapter {
 
     public CommandRouter getRouter() {
         return router;
+    }
+
+    public static String[] quotesOrSpaceSplits(String str) {
+        str += " ";
+        ArrayList<String> strings = new ArrayList<String>();
+        boolean inQuote = false;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (c == '"' || c == ' ' && !inQuote) {
+                if (c == '"')
+                    inQuote = !inQuote;
+                if (!inQuote && sb.length() > 0) {
+                    strings.add(sb.toString());
+                    sb.delete(0, sb.length());
+                }
+            } else
+                sb.append(c);
+        }
+        return strings.toArray(new String[strings.size()]);
     }
 }

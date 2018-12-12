@@ -69,6 +69,7 @@ public class Messenger {
     public static MessageEmbed NO_PERMS = new EmbedBuilder().setColor(Color.RED).setDescription("You do not have permission to run this command!").build();
     public static MessageEmbed NOT_SAME_VOICE = new EmbedBuilder().setColor(Color.RED).setDescription("You are not in the same voice channel as the bot!").build();
     public static MessageEmbed NOT_VOICE = new EmbedBuilder().setColor(Color.RED).setDescription("You are not in a voice channel!").build();
+    public static MessageEmbed INVALID_COMMAND = new EmbedBuilder().setColor(Color.RED).setDescription("This is not a valid command!").build();
 
     public static MessageEmbed INVALID_ARGS(String usage) {
         return new EmbedBuilder().setTitle("Invalid Args!").setDescription("Correct Usage: \n " + usage).setColor(Color.RED).build();
