@@ -5,10 +5,7 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import uk.co.netbans.supportbot.Message.Messenger;
 import uk.co.netbans.supportbot.NetBansBot;
 import uk.co.netbans.supportbot.Music.Command.*;
-import uk.co.netbans.supportbot.Support.Command.Admin.ConfigReload;
-import uk.co.netbans.supportbot.Support.Command.Admin.Embedify;
-import uk.co.netbans.supportbot.Support.Command.Admin.Perm;
-import uk.co.netbans.supportbot.Support.Command.Admin.Tips;
+import uk.co.netbans.supportbot.Support.Command.Admin.*;
 import uk.co.netbans.supportbot.Support.Command.Support.Help;
 import uk.co.netbans.supportbot.Support.Command.Support.Ticket;
 
@@ -36,7 +33,8 @@ public class CommandListener extends ListenerAdapter {
                 new ConfigReload(),
                 new Help(),
                 new Tips(),
-                new Embedify()
+                new Embedify(),
+                new Faq()
         );
     }
 
@@ -62,7 +60,7 @@ public class CommandListener extends ListenerAdapter {
         return router;
     }
 
-    public static String[] quotesOrSpaceSplits(String str) {
+    private String[] quotesOrSpaceSplits(String str) {
         str += " ";
         ArrayList<String> strings = new ArrayList<String>();
         boolean inQuote = false;

@@ -31,12 +31,19 @@ public class PrivateMessageListener extends ListenerAdapter {
         Member member = bot.getJDA().getGuildById(Long.valueOf((String)bot.getConf().get("guildID"))).getMember(event.getAuthor());
 
         if (member.getRoles().contains(bot.getJDA().getGuildById(Long.valueOf((String)bot.getConf().get("guildID"))).getRoleById((String)bot.getConf().get("noHelpRoleID")))) {
-            member.getUser().openPrivateChannel().complete().sendMessage("No channel has been created because you have the NoHelp role!").complete();
+            member.getUser().openPrivateChannel().complete().sendMessage("No channel has been created because you have the anti-support role!").complete();
             return;
         }
         for (Guild.Ban bans : bot.getJDA().getGuildById(Long.valueOf((String)bot.getConf().get("guildID"))).getBanList().complete()) {
             if (bans.getUser().getIdLong() == member.getUser().getIdLong())
                 return;
+        }
+
+        for (TextChannel channel : bot.getJDA().getCategoryById(Long.valueOf((String) bot.getConf().get("category"))).getTextChannels()) {
+            if (channel.getName().startsWith(event.getAuthor().getName())) {
+                member.getUser().openPrivateChannel().complete().sendMessage("No channel has been created because you have a support channel open already! Please complete that issue first. This may change to allow a max amount of channel instead of just one soon!").complete();
+                return;
+            }
         }
 
         TextChannel supportChannel = (TextChannel) bot.getJDA().getCategoryById(Long.valueOf((String) bot.getConf().get("category")))
