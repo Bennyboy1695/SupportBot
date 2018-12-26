@@ -54,6 +54,7 @@ public class ManualChannel implements Command {
             } else if (args[0].equals("move")) {
                 TextChannel channelArg = bot.getJDA().getTextChannelById(args[1].replaceAll("<", "").replaceAll("#", "").replaceAll(">", ""));
                 channel.getManager().setParent(channelArg.getParent()).complete();
+                channel.getManager().setName(channel.getName().replaceAll("-[0-9]*", "manual")).complete();
                 return CommandResult.SUCCESS;
             } else {
                 return CommandResult.INVALIDARGS;
