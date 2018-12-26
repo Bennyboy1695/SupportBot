@@ -56,7 +56,7 @@ public class ManualChannel implements Command {
                 Category original = channel.getParent();
                 TextChannel channelArg = bot.getJDA().getTextChannelById(args[1].replaceAll("<", "").replaceAll("#", "").replaceAll(">", ""));
                 channel.getManager().setParent(channelArg.getParent()).complete();
-                channel.getManager().setName(channel.getName().replaceAll("-[0-9]*", "manual")).complete();
+                channel.getManager().setName(channel.getName().replaceAll("-[0-9]*", "-manual")).complete();
                 channel.sendMessage("**Channel was moved from Category: " + original.getName() + " to Category: " + channelArg.getParent().getName() + "!**").complete();
                 return CommandResult.SUCCESS;
             } else {
