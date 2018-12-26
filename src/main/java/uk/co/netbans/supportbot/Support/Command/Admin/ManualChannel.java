@@ -2,6 +2,7 @@ package uk.co.netbans.supportbot.Support.Command.Admin;
 
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
+import net.dv8tion.jda.core.entities.Category;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -52,9 +53,11 @@ public class ManualChannel implements Command {
                         .build()).complete();
                 return CommandResult.SUCCESS;
             } else if (args[0].equals("move")) {
+                Category original = channel.getParent();
                 TextChannel channelArg = bot.getJDA().getTextChannelById(args[1].replaceAll("<", "").replaceAll("#", "").replaceAll(">", ""));
                 channel.getManager().setParent(channelArg.getParent()).complete();
                 channel.getManager().setName(channel.getName().replaceAll("-[0-9]*", "manual")).complete();
+                channel.sendMessage("**Channel was moved from Category: " + original.getName() + " to Category: " + channelArg.getParent().getName() + "!**").complete();
                 return CommandResult.SUCCESS;
             } else {
                 return CommandResult.INVALIDARGS;
