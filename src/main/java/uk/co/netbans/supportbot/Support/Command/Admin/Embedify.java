@@ -42,7 +42,7 @@ public class Embedify implements Command {
             }
             channel.sendMessage(embed.build()).complete();
         }
-        return CommandResult.SUCCESS;
+        return CommandResult.INVALIDARGS;
     }
 
     @Override

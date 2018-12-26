@@ -34,7 +34,8 @@ public class CommandListener extends ListenerAdapter {
                 new Help(),
                 new Tips(),
                 new Embedify(),
-                new Faq()
+                new Faq(),
+                new ManualChannel()
         );
     }
 

@@ -15,6 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class PrivateMessageListener extends ListenerAdapter {
 
     private NetBansBot bot;
+    private int userCount;
 
     public PrivateMessageListener(NetBansBot bot) {
         this.bot = bot;
@@ -41,13 +42,16 @@ public class PrivateMessageListener extends ListenerAdapter {
 
         for (TextChannel channel : bot.getJDA().getCategoryById(Long.valueOf((String) bot.getConf().get("category"))).getTextChannels()) {
             if (channel.getName().startsWith(event.getAuthor().getName())) {
-                member.getUser().openPrivateChannel().complete().sendMessage("No channel has been created because you have a support channel open already! Please complete that issue first. This may change to allow a max amount of channel instead of just one soon!").complete();
-                return;
+                userCount++;
+                if (userCount >= 3) {
+                    member.getUser().openPrivateChannel().complete().sendMessage("No channel has been created because you multiple channels open already. Please complete these issue first!").complete();
+                    return;
+                }
             }
         }
 
         TextChannel supportChannel = (TextChannel) bot.getJDA().getCategoryById(Long.valueOf((String) bot.getConf().get("category")))
-                .createTextChannel(ThreadLocalRandom.current().nextInt(99999) + "-" + event.getAuthor().getName()).complete();
+                .createTextChannel(event.getAuthor().getName() + "-" + ThreadLocalRandom.current().nextInt(99999)).complete();
 
         supportChannel.createPermissionOverride(member).setAllow(101440).complete();
         supportChannel.getManager().setTopic("Creation date: "+ supportChannel.getCreationTime().format(dateFormat) + " Creation Time: " + supportChannel.getCreationTime().format(timeFormat) + "GMT").complete();

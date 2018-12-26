@@ -16,7 +16,7 @@ import uk.co.netbans.supportbot.Support.Command.CommandRouter;
 import uk.co.netbans.supportbot.Support.Listeners.SuggestionListener;
 import uk.co.netbans.supportbot.Support.Listeners.SupportCategoryListener;
 import uk.co.netbans.supportbot.Support.Listeners.PrivateMessageListener;
-import uk.co.netbans.supportbot.Support.Listeners.SupportCategoryReactionListener;
+import uk.co.netbans.supportbot.Support.Listeners.TicketChannelsReactionListener;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -90,7 +90,7 @@ public class NetBansBot {
         this.jda.addEventListener(listener = new CommandListener(this));
         this.jda.addEventListener(new PrivateMessageListener(this));
         this.jda.addEventListener(new SupportCategoryListener(this));
-        this.jda.addEventListener(new SupportCategoryReactionListener(this));
+        this.jda.addEventListener(new TicketChannelsReactionListener(this));
         this.jda.addEventListener(new SuggestionListener(this));
 
         System.out.println("Loading Music Manager...");

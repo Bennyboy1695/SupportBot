@@ -12,11 +12,11 @@ import uk.co.netbans.supportbot.NetBansBot;
 import uk.co.netbans.supportbot.PermType;
 
 
-public class SupportCategoryReactionListener extends ListenerAdapter {
+public class TicketChannelsReactionListener extends ListenerAdapter {
 
     private NetBansBot bot;
 
-    public SupportCategoryReactionListener(NetBansBot bot) {
+    public TicketChannelsReactionListener(NetBansBot bot) {
         this.bot = bot;
     }
 
@@ -24,7 +24,7 @@ public class SupportCategoryReactionListener extends ListenerAdapter {
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
         if (event.isFromType(ChannelType.TEXT)) {
             TextChannel channel = (TextChannel) event.getChannel();
-            if (channel.getParent().getIdLong() == Long.valueOf((String) bot.getConf().get("category"))) {
+            if (channel.getParent().getIdLong() == Long.valueOf((String) bot.getConf().get("category")) || channel.getName().contains("manual")) {
                 for (Message message : channel.getPinnedMessages().complete()) {
                     if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\u2705")) {
                         for (Member member : message.getMentionedMembers()) {
