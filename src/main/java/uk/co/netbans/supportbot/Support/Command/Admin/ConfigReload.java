@@ -22,7 +22,7 @@ public class ConfigReload implements Command {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return CommandResult.SUCCESS;
     }
 
     @Override
