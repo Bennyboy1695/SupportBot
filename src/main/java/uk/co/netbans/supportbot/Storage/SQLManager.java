@@ -10,9 +10,6 @@ public class SQLManager {
 
     private Database database;
     private File dataFolder;
-    private String commandPermsTable = "commandPermsTable";
-    private String permRolesTable = "permsRolesTable";
-    private String userPermsInfoTable = "userPermsInfoTable";
 
     public SQLManager(File dataFolder) {
         this.dataFolder = dataFolder;
@@ -23,45 +20,74 @@ public class SQLManager {
             e.printStackTrace();
         }
         try {
-            writeTables(commandPermsTable, permRolesTable, userPermsInfoTable);
+            writeTables();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    private void writeTables(String commandPerms, String permRoles, String UserPermsInfo) throws SQLException, ClassNotFoundException {
-        String CreateCommandPermsTable = "CREATE TABLE IF NOT EXISTS `" + this.commandPermsTable + "` (" +
-                "`command` varchar(64)," +
-                "`permrole` varchar(64) NOT NULL DEFAULT 0" +
+    private void writeTables() throws SQLException, ClassNotFoundException {
+        String GroupsTable = "CREATE TABLE IF NOT EXISTS `groups` (" +
+                "`name`      VARCHAR(16)         NOT NULL," +
+                "`child`     VARCHAR(16)         DEFAULT 'default'," +
+                "`role`      VARCHAR(16)         DEFAULT '0'," +
+                "FOREIGN KEY (`child`) REFERENCES `groups` (`name`)," +
+                "PRIMARY KEY (`name`));";
+
+        String GroupsIndex = "CREATE INDEX IF NOT EXISTS `groups_child` ON `groups` (`child`);" +
+                "CREATE INDEX IF NOT EXISTS `groups_role` ON `groups` (`role`);";
+
+        String GroupPerms = "CREATE TABLE IF NOT EXISTS `group_perms` (" +
+                "`id`        INT AUTO_INCREMENT  NOT NULL," +
+                "`grp`       VARCHAR(16)         NOT NULL," +
+                "`perm`      VARCHAR(16)         NOT NULL," +
+                "FOREIGN KEY (`grp`) REFERENCES `groups` (`name`)," +
+                "PRIMARY KEY (`id`)" +
                 ");";
 
-        String CreatePermRolesTable = "CREATE TABLE IF NOT EXISTS `" + this.permRolesTable + "` (" +
-                "`permrole` varchar(64)," +
-                "`linkeddiscordrole` varchar(64) NOT NULL DEFAULT 0" +
+        String GroupPermsIndex = "CREATE INDEX IF NOT EXISTS `group_perms_grp` ON `group_perms` (`grp`);" +
+                "CREATE INDEX IF NOT EXISTS `group_perms_perm` ON `group_perms` (`perm`);";
+
+        String UserGroups = "CREATE TABLE IF NOT EXISTS `user_groups` (" +
+                "`id`        INT AUTO_INCREMENT  NOT NULL," +
+                "`usr`       BIGINT(32)          NOT NULL," +
+                "`grp`       VARCHAR(16)         NOT NULL DEFAULT 'default'," +
+                "FOREIGN KEY (`grp`) REFERENCES `groups` (`name`)," +
+                "PRIMARY KEY (`id`)" +
                 ");";
 
-        String CreateUserPermsInfoTable = "CREATE TABLE IF NOT EXISTS `" + this.userPermsInfoTable + "` (" +
-                "`userlongid` varchar(64)," +
-                "`permrole` varchar(64)" +
+        String UserGroupsIndex = "CREATE INDEX IF NOT EXISTS `user_groups_usr` ON `user_groups` (`usr`);" +
+                "CREATE INDEX IF NOT EXISTS `user_groups_grp` ON `user_groups` (`grp`);";
+
+        String UserPerms = "CREATE TABLE IF NOT EXISTS `user_perms` (" +
+                "    `id`        INT AUTO_INCREMENT  NOT NULL," +
+                "    `usr`       BIGINT(32)          NOT NULL," +
+                "    `perm`      VARCHAR(16)         NOT NULL," +
+                "    PRIMARY KEY (`id`)" +
                 ");";
+
+        String UserPermsIndex = "CREATE INDEX IF NOT EXISTS `user_perms_usr` ON `user_perms` (`usr`);" +
+                "CREATE INDEX IF NOT EXISTS `user_perms_perm` ON `user_perms` (`perm`);";
 
 
         database.openConnection();
-        database.updateSQL(CreateCommandPermsTable);
-        database.updateSQL(CreatePermRolesTable);
-        database.updateSQL(CreateUserPermsInfoTable);
+        database.updateSQL(GroupsTable);
+        database.updateSQL(GroupsIndex);
+        database.updateSQL(GroupPerms);
+        database.updateSQL(GroupPermsIndex);
+        database.updateSQL(UserGroups);
+        database.updateSQL(UserGroupsIndex);
+        database.updateSQL(UserPerms);
+        database.updateSQL(UserPermsIndex);
         database.closeConnection();
     }
 
-    public void createCommandWithPerms(String commandName, Optional<String> perm) {
-        try (Connection c = database.openConnection()) {
-            try (PreparedStatement ps = c.prepareStatement("INSERT INTO " + this.commandPermsTable + " (command, permrole) VALUES(?,?)")) {
-                ps.setString(1, commandName);
-                if (perm.isPresent()) ps.setString(2, perm.get());
+    public void addNewGroup(String groupName) {
+        try (Connection c = database.openConnection()){
+            String statement = "INSERT INTO groups ('name') VALUES(?);";
+            try (PreparedStatement ps = c.prepareStatement(statement)){
+                ps.setString(1, groupName);
                 ps.executeUpdate();
-                database.closeConnection();
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -70,14 +96,13 @@ public class SQLManager {
         }
     }
 
-    public void updateCommandWithPerms(String commandName, String perm) {
-        try (Connection c = database.openConnection()) {
-            try (PreparedStatement ps = c.prepareStatement("UPDATE " + this.commandPermsTable + " SET perm=? WHERE command='" + commandName + "';")) {
-                ps.setString(1, perm);
+    public void addNewGroup(String groupName, String child) {
+        try (Connection c = database.openConnection()){
+            String statement = "INSERT INTO groups ('name','child') VALUES(?,?);";
+            try (PreparedStatement ps = c.prepareStatement(statement)){
+                ps.setString(1, groupName);
+                ps.setString(2, child);
                 ps.executeUpdate();
-                database.closeConnection();
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -86,15 +111,13 @@ public class SQLManager {
         }
     }
 
-    public void createPermRoleWithLinkedRole(String permRoleName, Optional<Long> roleID) {
-        try (Connection c = database.openConnection()) {
-            try (PreparedStatement ps = c.prepareStatement("INSERT INTO " + this.permRolesTable + " (permrole, linkeddiscordrole) VALUES(?,?)")) {
-                ps.setString(1, permRoleName);
-                if (roleID.isPresent()) ps.setString(2, roleID.get().toString());
+    public void addNewGroup(String groupName, long roleID) {
+        try (Connection c = database.openConnection()){
+            String statement = "INSERT INTO groups ('name','role') VALUES(?,?);";
+            try (PreparedStatement ps = c.prepareStatement(statement)){
+                ps.setString(1, groupName);
+                ps.setString(2, String.valueOf(roleID));
                 ps.executeUpdate();
-                database.closeConnection();
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -103,47 +126,14 @@ public class SQLManager {
         }
     }
 
-    public void updatePermRoleWithLinkedRole(String permRoleName, long roleID) {
-        try (Connection c = database.openConnection()) {
-            try (PreparedStatement ps = c.prepareStatement("UPDATE " + this.permRolesTable + " SET linkeddiscordrole=? WHERE permrole='" + permRoleName + "';")) {
-                ps.setString(1, String.valueOf(roleID));
+    public void addNewGroup(String groupName, String child, String roleID) {
+        try (Connection c = database.openConnection()){
+            String statement = "INSERT INTO groups ('name','child','role') VALUES(?,?,?);";
+            try (PreparedStatement ps = c.prepareStatement(statement)){
+                ps.setString(1, groupName);
+               ps.setString(2, child);
+               ps.setString(3, roleID);
                 ps.executeUpdate();
-                database.closeConnection();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void createUserWithPerms(long userLong, Optional<String> permRoleName) {
-        try (Connection c = database.openConnection()) {
-            try (PreparedStatement ps = c.prepareStatement("INSERT INTO " + this.userPermsInfoTable + " (userlongid, permrole) VALUES(?,?)")) {
-                ps.setString(1, String.valueOf(userLong));
-                if (permRoleName.isPresent()) ps.setString(2, permRoleName.get());
-                ps.executeUpdate();
-                database.closeConnection();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void updateUserWithPerms(long userLong, String permRoleName, String oldPermRoleName) {
-        try (Connection c = database.openConnection()) {
-            try (PreparedStatement ps = c.prepareStatement("UPDATE " + this.userPermsInfoTable + " SET permrole=? WHERE userlongid='" + userLong + "' AND permrole='" + oldPermRoleName +"';")) {
-                ps.setString(1, String.valueOf(permRoleName));
-                ps.executeUpdate();
-                database.closeConnection();
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -10,6 +10,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import uk.co.netbans.supportbot.Message.Messenger;
+import uk.co.netbans.supportbot.Storage.SQLManager;
 import uk.co.netbans.supportbot.Support.Command.CommandListener;
 import uk.co.netbans.supportbot.Music.MusicManager;
 import uk.co.netbans.supportbot.Support.Command.CommandRouter;
@@ -39,6 +40,7 @@ public class NetBansBot {
     private Path logDirectory;
     private JSONObject conf;
     private EnumMap<PermType, List<Long>> perms;
+    private SQLManager sqlManager;
     private CommandListener listener;
 
     public void init(Path directory) throws Exception {
@@ -50,6 +52,9 @@ public class NetBansBot {
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize config!", e);
         }
+
+        System.out.println("Loading SQL!");
+        sqlManager = new SQLManager(directory.toFile());
 
         System.out.println("Initializing Perms!");
         try {
@@ -148,6 +153,10 @@ public class NetBansBot {
 
     public CommandListener getListener() {
         return listener;
+    }
+
+    public SQLManager getSqlManager() {
+        return sqlManager;
     }
 
     @SuppressWarnings("unchecked")

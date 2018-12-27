@@ -34,8 +34,8 @@ public class CommandRouter {
         if (args.length > 0) {
             Command command = getCommand(args[0]);
             if (command != null) {
-                if (!command.hasPermission(bot, sender.getUser().getIdLong()))
-                    return CommandResult.NOPERMS;
+                //if (!bot.getSqlManager().getPermForUser(sender.getUser().getIdLong()).equals(command.getPermission()))
+                //    return CommandResult.NOPERMS;
                 String[] argsNew = new String[args.length-1];
                 System.arraycopy(args, 1, argsNew, 0, args.length - 1);
                 CommandResult result = command.onExecute(this.bot, sender, channel, args[0], argsNew);
