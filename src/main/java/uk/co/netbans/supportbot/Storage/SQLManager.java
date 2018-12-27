@@ -3,6 +3,7 @@ package uk.co.netbans.supportbot.Storage;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
@@ -38,7 +39,7 @@ public class SQLManager {
                 "CREATE INDEX IF NOT EXISTS `groups_role` ON `groups` (`role`);";
 
         String GroupPerms = "CREATE TABLE IF NOT EXISTS `group_perms` (" +
-                "`id`        INT AUTO_INCREMENT  NOT NULL," +
+                "`id`        INT AUTO_INCREMENT," +
                 "`grp`       VARCHAR(16)         NOT NULL," +
                 "`perm`      VARCHAR(16)         NOT NULL," +
                 "FOREIGN KEY (`grp`) REFERENCES `groups` (`name`)," +
@@ -49,7 +50,7 @@ public class SQLManager {
                 "CREATE INDEX IF NOT EXISTS `group_perms_perm` ON `group_perms` (`perm`);";
 
         String UserGroups = "CREATE TABLE IF NOT EXISTS `user_groups` (" +
-                "`id`        INT AUTO_INCREMENT  NOT NULL," +
+                "`id`        INT AUTO_INCREMENT," +
                 "`usr`       BIGINT(32)          NOT NULL," +
                 "`grp`       VARCHAR(16)         NOT NULL DEFAULT 'default'," +
                 "FOREIGN KEY (`grp`) REFERENCES `groups` (`name`)," +
@@ -60,7 +61,7 @@ public class SQLManager {
                 "CREATE INDEX IF NOT EXISTS `user_groups_grp` ON `user_groups` (`grp`);";
 
         String UserPerms = "CREATE TABLE IF NOT EXISTS `user_perms` (" +
-                "    `id`        INT AUTO_INCREMENT  NOT NULL," +
+                "    `id`        INT AUTO_INCREMENT," +
                 "    `usr`       BIGINT(32)          NOT NULL," +
                 "    `perm`      VARCHAR(16)         NOT NULL," +
                 "    PRIMARY KEY (`id`)" +
@@ -131,9 +132,102 @@ public class SQLManager {
             String statement = "INSERT INTO groups ('name','child','role') VALUES(?,?,?);";
             try (PreparedStatement ps = c.prepareStatement(statement)){
                 ps.setString(1, groupName);
-               ps.setString(2, child);
-               ps.setString(3, roleID);
+                ps.setString(2, child);
+                ps.setString(3, roleID);
                 ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addNewGroupPerm(String group, String perm) {
+        try (Connection c = database.openConnection()) {
+            String statement = "INSERT INTO group_perms ('grp','perm') VALUES(?,?);";
+            try (PreparedStatement ps = c.prepareStatement(statement)) {
+                ps.setString(1, group);
+                ps.setString(2, perm);
+                ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeGroupPerm(String group, String perm) {
+        try (Connection c = database.openConnection()) {
+            String statement = "DELETE FROM group_perms WHERE grp='" + group + "' AND perm='" + perm + "';";
+            try (PreparedStatement ps = c.prepareStatement(statement)) {
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.rowDeleted())
+                        System.out.println("Deleted Successfully!");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addUserToGroup(long userID, String group) {
+        try (Connection c = database.openConnection()) {
+            String statement = "INSERT INTO user_groups ('usr','grp') VALUES(?,?);";
+            try (PreparedStatement ps = c.prepareStatement(statement)) {
+                ps.setLong(1, userID);
+                ps.setString(2, group);
+                ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeUserFromGroup(long userID, String group) {
+        try (Connection c = database.openConnection()) {
+            String statement = "DELETE FROM user_groups WHERE usr='" + userID + "' AND grp='" + group + "';";
+            try (PreparedStatement ps = c.prepareStatement(statement)) {
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.rowDeleted())
+                        System.out.println("Deleted Successfully!");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addNewPermToUser(long userID, String perm) {
+        try (Connection c = database.openConnection()) {
+            String statement = "INSERT INTO user_perms ('usr','perm') VALUES(?,?);";
+            try (PreparedStatement ps = c.prepareStatement(statement)) {
+                ps.setLong(1, userID);
+                ps.setString(2, perm);
+                ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removePermFromUser(long userID, String perm) {
+        try (Connection c = database.openConnection()) {
+            String statement = "DELETE FROM user_perms WHERE usr='" + userID + "' AND perm='" + perm + "';";
+            try (PreparedStatement ps = c.prepareStatement(statement)) {
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.rowDeleted())
+                        System.out.println("Deleted Successfully!");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

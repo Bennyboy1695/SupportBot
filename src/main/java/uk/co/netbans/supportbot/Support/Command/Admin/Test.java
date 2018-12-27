@@ -33,6 +33,28 @@ public class Test implements Command {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        try {
+            System.out.println("Added 1 Group Perm");
+            bot.getSqlManager().addNewGroupPerm("test", "command.test");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            System.out.println("Added 2 Group Perm");
+            bot.getSqlManager().addNewGroupPerm("test2", "command.test.2");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            System.out.println("Removed 2nd Group Perm");
+            bot.getSqlManager().removeGroupPerm("test2", "command.test.2");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return CommandResult.SUCCESS;
     }
 
