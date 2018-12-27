@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Optional;
 
 public class SQLManager {
 
@@ -39,32 +38,29 @@ public class SQLManager {
                 "CREATE INDEX IF NOT EXISTS `groups_role` ON `groups` (`role`);";
 
         String GroupPerms = "CREATE TABLE IF NOT EXISTS `group_perms` (" +
-                "`id`        INT AUTO_INCREMENT," +
+                "`id`        INTEGER PRIMARY KEY NOT NULL," +
                 "`grp`       VARCHAR(16)         NOT NULL," +
                 "`perm`      VARCHAR(16)         NOT NULL," +
-                "FOREIGN KEY (`grp`) REFERENCES `groups` (`name`)," +
-                "PRIMARY KEY (`id`)" +
+                "FOREIGN KEY (`grp`) REFERENCES `groups` (`name`)" +
                 ");";
 
         String GroupPermsIndex = "CREATE INDEX IF NOT EXISTS `group_perms_grp` ON `group_perms` (`grp`);" +
                 "CREATE INDEX IF NOT EXISTS `group_perms_perm` ON `group_perms` (`perm`);";
 
         String UserGroups = "CREATE TABLE IF NOT EXISTS `user_groups` (" +
-                "`id`        INT AUTO_INCREMENT," +
+                "`id`        INTEGER PRIMARY KEY NOT NULL," +
                 "`usr`       BIGINT(32)          NOT NULL," +
                 "`grp`       VARCHAR(16)         NOT NULL DEFAULT 'default'," +
-                "FOREIGN KEY (`grp`) REFERENCES `groups` (`name`)," +
-                "PRIMARY KEY (`id`)" +
+                "FOREIGN KEY (`grp`) REFERENCES `groups` (`name`)" +
                 ");";
 
         String UserGroupsIndex = "CREATE INDEX IF NOT EXISTS `user_groups_usr` ON `user_groups` (`usr`);" +
                 "CREATE INDEX IF NOT EXISTS `user_groups_grp` ON `user_groups` (`grp`);";
 
         String UserPerms = "CREATE TABLE IF NOT EXISTS `user_perms` (" +
-                "    `id`        INT AUTO_INCREMENT," +
+                "    `id`        INTEGER PRIMARY KEY NOT NULL," +
                 "    `usr`       BIGINT(32)          NOT NULL," +
-                "    `perm`      VARCHAR(16)         NOT NULL," +
-                "    PRIMARY KEY (`id`)" +
+                "    `perm`      VARCHAR(16)         NOT NULL" +
                 ");";
 
         String UserPermsIndex = "CREATE INDEX IF NOT EXISTS `user_perms_usr` ON `user_perms` (`usr`);" +
@@ -162,10 +158,7 @@ public class SQLManager {
         try (Connection c = database.openConnection()) {
             String statement = "DELETE FROM group_perms WHERE grp='" + group + "' AND perm='" + perm + "';";
             try (PreparedStatement ps = c.prepareStatement(statement)) {
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.rowDeleted())
-                        System.out.println("Deleted Successfully!");
-                }
+                ps.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -193,10 +186,7 @@ public class SQLManager {
         try (Connection c = database.openConnection()) {
             String statement = "DELETE FROM user_groups WHERE usr='" + userID + "' AND grp='" + group + "';";
             try (PreparedStatement ps = c.prepareStatement(statement)) {
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.rowDeleted())
-                        System.out.println("Deleted Successfully!");
-                }
+                ps.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -224,10 +214,7 @@ public class SQLManager {
         try (Connection c = database.openConnection()) {
             String statement = "DELETE FROM user_perms WHERE usr='" + userID + "' AND perm='" + perm + "';";
             try (PreparedStatement ps = c.prepareStatement(statement)) {
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.rowDeleted())
-                        System.out.println("Deleted Successfully!");
-                }
+                ps.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();
