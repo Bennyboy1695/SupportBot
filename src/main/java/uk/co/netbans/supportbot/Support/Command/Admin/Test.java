@@ -14,43 +14,38 @@ public class Test implements Command {
     @Override
     public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
         try {
-            System.out.println("Empty Args (Both)");
-            bot.getSqlManager().addNewGroup("test");
+            if (bot.getSqlManager().addNewGroup("test")) System.out.println("Empty Args (Both)");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         try {
-            System.out.println("Empty Args (Role)");
-            bot.getSqlManager().addNewGroup("testwithchild", "test");
+            if (bot.getSqlManager().addNewGroup("testwithchild", "test")) System.out.println("Empty Args (Role)");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         try {
-            System.out.println("Full Args");
-            bot.getSqlManager().addNewGroup("testwithall", "testwithchild", String.valueOf(123456789L));
+            if (bot.getSqlManager().addNewGroup("testwithall", "testwithchild", String.valueOf(123456789L))) System.out.println("Full Args");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         try {
-            System.out.println("Added 1 Group Perm");
-            bot.getSqlManager().addNewGroupPerm("test", "command.test");
+            if (bot.getSqlManager().addNewGroupPerm("test", "command.test")) System.out.println("Added 1 Group Perm");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         try {
-            System.out.println("Added 2 Group Perm");
-            bot.getSqlManager().addNewGroupPerm("test2", "command.test.2");
+            if (bot.getSqlManager().addNewGroupPerm("test2", "command.test.2")) System.out.println("Added 2 Group Perm");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         try {
-            System.out.println("Removed 2nd Group Perm");
-            bot.getSqlManager().removeGroupPerm("test2", "command.test.2");
+
+            if (bot.getSqlManager().removeGroupPerm("test2", "command.test.2")) System.out.println("Removed 2nd Group Perm");
         } catch (Exception e) {
             e.printStackTrace();
         }

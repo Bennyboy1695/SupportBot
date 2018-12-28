@@ -79,147 +79,241 @@ public class SQLManager {
         database.closeConnection();
     }
 
-    public void addNewGroup(String groupName) {
+    public boolean addNewGroup(String groupName) {
         try (Connection c = database.openConnection()){
             String statement = "INSERT INTO groups ('name') VALUES(?);";
+            if (groupAlreadyExist(groupName)) return false;
             try (PreparedStatement ps = c.prepareStatement(statement)){
                 ps.setString(1, groupName);
                 ps.executeUpdate();
+                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    public void addNewGroup(String groupName, String child) {
+    public boolean addNewGroup(String groupName, String child) {
         try (Connection c = database.openConnection()){
             String statement = "INSERT INTO groups ('name','child') VALUES(?,?);";
+            if (groupAlreadyExist(groupName)) return false;
             try (PreparedStatement ps = c.prepareStatement(statement)){
                 ps.setString(1, groupName);
                 ps.setString(2, child);
                 ps.executeUpdate();
+                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    public void addNewGroup(String groupName, long roleID) {
+    public boolean addNewGroup(String groupName, long roleID) {
         try (Connection c = database.openConnection()){
             String statement = "INSERT INTO groups ('name','role') VALUES(?,?);";
+            if (groupAlreadyExist(groupName)) return false;
             try (PreparedStatement ps = c.prepareStatement(statement)){
                 ps.setString(1, groupName);
                 ps.setString(2, String.valueOf(roleID));
                 ps.executeUpdate();
+                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    public void addNewGroup(String groupName, String child, String roleID) {
+    public boolean addNewGroup(String groupName, String child, String roleID) {
         try (Connection c = database.openConnection()){
             String statement = "INSERT INTO groups ('name','child','role') VALUES(?,?,?);";
+            if (groupAlreadyExist(groupName)) return false;
             try (PreparedStatement ps = c.prepareStatement(statement)){
                 ps.setString(1, groupName);
                 ps.setString(2, child);
                 ps.setString(3, roleID);
                 ps.executeUpdate();
+                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    public void addNewGroupPerm(String group, String perm) {
+    public boolean groupAlreadyExist(String groupName) {
+        try (Connection c = database.openConnection()) {
+            String statement = "SELECT * FROM groups WHERE name='" + groupName + "';";
+            try (PreparedStatement ps = c.prepareStatement(statement)) {
+                try (ResultSet rs = ps.executeQuery()) {
+                    return rs.next();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean addNewGroupPerm(String group, String perm) {
         try (Connection c = database.openConnection()) {
             String statement = "INSERT INTO group_perms ('grp','perm') VALUES(?,?);";
+            if (permAlreadyExists(group, perm)) return false;
             try (PreparedStatement ps = c.prepareStatement(statement)) {
                 ps.setString(1, group);
                 ps.setString(2, perm);
                 ps.executeUpdate();
+                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    public void removeGroupPerm(String group, String perm) {
+    public boolean removeGroupPerm(String group, String perm) {
         try (Connection c = database.openConnection()) {
             String statement = "DELETE FROM group_perms WHERE grp='" + group + "' AND perm='" + perm + "';";
+            if (permAlreadyExists(group, perm)) return false;
             try (PreparedStatement ps = c.prepareStatement(statement)) {
                 ps.executeUpdate();
+                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    public void addUserToGroup(long userID, String group) {
+    public boolean permAlreadyExists(String group, String perm) {
+        try (Connection c = database.openConnection()) {
+            String statement = "SELECT * FROM group_perms WHERE grp='" + group + "' AND perm='" + perm + "';";
+            try (PreparedStatement ps = c.prepareStatement(statement)) {
+                try (ResultSet rs = ps.executeQuery()) {
+                    return rs.next();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean addUserToGroup(long userID, String group) {
         try (Connection c = database.openConnection()) {
             String statement = "INSERT INTO user_groups ('usr','grp') VALUES(?,?);";
+            if (userAlreadyInGroup(userID, group)) return false;
             try (PreparedStatement ps = c.prepareStatement(statement)) {
                 ps.setLong(1, userID);
                 ps.setString(2, group);
                 ps.executeUpdate();
+                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    public void removeUserFromGroup(long userID, String group) {
+    public boolean removeUserFromGroup(long userID, String group) {
         try (Connection c = database.openConnection()) {
             String statement = "DELETE FROM user_groups WHERE usr='" + userID + "' AND grp='" + group + "';";
+            if (userAlreadyInGroup(userID, group)) return false;
             try (PreparedStatement ps = c.prepareStatement(statement)) {
                 ps.executeUpdate();
+                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    public void addNewPermToUser(long userID, String perm) {
+    public boolean userAlreadyInGroup(long userID, String group) {
+        try (Connection c = database.openConnection()) {
+            String statement = "SELECT * FROM user_groups WHERE usr='" + userID + "' AND grp='" + group + "';";
+            try (PreparedStatement ps = c.prepareStatement(statement)) {
+                try (ResultSet rs = ps.executeQuery()) {
+                    return rs.next();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean addNewPermToUser(long userID, String perm) {
         try (Connection c = database.openConnection()) {
             String statement = "INSERT INTO user_perms ('usr','perm') VALUES(?,?);";
+            if (userAlreadyHasPerm(userID, perm)) return false;
             try (PreparedStatement ps = c.prepareStatement(statement)) {
                 ps.setLong(1, userID);
                 ps.setString(2, perm);
                 ps.executeUpdate();
+                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    public void removePermFromUser(long userID, String perm) {
+    public boolean removePermFromUser(long userID, String perm) {
         try (Connection c = database.openConnection()) {
             String statement = "DELETE FROM user_perms WHERE usr='" + userID + "' AND perm='" + perm + "';";
+            if (userAlreadyHasPerm(userID, perm)) return false;
             try (PreparedStatement ps = c.prepareStatement(statement)) {
                 ps.executeUpdate();
+                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        return false;
+    }
+
+    public boolean userAlreadyHasPerm(long userID, String perm) {
+        try (Connection c = database.openConnection()) {
+            String statement = "SELECT * FROM user_perms WHERE usr='" + userID + "' AND perm='" + perm +"';";
+            try (PreparedStatement ps = c.prepareStatement(statement)) {
+                try (ResultSet rs = ps.executeQuery()) {
+                    return rs.next();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
