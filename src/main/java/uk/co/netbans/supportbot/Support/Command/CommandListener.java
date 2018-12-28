@@ -6,6 +6,7 @@ import uk.co.netbans.supportbot.Message.Messenger;
 import uk.co.netbans.supportbot.NetBansBot;
 import uk.co.netbans.supportbot.Music.Command.*;
 import uk.co.netbans.supportbot.Support.Command.Admin.*;
+import uk.co.netbans.supportbot.Support.Command.Admin.PermChildren.List;
 import uk.co.netbans.supportbot.Support.Command.Support.Help;
 import uk.co.netbans.supportbot.Support.Command.Support.Ticket;
 
@@ -29,15 +30,19 @@ public class CommandListener extends ListenerAdapter {
                 new Volume(),
                 new Proximity(),
                 new Ticket(),
-                new Perm(),
                 new ConfigReload(),
                 new Help(),
                 new Tips(),
                 new Embedify(),
                 new Faq(),
                 new ManualChannel(),
-                new Test()
+                new Test(),
+                new Perm()
         );
+
+        CommandRouter perm = new CommandRouter(bot, "perm", null);
+        perm.addCommand(new List());
+        this.router.addSubRouter(perm);
     }
 
     @Override
