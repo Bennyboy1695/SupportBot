@@ -36,11 +36,10 @@ public class CommandListener extends ListenerAdapter {
                 new Embedify(),
                 new Faq(),
                 new ManualChannel(),
-                new Test(),
-                new Perm()
+                new Test()
         );
 
-        CommandRouter perm = new CommandRouter(bot, "perm", null);
+        CommandRouter perm = new CommandRouter(bot, "perm", new ArrayList<>());
         perm.addCommand(new List());
         this.router.addSubRouter(perm);
     }
