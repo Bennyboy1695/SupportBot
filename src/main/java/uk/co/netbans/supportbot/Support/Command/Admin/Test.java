@@ -26,7 +26,7 @@ public class Test implements Command {
         }
 
         try {
-            if (bot.getSqlManager().addNewGroup("testwithall", "testwithchild", String.valueOf(123456789L))) System.out.println("Full Args");
+            if (bot.getSqlManager().addNewGroup("testwithall", "testwithchild", 123456789L)) System.out.println("Full Args");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -44,7 +44,6 @@ public class Test implements Command {
         }
 
         try {
-
             if (bot.getSqlManager().removeGroupPerm("test2", "command.test.2")) System.out.println("Removed 2nd Group Perm");
         } catch (Exception e) {
             e.printStackTrace();

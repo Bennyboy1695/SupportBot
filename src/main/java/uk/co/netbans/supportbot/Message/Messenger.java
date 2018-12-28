@@ -70,6 +70,11 @@ public class Messenger {
     public static MessageEmbed NOT_SAME_VOICE = new EmbedBuilder().setColor(Color.RED).setDescription("You are not in the same voice channel as the bot!").build();
     public static MessageEmbed NOT_VOICE = new EmbedBuilder().setColor(Color.RED).setDescription("You are not in a voice channel!").build();
     public static MessageEmbed INVALID_COMMAND = new EmbedBuilder().setColor(Color.RED).setDescription("This is not a valid command!").build();
+    public static MessageEmbed GROUP_DOESNT_EXIST = new EmbedBuilder().setColor(Color.RED).setDescription("This group doesn't exist!").build();
+    public static MessageEmbed GROUP_ALREADY_EXIST = new EmbedBuilder().setColor(Color.RED).setDescription("This group already exists!").build();
+    public static MessageEmbed DISCORD_ROLE_DOESNT_EXIST = new EmbedBuilder().setColor(Color.RED).setDescription("This Discord role doesn't exist!").build();
+    public static MessageEmbed PERM_ALREADY_EXIST = new EmbedBuilder().setColor(Color.RED).setDescription("This group already has this perm!").build();
+    public static MessageEmbed INCOMPATIBLE_ARG = new EmbedBuilder().setColor(Color.RED).setDescription("This arg is incompatible with your current set of args!").build();
 
     public static MessageEmbed INVALID_ARGS(String usage) {
         return new EmbedBuilder().setTitle("Invalid Args!").setDescription("Correct Usage: \n " + usage).setColor(Color.RED).build();
