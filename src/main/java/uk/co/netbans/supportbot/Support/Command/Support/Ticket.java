@@ -14,7 +14,7 @@ import java.awt.*;
 
 public class Ticket {
 
-    @Command(name = "ticket", displayName = "ticket", aliases = "report")
+    @Command(name = "ticket", displayName = "ticket", aliases = "report", usage = "ticket")
     public CommandResult onExecute(CommandArgs args) {
         NetBansBot bot = args.getBot();
         TextChannel channel = (TextChannel) args.getChannel();

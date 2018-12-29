@@ -16,13 +16,13 @@ import java.time.format.DateTimeFormatter;
 
 public class ManualChannel {
 
-    @Command(name = "channel", displayName = "channel", permission = "supportbot.command.admin.channel")
+    @Command(name = "channel", displayName = "channel", permission = "supportbot.command.admin.channel", usage = "channel <create|move> <user> [<channel>]")
     public CommandResult onManualChannel(CommandArgs commandArgs) {
         NetBansBot bot = commandArgs.getBot();
         String[] args = commandArgs.getArgs();
         TextChannel channel = (TextChannel) commandArgs.getChannel();
         if (args.length >= 2) {
-            if (args[1].equals("create")) {
+            if (args[0].equals("create")) {
                 DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/YY");
                 DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
                 TextChannel supportChannel;

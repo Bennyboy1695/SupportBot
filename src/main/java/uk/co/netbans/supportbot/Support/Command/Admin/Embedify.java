@@ -12,7 +12,7 @@ import java.awt.*;
 public class Embedify {
 
 
-    @Command(name = "embed", displayName = "embed", permission = "supportbot.command.admin.embed")
+    @Command(name = "embed", displayName = "embed", permission = "supportbot.command.admin.embed", usage = "embed <title> <link|token> <username|token> [<password>]")
     public CommandResult onEmbedify(CommandArgs commandArgs) {
         NetBansBot bot = commandArgs.getBot();
         String[] args = commandArgs.getArgs();
@@ -35,7 +35,7 @@ public class Embedify {
                 embed.addField("**Username:**", args[2].replaceAll("`", ""), true);
                 embed.addField("**Password:**", args[3].replaceAll("`", ""), true);
             } else {
-                if (!args[1].contains("Token")) {
+                if (!args[1].contains("Token") || !args[1].contains("token")) {
                     embed.addField("**Username:**", args[1].replaceAll("`", ""), true);
                     embed.addField("**Password:**", args[2].replaceAll("`", ""), true);
                 } else {
