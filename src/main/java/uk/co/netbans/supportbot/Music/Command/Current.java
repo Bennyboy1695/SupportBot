@@ -5,7 +5,7 @@ import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
 import uk.co.netbans.supportbot.Message.Messenger;
 import uk.co.netbans.supportbot.Support.Command.Command;
-import uk.co.netbans.supportbot.Support.Command.CommandResult;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandResult;
 import uk.co.netbans.supportbot.Music.MusicManager;
 import uk.co.netbans.supportbot.NetBansBot;
 import uk.co.netbans.supportbot.Util;

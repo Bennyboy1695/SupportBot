@@ -4,17 +4,23 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
+import uk.co.netbans.supportbot.BenCMDFramework.Command;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandArgs;
 import uk.co.netbans.supportbot.Message.Messenger;
 import uk.co.netbans.supportbot.NetBansBot;
-import uk.co.netbans.supportbot.Support.Command.Command;
-import uk.co.netbans.supportbot.Support.Command.CommandResult;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandResult;
 
 import java.awt.*;
 
-public class User implements Command {
+public class User{
 
-    @Override
-    public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
+    @Command(name = "perm~user", aliases = "permission~user,perms~user", permission = "supportbot.command.admin.perm.user")
+    public CommandResult onPermUser(CommandArgs commandArgs) {
+        String[] args = commandArgs.getArgs();
+        NetBansBot bot = commandArgs.getBot();
+        TextChannel channel = (TextChannel) commandArgs.getChannel();
+        if (args.length <= 4)
+            return CommandResult.INVALIDARGS;
         for (Role roles1 : bot.getJDA().getGuildById(Long.valueOf((String) bot.getConf().get("guildID"))).getRoles()) {
             if (roles1.getName().toLowerCase().equals(args[3].toLowerCase())) {
                 bot.getMessenger().sendEmbed(channel, Messenger.INCOMPATIBLE_ARG, 10);
@@ -64,25 +70,5 @@ public class User implements Command {
                 break;
         }
         return CommandResult.SUCCESS;
-    }
-
-    @Override
-    public String name() {
-        return "user";
-    }
-
-    @Override
-    public String desc() {
-        return "";
-    }
-
-    @Override
-    public String usage() {
-        return "";
-    }
-
-    @Override
-    public String[] aliases() {
-        return new String[0];
     }
 }

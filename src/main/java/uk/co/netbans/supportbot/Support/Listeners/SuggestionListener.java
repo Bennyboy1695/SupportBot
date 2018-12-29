@@ -14,12 +14,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class SuggestionListener extends ListenerAdapter {
 
     private NetBansBot bot;
     private final ScheduledExecutorService executorService;
-    private long messageId;
     final AtomicBoolean hasSent = new AtomicBoolean(false);
     public SuggestionListener(NetBansBot bot) {
         this.bot = bot;
@@ -40,6 +40,7 @@ public class SuggestionListener extends ListenerAdapter {
             e.printStackTrace();
         }
         for (String[] sugg : tips) {
+            AtomicLong messageId = new AtomicLong();
             if (event.getMessage().getContentRaw().toLowerCase().contains(sugg[0])) {
                 if (hasSent.get())
                     return;
@@ -56,12 +57,12 @@ public class SuggestionListener extends ListenerAdapter {
                                 .replaceAll("<velocity>", "TODO")
                                 .replaceAll("<bungee>", "TODO")
                         ).build()).queue(x -> {
-                            messageId = x.getIdLong();
+                            messageId.set(x.getIdLong());
                             hasSent.set(true);
                     executorService.schedule(()-> {
-                        event.getChannel().getMessageById(messageId).complete().delete().complete();
+                        event.getChannel().getMessageById(messageId.get()).complete().delete().complete();
                         hasSent.set(false);
-                        messageId = 0L;
+                        messageId.set(0L);
                     },30, TimeUnit.SECONDS);
                 });
 

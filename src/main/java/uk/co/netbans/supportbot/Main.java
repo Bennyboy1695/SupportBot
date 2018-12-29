@@ -1,6 +1,7 @@
 package uk.co.netbans.supportbot;
 
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandFramework;
 
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -27,7 +28,6 @@ public class Main extends ListenerAdapter {
             bot.shutdown();
             System.exit(0);
         });
-
         bot.init(Paths.get(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent());
     }
 }

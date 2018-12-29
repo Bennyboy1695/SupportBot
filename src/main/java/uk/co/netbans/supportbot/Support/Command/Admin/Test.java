@@ -1,18 +1,19 @@
 package uk.co.netbans.supportbot.Support.Command.Admin;
 
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.TextChannel;
+import uk.co.netbans.supportbot.BenCMDFramework.Command;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandArgs;
 import uk.co.netbans.supportbot.NetBansBot;
-import uk.co.netbans.supportbot.PermType;
-import uk.co.netbans.supportbot.Support.Command.Command;
-import uk.co.netbans.supportbot.Support.Command.CommandResult;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandResult;
 
-import java.util.Optional;
+import java.util.Arrays;
 
-public class Test implements Command {
+public class Test {
 
-    @Override
-    public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
+    @Command(name = "test", aliases = "tester", usage = "test", permission = "command.test.new")
+    public CommandResult onTest(CommandArgs args) {
+        NetBansBot bot = args.getBot();
+
+        System.out.println(Arrays.toString(args.getArgs()));
         try {
             if (bot.getSqlManager().addNewGroup("test")) System.out.println("Empty Args (Both)");
         } catch (Exception e) {
@@ -50,30 +51,5 @@ public class Test implements Command {
         }
 
         return CommandResult.SUCCESS;
-    }
-
-    @Override
-    public String name() {
-        return "test";
-    }
-
-    @Override
-    public String desc() {
-        return "A test command!";
-    }
-
-    @Override
-    public String usage() {
-        return "test";
-    }
-
-    @Override
-    public String[] aliases() {
-        return new String[0];
-    }
-
-    @Override
-    public PermType getPermission() {
-        return PermType.ADMIN;
     }
 }

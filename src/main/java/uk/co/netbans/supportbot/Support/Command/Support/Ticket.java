@@ -5,19 +5,21 @@ import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.requests.RestAction;
-import uk.co.netbans.supportbot.Support.Command.Command;
-import uk.co.netbans.supportbot.Support.Command.CommandResult;
+import uk.co.netbans.supportbot.BenCMDFramework.Command;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandArgs;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandResult;
 import uk.co.netbans.supportbot.NetBansBot;
 
 import java.awt.*;
 
-public class Ticket implements Command {
+public class Ticket {
 
-    private NetBansBot bot;
+    @Command(name = "ticket", aliases = "report")
+    public CommandResult onExecute(CommandArgs args) {
+        NetBansBot bot = args.getBot();
+        TextChannel channel = (TextChannel) args.getChannel();
+        Member sender = args.getMember();
 
-    @Override
-    public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
-        this.bot = bot;
         RestAction<PrivateChannel> pmChannel = sender.getUser().openPrivateChannel();
         bot.getMessenger().sendEmbed(channel, bot.getMessenger().getCommonEmbed()
                 .setColor(new Color(127, 255, 212))
@@ -34,27 +36,7 @@ public class Ticket implements Command {
                 .setDescription("To create a ticket simply type a message here and it will be used to create a ticket containing that message you provided! \n" +
                         "Please note: Multiple message will not be combined together so your message needs to be one message NOT multiple little ones! \n" +
                         "Also if you upload a file we will take the file and put it into the support channel too!").build()
-                ).addReaction("\u2705").complete();
+                );
         return CommandResult.SUCCESS;
-    }
-
-    @Override
-    public String name() {
-        return "ticket";
-    }
-
-    @Override
-    public String desc() {
-        return "Provides you with information on how to create a ticket!";
-    }
-
-    @Override
-    public String usage() {
-        return "ticket";
-    }
-
-    @Override
-    public String[] aliases() {
-        return new String[0];
     }
 }

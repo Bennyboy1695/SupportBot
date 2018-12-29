@@ -3,31 +3,29 @@ package uk.co.netbans.supportbot.Support.Command.Support;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
+import uk.co.netbans.supportbot.BenCMDFramework.Command;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandArgs;
 import uk.co.netbans.supportbot.NetBansBot;
-import uk.co.netbans.supportbot.PermType;
-import uk.co.netbans.supportbot.Support.Command.Command;
-import uk.co.netbans.supportbot.Support.Command.CommandResult;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandResult;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
-public class Help implements Command {
+public class Help {
 
-    private NetBansBot bot;
-
-    @Override
-    public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
-        this.bot = bot;
+    @Command(name = "help")
+    public CommandResult onExecute(CommandArgs commandArgs) {
+        NetBansBot bot = commandArgs.getBot();
+        String[] args = commandArgs.getArgs();
+        Member sender = commandArgs.getMember();
+        TextChannel channel = (TextChannel) commandArgs.getChannel();
+        /* TODO: Needs redesigning for the new CommandFramework and the new perm system!
         Collections.sort(bot.getCommandRouter().getCommands());
         if (bot.getPerms().get(PermType.ADMIN).contains(sender.getUser().getIdLong())) {
             StringBuilder adminCommands = new StringBuilder();
             StringBuilder modCommands = new StringBuilder();
             StringBuilder commands = new StringBuilder();
             List<String> temp = new ArrayList<String>();
-            for (Command command : bot.getCommandRouter().getCommands()) {
-                if (command.getPermission() == PermType.ADMIN) {
+            for (Command command : bot.getFramework().getCommandMap().get()) {
+                if (command.permission() == PermType.ADMIN) {
                     String output = command.name().substring(0, 1).toUpperCase() + command.name().substring(1);
                     adminCommands.append("**" + output + ":**" + "\n" +
                             "**Description:** " + command.desc() + "\n" +
@@ -116,27 +114,8 @@ public class Help implements Command {
                 bot.getMessenger().sendEmbed(channel, new EmbedBuilder().setTitle("Help").setColor(Color.ORANGE).addField("Commands:", str + "\n", false).build(), 30);
             }
         }
+        */
         return CommandResult.SUCCESS;
 
-    }
-
-    @Override
-    public String name() {
-        return "help";
-    }
-
-    @Override
-    public String desc() {
-        return "Sends a list of commands available to you!";
-    }
-
-    @Override
-    public String usage() {
-        return "help";
-    }
-
-    @Override
-    public String[] aliases() {
-        return new String[0];
     }
 }

@@ -4,21 +4,24 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
 import org.json.simple.parser.ParseException;
+import uk.co.netbans.supportbot.BenCMDFramework.Command;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandArgs;
 import uk.co.netbans.supportbot.NetBansBot;
-import uk.co.netbans.supportbot.PermType;
-import uk.co.netbans.supportbot.Support.Command.Command;
-import uk.co.netbans.supportbot.Support.Command.CommandResult;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandResult;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tips implements Command {
+public class Tips {
 
 
-    @Override
-    public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
+    @Command(name = "tips", aliases = "suggestions", permission = "supportbot.command.admin.tips")
+    public CommandResult onTips(CommandArgs args) {
+        Member sender = args.getMember();
+        NetBansBot bot = args.getBot();
+        TextChannel channel = (TextChannel) args.getChannel();
         List<String[]> tips = new ArrayList<>();
         try {
             tips = bot.getTips();
@@ -44,30 +47,5 @@ public class Tips implements Command {
 
         bot.getMessenger().sendEmbed(channel, builder.build(), 30);
         return CommandResult.SUCCESS;
-    }
-
-    @Override
-    public String name() {
-        return "tips";
-    }
-
-    @Override
-    public String desc() {
-        return "Gives you a list of all the words that can trigger tips!";
-    }
-
-    @Override
-    public String usage() {
-        return "tips";
-    }
-
-    @Override
-    public String[] aliases() {
-        return new String[]{"suggestions"};
-    }
-
-    @Override
-    public PermType getPermission() {
-        return PermType.ADMIN;
     }
 }

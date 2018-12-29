@@ -9,11 +9,18 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandFramework;
 import uk.co.netbans.supportbot.Message.Messenger;
 import uk.co.netbans.supportbot.Storage.SQLManager;
+import uk.co.netbans.supportbot.Support.Command.Admin.*;
+import uk.co.netbans.supportbot.Support.Command.Admin.PermChildren.CreateGroup;
+import uk.co.netbans.supportbot.Support.Command.Admin.PermChildren.Group;
+import uk.co.netbans.supportbot.Support.Command.Admin.PermChildren.User;
 import uk.co.netbans.supportbot.Support.Command.CommandListener;
 import uk.co.netbans.supportbot.Music.MusicManager;
 import uk.co.netbans.supportbot.Support.Command.CommandRouter;
+import uk.co.netbans.supportbot.Support.Command.Support.Help;
+import uk.co.netbans.supportbot.Support.Command.Support.Ticket;
 import uk.co.netbans.supportbot.Support.Listeners.SuggestionListener;
 import uk.co.netbans.supportbot.Support.Listeners.SupportCategoryListener;
 import uk.co.netbans.supportbot.Support.Listeners.PrivateMessageListener;
@@ -42,6 +49,7 @@ public class NetBansBot {
     private EnumMap<PermType, List<Long>> perms;
     private SQLManager sqlManager;
     private CommandListener listener;
+    private CommandFramework framework;
 
     public void init(Path directory) throws Exception {
         this.directory = directory;
@@ -92,7 +100,10 @@ public class NetBansBot {
 
         System.out.println("Registering Commands...");
         // old
+        this.jda.addEventListener(framework = new CommandFramework(this));
         this.jda.addEventListener(listener = new CommandListener(this));
+        registerCommands();
+
         this.jda.addEventListener(new PrivateMessageListener(this));
         this.jda.addEventListener(new SupportCategoryListener(this));
         this.jda.addEventListener(new TicketChannelsReactionListener(this));
@@ -157,6 +168,10 @@ public class NetBansBot {
 
     public SQLManager getSqlManager() {
         return sqlManager;
+    }
+
+    public CommandFramework getFramework() {
+        return framework;
     }
 
     @SuppressWarnings("unchecked")
@@ -290,5 +305,28 @@ public class NetBansBot {
         public void handle(Event e) {
             executor.submit(() -> super.handle(e));
         }
+    }
+
+    private void registerCommands() {
+        framework.registerCommands(new Test());
+        framework.registerCommands(new Purge());
+
+        //Perm Commands And Children
+        framework.registerCommands(new Perm());
+        framework.registerCommands(new uk.co.netbans.supportbot.Support.Command.Admin.PermChildren.List());
+        framework.registerCommands(new User());
+        framework.registerCommands(new Group());
+        framework.registerCommands(new CreateGroup());
+
+        //Other Admin Commands
+        framework.registerCommands(new Tips());
+        framework.registerCommands(new ManualChannel());
+        framework.registerCommands(new Faq());
+        framework.registerCommands(new ConfigReload());
+        framework.registerCommands(new Embedify());
+
+        //Normal Commands (No Perms)
+        framework.registerCommands(new Help());
+        framework.registerCommands(new Ticket());
     }
 }

@@ -2,11 +2,11 @@ package uk.co.netbans.supportbot.Support.Command;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandResult;
 import uk.co.netbans.supportbot.Message.Messenger;
 import uk.co.netbans.supportbot.NetBansBot;
 import uk.co.netbans.supportbot.Music.Command.*;
 import uk.co.netbans.supportbot.Support.Command.Admin.*;
-import uk.co.netbans.supportbot.Support.Command.Admin.PermChildren.List;
 import uk.co.netbans.supportbot.Support.Command.Support.Help;
 import uk.co.netbans.supportbot.Support.Command.Support.Ticket;
 
@@ -28,20 +28,9 @@ public class CommandListener extends ListenerAdapter {
                 new Shuffle(),
                 new Reset(),
                 new Volume(),
-                new Proximity(),
-                new Ticket(),
-                new ConfigReload(),
-                new Help(),
-                new Tips(),
-                new Embedify(),
-                new Faq(),
-                new ManualChannel(),
-                new Test()
+                new Proximity()
+                //new Test()
         );
-
-        CommandRouter perm = new CommandRouter(bot, "perm", new ArrayList<>());
-        perm.addCommand(new List());
-        this.router.addSubRouter(perm);
     }
 
     @Override
@@ -57,7 +46,7 @@ public class CommandListener extends ListenerAdapter {
             bot.getMessenger().sendEmbed(e.getTextChannel(), Messenger.INVALID_COMMAND, 10);
         }
         if (result.equals(CommandResult.NOPERMS)) {
-            bot.getMessenger().sendEmbed(e.getTextChannel(), Messenger.NO_PERMS, 10);
+            //bot.getMessenger().sendEmbed(e.getTextChannel(), Messenger.NO_PERMS, 10);
         }
         bot.getMessenger().delMessage(e.getTextChannel(), e.getMessageIdLong(), 5);
     }

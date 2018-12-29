@@ -1,21 +1,21 @@
 package uk.co.netbans.supportbot.Support.Command.Admin;
 
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
+import uk.co.netbans.supportbot.BenCMDFramework.Command;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandArgs;
 import uk.co.netbans.supportbot.NetBansBot;
-import uk.co.netbans.supportbot.PermType;
-import uk.co.netbans.supportbot.Support.Command.Command;
-import uk.co.netbans.supportbot.Support.Command.CommandResult;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandResult;
 
 import java.awt.*;
 
-public class ConfigReload implements Command {
-    private NetBansBot bot;
+public class ConfigReload{
 
-    @Override
-    public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
-        this.bot = bot;
+    @Command(name = "configreload", aliases = "reloadconfig", permission = "supportbot.command.admin.configreload")
+    public CommandResult onConfigReload(CommandArgs args) {
+        NetBansBot bot = args.getBot();
+        TextChannel channel = (TextChannel) args.getChannel();
+        if (args.getArgs().length > 0) return CommandResult.INVALIDARGS;
         try {
             bot.reloadConfig();
             bot.getMessenger().sendEmbed(channel, new EmbedBuilder().setDescription("Reloaded Config!").setColor(Color.GREEN).build());
@@ -23,30 +23,5 @@ public class ConfigReload implements Command {
             e.printStackTrace();
         }
         return CommandResult.SUCCESS;
-    }
-
-    @Override
-    public String name() {
-        return "configreload";
-    }
-
-    @Override
-    public String desc() {
-        return "Reloads the config!";
-    }
-
-    @Override
-    public String usage() {
-        return ("configreload");
-    }
-
-    @Override
-    public String[] aliases() {
-        return new String[0];
-    }
-
-    @Override
-    public PermType getPermission() {
-        return PermType.ADMIN;
     }
 }

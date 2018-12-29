@@ -9,6 +9,7 @@ import java.time.Instant;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Messenger {
     private final ScheduledExecutorService executor;
@@ -40,6 +41,7 @@ public class Messenger {
     }
 
     public Message sendMessage(TextChannel channel, Message message, int lifetime) {
+
         Message sentMessage = channel.sendMessage(message).complete();
         if (lifetime != 0)
             this.delMessage(channel, sentMessage.getIdLong(), lifetime);
@@ -48,7 +50,9 @@ public class Messenger {
     }
 
     public void delMessage(TextChannel channel, long id, int lifetime) {
-        this.executor.schedule(() -> channel.getMessageById(id).queue(m -> m.delete().queue()), lifetime, TimeUnit.SECONDS);
+        AtomicLong messageID = new AtomicLong();
+        messageID.set(id);
+        this.executor.schedule(() -> channel.getMessageById(messageID.get()).queue(m -> m.delete().queue()), lifetime, TimeUnit.SECONDS);
     }
 
     public Message sendPrivateMessage(User user, MessageEmbed embed) {
@@ -66,7 +70,6 @@ public class Messenger {
         return channel.sendMessage(new MessageBuilder().append(message).build()).complete();
     }
 
-    public static MessageEmbed NO_PERMS = new EmbedBuilder().setColor(Color.RED).setDescription("You do not have permission to run this command!").build();
     public static MessageEmbed NOT_SAME_VOICE = new EmbedBuilder().setColor(Color.RED).setDescription("You are not in the same voice channel as the bot!").build();
     public static MessageEmbed NOT_VOICE = new EmbedBuilder().setColor(Color.RED).setDescription("You are not in a voice channel!").build();
     public static MessageEmbed INVALID_COMMAND = new EmbedBuilder().setColor(Color.RED).setDescription("This is not a valid command!").build();
@@ -78,6 +81,10 @@ public class Messenger {
 
     public static MessageEmbed INVALID_ARGS(String usage) {
         return new EmbedBuilder().setTitle("Invalid Args!").setDescription("Correct Usage: \n " + usage).setColor(Color.RED).build();
+    }
+
+    public static MessageEmbed NO_PERMS(String perm) {
+        return new EmbedBuilder().setTitle("No Perms!").setDescription("You do not have the required permission: `" + perm + "` to run this command!").setColor(Color.RED).build();
     }
 
 

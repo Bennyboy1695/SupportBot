@@ -2,6 +2,7 @@ package uk.co.netbans.supportbot.Support.Command;
 
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandResult;
 import uk.co.netbans.supportbot.Message.Messenger;
 import uk.co.netbans.supportbot.NetBansBot;
 

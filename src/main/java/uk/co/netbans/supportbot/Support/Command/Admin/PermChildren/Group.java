@@ -1,20 +1,23 @@
 package uk.co.netbans.supportbot.Support.Command.Admin.PermChildren;
 
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandArgs;
 import uk.co.netbans.supportbot.Message.Messenger;
 import uk.co.netbans.supportbot.NetBansBot;
-import uk.co.netbans.supportbot.Support.Command.Command;
-import uk.co.netbans.supportbot.Support.Command.CommandResult;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandResult;
 
 import java.awt.*;
 
-public class Group implements Command {
+public class Group{
 
-    @Override
-    public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
+    public CommandResult onPermGroup(CommandArgs commandArgs) {
+        NetBansBot bot = commandArgs.getBot();
+        TextChannel channel = (TextChannel) commandArgs.getChannel();
+        String[] args = commandArgs.getArgs();
+        if (args.length <= 4)
+            return CommandResult.INVALIDARGS;
         for (Role roles : bot.getJDA().getGuildById(Long.valueOf((String) bot.getConf().get("guildID"))).getRoles()) {
             if (roles.getName().toLowerCase().equals(args[3].toLowerCase())) {
                 bot.getMessenger().sendEmbed(channel, Messenger.INCOMPATIBLE_ARG, 10);
@@ -68,25 +71,5 @@ public class Group implements Command {
                 return CommandResult.INVALIDARGS;
         }
         return CommandResult.SUCCESS;
-    }
-
-    @Override
-    public String name() {
-        return "group";
-    }
-
-    @Override
-    public String desc() {
-        return "";
-    }
-
-    @Override
-    public String usage() {
-        return "";
-    }
-
-    @Override
-    public String[] aliases() {
-        return new String[0];
     }
 }

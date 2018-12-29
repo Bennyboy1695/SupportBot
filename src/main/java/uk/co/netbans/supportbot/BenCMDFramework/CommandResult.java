@@ -1,6 +1,7 @@
-package uk.co.netbans.supportbot.Support.Command;
+package uk.co.netbans.supportbot.BenCMDFramework;
 
 public enum CommandResult {
+    DEFAULT,
     SUCCESS(),
     INVALIDARGS(),
     INVALIDCOMMAND(),

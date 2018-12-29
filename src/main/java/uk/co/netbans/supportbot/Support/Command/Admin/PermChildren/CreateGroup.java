@@ -1,21 +1,25 @@
 package uk.co.netbans.supportbot.Support.Command.Admin.PermChildren;
 
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
+import uk.co.netbans.supportbot.BenCMDFramework.Command;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandArgs;
 import uk.co.netbans.supportbot.Message.Messenger;
 import uk.co.netbans.supportbot.NetBansBot;
-import uk.co.netbans.supportbot.Support.Command.Command;
-import uk.co.netbans.supportbot.Support.Command.CommandResult;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandResult;
 
 import java.awt.*;
 
-public class CreateGroup implements Command {
+public class CreateGroup {
 
-    @Override
-    public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
-        if (args.length >= 1) {
+    @Command(name = "perm~creategroup", aliases = "perms~creatgroup,permission~creategroup", permission = "supportbot.command.admin.perm.creategroup")
+    public CommandResult onPermCreateGroup(CommandArgs commandArgs) {
+        NetBansBot bot = commandArgs.getBot();
+        TextChannel channel = (TextChannel) commandArgs.getChannel();
+        String[] args = commandArgs.getArgs();
+        if (args.length <= 1)
+            return CommandResult.INVALIDARGS;
             if (!bot.getSqlManager().groupAlreadyExist(args[1])) {
                 if (args.length == 2) {
                     if (bot.getSqlManager().addNewGroup(args[1])) {
@@ -56,32 +60,11 @@ public class CreateGroup implements Command {
                                 return CommandResult.SUCCESS;
                             }
                         }
-                    }
                 }
             } else {
                 bot.getMessenger().sendEmbed(channel, Messenger.GROUP_ALREADY_EXIST, 10);
             }
         }
         return CommandResult.SUCCESS;
-    }
-
-    @Override
-    public String name() {
-        return "creategroup";
-    }
-
-    @Override
-    public String desc() {
-        return "";
-    }
-
-    @Override
-    public String usage() {
-        return "";
-    }
-
-    @Override
-    public String[] aliases() {
-        return new String[0];
     }
 }

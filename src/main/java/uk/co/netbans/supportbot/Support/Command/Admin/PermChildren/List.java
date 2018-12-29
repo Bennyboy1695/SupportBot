@@ -1,30 +1,34 @@
 package uk.co.netbans.supportbot.Support.Command.Admin.PermChildren;
 
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.Channel;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
+import uk.co.netbans.supportbot.BenCMDFramework.Command;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandArgs;
 import uk.co.netbans.supportbot.NetBansBot;
-import uk.co.netbans.supportbot.Support.Command.Command;
-import uk.co.netbans.supportbot.Support.Command.CommandResult;
+import uk.co.netbans.supportbot.BenCMDFramework.CommandResult;
 
 import java.awt.*;
 
-public class List implements Command {
+public class List {
 
-    @Override
-    public CommandResult onExecute(NetBansBot bot, Member sender, TextChannel channel, String label, String[] args) {
-        System.out.println("Im Being called!");
+    @Command(name = "perm~list", aliases = "permission~list,perms~list", permission = "supportbot.command.admin.perm.list")
+    public CommandResult onPermList(CommandArgs commandArgs) {
+        String[] args = commandArgs.getArgs();
+        NetBansBot bot = commandArgs.getBot();
+        TextChannel channel = (TextChannel) commandArgs.getChannel();
             if (args.length >= 1) {
-                if (bot.getSqlManager().groupAlreadyExist(args[1])) {
-                    EmbedBuilder builder = new EmbedBuilder().setColor(Color.CYAN).setTitle(args[1] + "'s Perm List");
+                if (bot.getSqlManager().groupAlreadyExist(args[0])) {
+                    EmbedBuilder builder = new EmbedBuilder().setColor(Color.CYAN).setTitle(args[0] + "'s Perm List");
                     StringBuilder perms = new StringBuilder();
-                    for (String str : bot.getSqlManager().getGroupsPerms(args[1])) {
+                    for (String str : bot.getSqlManager().getGroupsPerms(args[0])) {
                         perms.append("`" + str + "`\n");
                     }
                     builder.addField("", perms.toString(), false);
                     bot.getMessenger().sendEmbed(channel, builder.build(), 30);
                     return CommandResult.SUCCESS;
-                } else if (args[1].toLowerCase().equals("groups")) {
+                } else if (args[0].toLowerCase().equals("groups")) {
                     EmbedBuilder builder = new EmbedBuilder().setColor(Color.CYAN).setTitle("Groups List");
                     StringBuilder groupsList = new StringBuilder();
                     for (String str : bot.getSqlManager().getGroups()) {
@@ -32,8 +36,8 @@ public class List implements Command {
                     }
                     bot.getMessenger().sendEmbed(channel, builder.addField("", groupsList.toString(), false).build(), 30);
                     return CommandResult.SUCCESS;
-                } else if (args[1].contains(args[1].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", ""))) {
-                    Member member = bot.getJDA().getGuildById(Long.valueOf((String) bot.getConf().get("guildID"))).getMemberById(args[1].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", ""));
+                } else if (args[0].contains(args[0].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", ""))) {
+                    Member member = bot.getJDA().getGuildById(Long.valueOf((String) bot.getConf().get("guildID"))).getMemberById(args[0].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", ""));
                     EmbedBuilder builder = new EmbedBuilder().setColor(Color.CYAN).setTitle(member.getEffectiveName() + "'s Perm List");
                     StringBuilder perms = new StringBuilder();
                     for (String str : bot.getSqlManager().getUsersGroups(member.getUser().getIdLong())) {
@@ -47,23 +51,4 @@ public class List implements Command {
             return CommandResult.SUCCESS;
     }
 
-    @Override
-    public String name() {
-        return "list";
-    }
-
-    @Override
-    public String desc() {
-        return "?";
-    }
-
-    @Override
-    public String usage() {
-        return "???";
-    }
-
-    @Override
-    public String[] aliases() {
-        return new String[0];
-    }
 }
