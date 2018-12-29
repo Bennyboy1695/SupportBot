@@ -3,6 +3,7 @@ package uk.co.netbans.supportbot.Support.Command.Admin.PermChildren;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
+import uk.co.netbans.supportbot.BenCMDFramework.Command;
 import uk.co.netbans.supportbot.BenCMDFramework.CommandArgs;
 import uk.co.netbans.supportbot.Message.Messenger;
 import uk.co.netbans.supportbot.NetBansBot;
@@ -12,6 +13,7 @@ import java.awt.*;
 
 public class Group{
 
+    @Command(name = "perm~group", displayName = "group", permission = "supportbot.command.admin.perm.group")
     public CommandResult onPermGroup(CommandArgs commandArgs) {
         NetBansBot bot = commandArgs.getBot();
         TextChannel channel = (TextChannel) commandArgs.getChannel();

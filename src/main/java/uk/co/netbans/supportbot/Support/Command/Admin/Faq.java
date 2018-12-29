@@ -10,7 +10,7 @@ import java.awt.*;
 
 public class Faq {
 
-    @Command(name = "faq", permission = "supportbot.command.admin.faq")
+    @Command(name = "faq", displayName = "faq", permission = "supportbot.command.admin.faq")
     public CommandResult onFAQ(CommandArgs args) {
         EmbedBuilder embed = new EmbedBuilder().setColor(Color.GREEN).setTitle("Support F.A.Q");
         embed.addField("**What's this category for ?**", "This category is for channels created by the bot, to deal with support tickets! ", true);

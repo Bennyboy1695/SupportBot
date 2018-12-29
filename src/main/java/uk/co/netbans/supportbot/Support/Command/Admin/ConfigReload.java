@@ -11,7 +11,7 @@ import java.awt.*;
 
 public class ConfigReload{
 
-    @Command(name = "configreload", aliases = "reloadconfig", permission = "supportbot.command.admin.configreload")
+    @Command(name = "configreload", displayName = "configreload", aliases = "reloadconfig", permission = "supportbot.command.admin.configreload")
     public CommandResult onConfigReload(CommandArgs args) {
         NetBansBot bot = args.getBot();
         TextChannel channel = (TextChannel) args.getChannel();

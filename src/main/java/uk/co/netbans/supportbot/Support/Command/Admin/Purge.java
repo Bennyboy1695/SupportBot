@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public class Purge {
 
-    @Command(name = "test.purge", aliases = "test.purged", permission = "command.test.purge")
+    @Command(name = "test.purge", displayName = "purge", aliases = "test.purged", permission = "command.test.purge")
     public CommandResult onPurge(CommandArgs args) {
         System.out.println("Purge!!");
         System.out.println(Arrays.toString(args.getArgs()));

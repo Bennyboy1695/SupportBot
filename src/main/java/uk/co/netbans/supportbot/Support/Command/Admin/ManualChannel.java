@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 
 public class ManualChannel {
 
-    @Command(name = "channel", permission = "supportbot.command.admin.channel")
+    @Command(name = "channel", displayName = "channel", permission = "supportbot.command.admin.channel")
     public CommandResult onManualChannel(CommandArgs commandArgs) {
         NetBansBot bot = commandArgs.getBot();
         String[] args = commandArgs.getArgs();

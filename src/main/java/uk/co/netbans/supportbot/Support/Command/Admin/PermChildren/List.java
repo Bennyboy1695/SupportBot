@@ -13,7 +13,7 @@ import java.awt.*;
 
 public class List {
 
-    @Command(name = "perm~list", aliases = "permission~list,perms~list", permission = "supportbot.command.admin.perm.list")
+    @Command(name = "perm~list", displayName = "list", aliases = "permission~list,perms~list", permission = "supportbot.command.admin.perm.list")
     public CommandResult onPermList(CommandArgs commandArgs) {
         String[] args = commandArgs.getArgs();
         NetBansBot bot = commandArgs.getBot();

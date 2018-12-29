@@ -14,7 +14,7 @@ import java.awt.*;
 
 public class User{
 
-    @Command(name = "perm~user", aliases = "permission~user,perms~user", permission = "supportbot.command.admin.perm.user")
+    @Command(name = "perm~user", displayName = "user", aliases = "permission~user,perms~user", permission = "supportbot.command.admin.perm.user")
     public CommandResult onPermUser(CommandArgs commandArgs) {
         String[] args = commandArgs.getArgs();
         NetBansBot bot = commandArgs.getBot();

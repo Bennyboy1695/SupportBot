@@ -12,7 +12,7 @@ import java.awt.*;
 public class Embedify {
 
 
-    @Command(name = "embed", permission = "supportbot.command.admin.embed")
+    @Command(name = "embed", displayName = "embed", permission = "supportbot.command.admin.embed")
     public CommandResult onEmbedify(CommandArgs commandArgs) {
         NetBansBot bot = commandArgs.getBot();
         String[] args = commandArgs.getArgs();

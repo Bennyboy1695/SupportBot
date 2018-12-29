@@ -7,7 +7,7 @@ import uk.co.netbans.supportbot.BenCMDFramework.CommandResult;
 
 public class Perm {
 
-    @Command(name = "perm", aliases = "perms,permission", permission = "supportbot.command.admin.perm")
+    @Command(name = "perm", displayName = "perm", aliases = "perms,permission", permission = "supportbot.command.admin.perm")
     public CommandResult onPerm(CommandArgs args) {
         System.out.println("Perm being called!");
         return CommandResult.INVALIDARGS;

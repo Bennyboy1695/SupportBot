@@ -13,7 +13,7 @@ import java.awt.*;
 
 public class CreateGroup {
 
-    @Command(name = "perm~creategroup", aliases = "perms~creatgroup,permission~creategroup", permission = "supportbot.command.admin.perm.creategroup")
+    @Command(name = "perm~creategroup", displayName = "creategroup",aliases = "perms~creatgroup,permission~creategroup", permission = "supportbot.command.admin.perm.creategroup")
     public CommandResult onPermCreateGroup(CommandArgs commandArgs) {
         NetBansBot bot = commandArgs.getBot();
         TextChannel channel = (TextChannel) commandArgs.getChannel();

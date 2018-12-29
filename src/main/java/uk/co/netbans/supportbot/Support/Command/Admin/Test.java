@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class Test {
 
-    @Command(name = "test", aliases = "tester", usage = "test", permission = "command.test.new")
+    @Command(name = "test", displayName = "test", aliases = "tester", usage = "test", permission = "command.test.new")
     public CommandResult onTest(CommandArgs args) {
         NetBansBot bot = args.getBot();
 

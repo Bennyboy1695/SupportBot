@@ -17,7 +17,7 @@ import java.util.List;
 public class Tips {
 
 
-    @Command(name = "tips", aliases = "suggestions", permission = "supportbot.command.admin.tips")
+    @Command(name = "tips", displayName = "tips", aliases = "suggestions", permission = "supportbot.command.admin.tips")
     public CommandResult onTips(CommandArgs args) {
         Member sender = args.getMember();
         NetBansBot bot = args.getBot();
