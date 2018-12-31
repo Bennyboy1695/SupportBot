@@ -11,6 +11,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import uk.co.netbans.supportbot.BenCMDFramework.CommandFramework;
 import uk.co.netbans.supportbot.Message.Messenger;
+import uk.co.netbans.supportbot.Moderation.Purge.Link;
+import uk.co.netbans.supportbot.Moderation.Purge.Purge;
 import uk.co.netbans.supportbot.Storage.SQLManager;
 import uk.co.netbans.supportbot.Support.Command.Admin.*;
 import uk.co.netbans.supportbot.Support.Command.Admin.PermChildren.CreateGroup;
@@ -324,6 +326,10 @@ public class NetBansBot {
         framework.registerCommands(new Faq());
         framework.registerCommands(new ConfigReload());
         framework.registerCommands(new Embedify());
+
+        //Moderation Commands
+        framework.registerCommands(new uk.co.netbans.supportbot.Moderation.Purge.User());
+        framework.registerCommands(new Link());
 
         //Normal Commands (No Perms)
         framework.registerCommands(new Help());

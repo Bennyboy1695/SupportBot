@@ -29,7 +29,6 @@ public class Help {
             if (x.equals(Arrays.toString(command.aliases()).replace("[", "").replace("]", "")))
                 return; //Dirty way to only do each command once as some have only one alias!
             if (x.contains("~")) return;
-            System.out.println(command.displayName());
             commandsList.add(command);
         });
         commandsList.sort(Comparator.comparing(Command::name));

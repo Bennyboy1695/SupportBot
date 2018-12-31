@@ -1,4 +1,4 @@
-package uk.co.netbans.supportbot.Support.Command.Admin;
+package uk.co.netbans.supportbot.Moderation.Purge;
 
 import uk.co.netbans.supportbot.BenCMDFramework.Command;
 import uk.co.netbans.supportbot.BenCMDFramework.CommandArgs;
@@ -8,11 +8,8 @@ import java.util.Arrays;
 
 public class Purge {
 
-    @Command(name = "test~purge", displayName = "purge", aliases = "test.purged", permission = "command.test.purge")
+    @Command(name = "purge", displayName = "purge", aliases = "purged", permission = "supportbot.command.moderation.purge")
     public CommandResult onPurge(CommandArgs args) {
-        System.out.println("Purge!!");
-        System.out.println(Arrays.toString(args.getArgs()));
-
         return CommandResult.SUCCESS;
     }
 

@@ -78,6 +78,8 @@ public class Messenger {
     public static MessageEmbed DISCORD_ROLE_DOESNT_EXIST = new EmbedBuilder().setColor(Color.RED).setDescription("This Discord role doesn't exist!").build();
     public static MessageEmbed PERM_ALREADY_EXIST = new EmbedBuilder().setColor(Color.RED).setDescription("This group already has this perm!").build();
     public static MessageEmbed INCOMPATIBLE_ARG = new EmbedBuilder().setColor(Color.RED).setDescription("This arg is incompatible with your current set of args!").build();
+    public static MessageEmbed AMOUNT_TOO_HIGH = new EmbedBuilder().setColor(Color.RED).setDescription("The max amount allowed for this is 100!").build();
+    public static MessageEmbed NO_MESSAGES_FOUND = new EmbedBuilder().setColor(Color.RED).setDescription("No messages matching your query was found!").build();
 
     public static MessageEmbed INVALID_ARGS(String usage) {
         return new EmbedBuilder().setTitle("Invalid Args!").setDescription("Correct Usage: \n " + usage).setColor(Color.RED).build();
@@ -87,5 +89,12 @@ public class Messenger {
         return new EmbedBuilder().setTitle("No Perms!").setDescription("You do not have the required permission: `" + perm + "` to run this command!").setColor(Color.RED).build();
     }
 
+    public static MessageEmbed DELETED_AMOUNT_OF_MESSAGES(int amount, String username) {
+        return new EmbedBuilder().setTitle("Success!").setDescription("Deleted " + amount + " messages from " + username + "!").setColor(Color.GREEN).build();
+    }
 
+    public static MessageEmbed DELETED_AMOUNT_OF_MESSAGES(int amount) {
+        return new EmbedBuilder().setTitle("Success!").setDescription("Deleted " + amount + " messages!").setColor(Color.GREEN).build();
+
+    }
 }
