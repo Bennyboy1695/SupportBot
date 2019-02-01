@@ -20,12 +20,17 @@ public class TrackManager extends AudioEventAdapter {
         this.queue = new LinkedBlockingQueue<>();
     }
 
-    public void queue(AudioTrack track, Member author) {
+    public void queue(AudioTrack track, Member author, boolean shuffle) {
         TrackInfo info = new TrackInfo(track, author);
         queue.add(info);
 
         if (player.getPlayingTrack() == null) {
-            player.playTrack(track);
+            if (shuffle) {
+                shuffleQueue();
+                player.playTrack(track);
+            } else {
+                player.playTrack(track);
+            }
         }
     }
 

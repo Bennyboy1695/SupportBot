@@ -29,13 +29,13 @@ public class PrivateMessageListener extends ListenerAdapter {
 
         String userMessage = event.getMessage().getContentRaw();
 
-        Member member = bot.getJDA().getGuildById(Long.valueOf((String)bot.getConf().get("guildID"))).getMember(event.getAuthor());
+        Member member = bot.getJDA().getGuildById(bot.getGuildID()).getMember(event.getAuthor());
 
-        if (member.getRoles().contains(bot.getJDA().getGuildById(Long.valueOf((String)bot.getConf().get("guildID"))).getRoleById((String)bot.getConf().get("noHelpRoleID")))) {
+        if (member.getRoles().contains(bot.getJDA().getGuildById(bot.getGuildID()).getRoleById((String)bot.getConf().get("noHelpRoleID")))) {
             member.getUser().openPrivateChannel().complete().sendMessage("No channel has been created because you have the anti-support role!").complete();
             return;
         }
-        for (Guild.Ban bans : bot.getJDA().getGuildById(Long.valueOf((String)bot.getConf().get("guildID"))).getBanList().complete()) {
+        for (Guild.Ban bans : bot.getJDA().getGuildById(bot.getGuildID()).getBanList().complete()) {
             if (bans.getUser().getIdLong() == member.getUser().getIdLong())
                 return;
         }
@@ -80,7 +80,7 @@ public class PrivateMessageListener extends ListenerAdapter {
         supportMessage.addReaction("\u2705").complete();
         event.getAuthor().openPrivateChannel().complete().sendMessage(new EmbedBuilder()
                 .setTitle("Support Channel")
-                .setDescription("https://discordapp.com/channels/" + bot.getConf().get("guildID")  + "/" + supportChannel.getIdLong())
+                .setDescription("https://discordapp.com/channels/" + bot.getGuildID()  + "/" + supportChannel.getIdLong())
                 .setColor(new Color(127, 255, 212))
                 .build()).complete();
 

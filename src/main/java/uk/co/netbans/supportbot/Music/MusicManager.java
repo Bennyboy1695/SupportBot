@@ -14,8 +14,9 @@ import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import uk.co.netbans.supportbot.Message.Messenger;
 import uk.co.netbans.supportbot.NetBansBot;
-import uk.co.netbans.supportbot.Util;
+import uk.co.netbans.supportbot.Utils.Util;
 
 import java.util.*;
 
@@ -80,6 +81,19 @@ public class MusicManager extends ListenerAdapter {
         return nPlayer;
     }
 
+    public boolean canBotPlayMusic(Member sender, TextChannel channel, NetBansBot bot) {
+        if (sender.getVoiceState().getChannel() == null) {
+            bot.getMessenger().sendEmbed(channel, Messenger.NOT_VOICE, 10);
+            return false;
+        }
+        Member botMember = bot.getJDA().getGuildById(bot.getGuildID()).getMemberById(bot.getJDA().asBot().getApplicationInfo().complete().getIdLong());
+        if (botMember.getVoiceState().inVoiceChannel() && !sender.getVoiceState().getChannel().getMembers().contains(bot.getJDA().getGuildById(bot.getGuildID()).getMemberById(bot.getJDA().asBot().getApplicationInfo().complete().getIdLong()))) {
+            bot.getMessenger().sendEmbed(channel, Messenger.NOT_SAME_VOICE, 10);
+            return false;
+        }
+        return true;
+    }
+
     public void reset(Guild guild) {
         players.remove(guild.getId());
         getPlayer(guild).destroy();
@@ -87,7 +101,7 @@ public class MusicManager extends ListenerAdapter {
         guild.getAudioManager().closeAudioConnection();
     }
 
-    public void loadTrack(String identifier, Member author, TextChannel channel) {
+    public void loadTrack(String identifier, Member author, TextChannel channel, boolean shuffle) {
         if (author.getVoiceState().getChannel() == null) {
             Util.sendMessage(channel, "You must be in a voice channel to summon me :D");
             return;
@@ -103,7 +117,7 @@ public class MusicManager extends ListenerAdapter {
             public void trackLoaded(AudioTrack track) {
                 sendEmbed(channel, String.format(QUEUE_TITLE, Util.userDiscrimSet(author.getUser()), 1, ""),
                         String.format(QUEUE_DESCRIPTION, CD, getOrNull(track.getInfo().title), "", MIC, getOrNull(track.getInfo().author), ""));
-                getTrackManager(guild).queue(track, author);
+                getTrackManager(guild).queue(track, author, shuffle);
             }
 
             @Override
@@ -116,7 +130,7 @@ public class MusicManager extends ListenerAdapter {
                     sendEmbed(channel, String.format(QUEUE_TITLE, Util.userDiscrimSet(author.getUser()), Math.min(playlist.getTracks().size(), 1000), "s"),
                             String.format(QUEUE_DESCRIPTION, DVD, getOrNull(playlist.getName()), "", "", "", ""));
                     for (int i = 0; i < Math.min(playlist.getTracks().size(), 1000); i++) {
-                        getTrackManager(guild).queue(playlist.getTracks().get(i), author);
+                        getTrackManager(guild).queue(playlist.getTracks().get(i), author, shuffle);
                     }
                 }
             }

@@ -5,6 +5,7 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.json.simple.parser.ParseException;
 import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.Utils.Util;
 
 import java.awt.*;
 import java.io.IOException;
@@ -44,6 +45,8 @@ public class SuggestionListener extends ListenerAdapter {
             if (event.getMessage().getContentRaw().toLowerCase().contains(sugg[0])) {
                 if (hasSent.get())
                     return;
+                if (Util.containsLink(event.getMessage().getContentRaw()))
+                    return;
                 event.getChannel().sendMessage(new EmbedBuilder()
                         .setColor(Color.CYAN)
                         .setDescription(sugg[1]
@@ -65,7 +68,6 @@ public class SuggestionListener extends ListenerAdapter {
                         messageId.set(0L);
                     },30, TimeUnit.SECONDS);
                 });
-
             }
         }
     }

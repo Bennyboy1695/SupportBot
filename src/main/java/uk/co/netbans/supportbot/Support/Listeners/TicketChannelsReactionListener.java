@@ -9,7 +9,6 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import uk.co.netbans.supportbot.NetBansBot;
-import uk.co.netbans.supportbot.PermType;
 
 
 public class TicketChannelsReactionListener extends ListenerAdapter {
@@ -28,7 +27,7 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                 for (Message message : channel.getPinnedMessages().complete()) {
                     if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\u2705")) {
                         for (Member member : message.getMentionedMembers()) {
-                            if (event.getMember() == member || bot.getPerms().get(PermType.ADMIN).contains(event.getMember().getUser().getIdLong())) {
+                            if (event.getMember() == member || bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.ticket.close")) {
                                 Message historyMessage = channel.getHistory().retrievePast(1).complete().get(0);
                                 String reason = "";
                                 String memberMention = "";
@@ -51,7 +50,7 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                                 member.getUser().openPrivateChannel().complete()
                                         .sendFile(bot.getLogDirectory().resolve(channel.getName()+ ".log").toFile())
                                         .complete();
-                                bot.getJDA().getGuildById(Long.valueOf((String)bot.getConf().get("guildID"))).getTextChannelById(Long.valueOf((String)bot.getConf().get("logChannelID")))
+                                bot.getJDA().getGuildById(bot.getGuildID()).getTextChannelById(Long.valueOf((String)bot.getConf().get("logChannelID")))
                                         .sendFile(bot.getLogDirectory().resolve(channel.getName()+ ".log").toFile(), new MessageBuilder()
                                                 .append(reason.replaceAll("you", event.getMember().getAsMention()))
                                                 .build())

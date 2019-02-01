@@ -1,7 +1,6 @@
 package uk.co.netbans.supportbot;
 
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import uk.co.netbans.supportbot.BenCMDFramework.CommandFramework;
 
 import java.nio.file.Paths;
 import java.util.Scanner;

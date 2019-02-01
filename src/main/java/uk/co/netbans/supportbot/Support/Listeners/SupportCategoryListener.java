@@ -33,9 +33,9 @@ public class SupportCategoryListener extends ListenerAdapter {
                         String message = event.getMessage().getContentRaw();
                         for (Member mention : event.getMessage().getMentionedMembers())
                             message = message.replace(mention.getAsMention(), mention.getEffectiveName());
-                        content = ("[" + OffsetDateTime.now().format(format) + "] " + message);
+                        content = ("[" + OffsetDateTime.now().format(format) + "] " + event.getMember().getEffectiveName() + ": " +  message);
                     } else {
-                        content = ("[" + OffsetDateTime.now().format(format) + "] " + event.getMessage().getContentRaw());
+                        content = ("[" + OffsetDateTime.now().format(format) + "] " + event.getMember().getEffectiveName() + ": " + event.getMessage().getContentRaw());
                     }
                     Files.write(bot.getLogDirectory().resolve(event.getChannel().getName() + ".log"), (content + "\n").getBytes(), StandardOpenOption.APPEND);
                 } catch (IOException e) {

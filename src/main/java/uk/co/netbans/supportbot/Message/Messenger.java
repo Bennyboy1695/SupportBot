@@ -80,6 +80,9 @@ public class Messenger {
     public static MessageEmbed INCOMPATIBLE_ARG = new EmbedBuilder().setColor(Color.RED).setDescription("This arg is incompatible with your current set of args!").build();
     public static MessageEmbed AMOUNT_TOO_HIGH = new EmbedBuilder().setColor(Color.RED).setDescription("The max amount allowed for this is 100!").build();
     public static MessageEmbed NO_MESSAGES_FOUND = new EmbedBuilder().setColor(Color.RED).setDescription("No messages matching your query was found!").build();
+    public static MessageEmbed VOLUME_TOO_HIGH = new EmbedBuilder().setColor(Color.RED).setDescription("The max volume allowed is 100!").build();
+    public static MessageEmbed VOLUME_TOO_LOW = new EmbedBuilder().setColor(Color.RED).setDescription("The min volume allowed is 1!").build();
+    public static MessageEmbed HASTEBIN = new EmbedBuilder().setTitle("Exported List").setDescription("Successfully exported list to Json").setColor(Color.GREEN).build();
 
     public static MessageEmbed INVALID_ARGS(String usage) {
         return new EmbedBuilder().setTitle("Invalid Args!").setDescription("Correct Usage: \n " + usage).setColor(Color.RED).build();
@@ -95,6 +98,22 @@ public class Messenger {
 
     public static MessageEmbed DELETED_AMOUNT_OF_MESSAGES(int amount) {
         return new EmbedBuilder().setTitle("Success!").setDescription("Deleted " + amount + " messages!").setColor(Color.GREEN).build();
-
     }
+
+    public static MessageEmbed VOLUME_NOW_AT(int volume) {
+        return new EmbedBuilder().setDescription("Volume is now " + volume).setColor(Color.GREEN).build();
+    }
+
+    public static MessageEmbed LEAVING_VOICE(String channel) {
+        return new EmbedBuilder().setTitle("Leaving Channel!").setDescription("Leaving " + channel + "!").setColor(Color.GREEN).build();
+    }
+
+    public static MessageEmbed JOINING_VOICE(String channel) {
+        return new EmbedBuilder().setTitle("Joining Channel!").setDescription("Joining " + channel + "!").setColor(Color.GREEN).build();
+    }
+
+    public static MessageEmbed MOVING_VOICE(String oldChannel, String channel) {
+        return new EmbedBuilder().setTitle("Moving Channel!").setDescription("Moving from " + oldChannel + " to " + channel + "!").setColor(Color.GREEN).build();
+    }
+
 }

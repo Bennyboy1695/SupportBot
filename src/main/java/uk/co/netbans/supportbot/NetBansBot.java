@@ -3,30 +3,29 @@ package uk.co.netbans.supportbot;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.core.OnlineStatus;
+import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.hooks.InterfacedEventManager;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import uk.co.netbans.supportbot.BenCMDFramework.CommandFramework;
+import uk.co.netbans.supportbot.CommandFramework.CommandFramework;
+import uk.co.netbans.supportbot.Commands.Music.*;
 import uk.co.netbans.supportbot.Message.Messenger;
-import uk.co.netbans.supportbot.Moderation.Purge.Link;
-import uk.co.netbans.supportbot.Moderation.Purge.Purge;
+import uk.co.netbans.supportbot.Commands.Moderation.Purge.Link;
+import uk.co.netbans.supportbot.Commands.Moderation.Purge.Purge;
 import uk.co.netbans.supportbot.Storage.SQLManager;
-import uk.co.netbans.supportbot.Support.Command.Admin.*;
-import uk.co.netbans.supportbot.Support.Command.Admin.PermChildren.CreateGroup;
-import uk.co.netbans.supportbot.Support.Command.Admin.PermChildren.Group;
-import uk.co.netbans.supportbot.Support.Command.Admin.PermChildren.User;
-import uk.co.netbans.supportbot.Support.Command.CommandListener;
+import uk.co.netbans.supportbot.Commands.Admin.*;
+import uk.co.netbans.supportbot.Commands.Admin.PermChildren.CreateGroup;
+import uk.co.netbans.supportbot.Commands.Admin.PermChildren.Group;
+import uk.co.netbans.supportbot.Commands.Admin.PermChildren.User;
 import uk.co.netbans.supportbot.Music.MusicManager;
-import uk.co.netbans.supportbot.Support.Command.CommandRouter;
-import uk.co.netbans.supportbot.Support.Command.Support.Help;
-import uk.co.netbans.supportbot.Support.Command.Support.Ticket;
-import uk.co.netbans.supportbot.Support.Listeners.SuggestionListener;
-import uk.co.netbans.supportbot.Support.Listeners.SupportCategoryListener;
-import uk.co.netbans.supportbot.Support.Listeners.PrivateMessageListener;
-import uk.co.netbans.supportbot.Support.Listeners.TicketChannelsReactionListener;
+import uk.co.netbans.supportbot.Commands.Support.Help;
+import uk.co.netbans.supportbot.Commands.Support.Ticket;
+import uk.co.netbans.supportbot.Support.Listeners.*;
+import uk.co.netbans.supportbot.Utils.Util;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -34,8 +33,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -47,11 +46,11 @@ public class NetBansBot {
 
     private Path directory;
     private Path logDirectory;
+    private Path musicDirectory;
     private JSONObject conf;
-    private EnumMap<PermType, List<Long>> perms;
     private SQLManager sqlManager;
-    private CommandListener listener;
     private CommandFramework framework;
+    private NetBansBot bot = this;
 
     public void init(Path directory) throws Exception {
         this.directory = directory;
@@ -66,13 +65,6 @@ public class NetBansBot {
         System.out.println("Loading SQL!");
         sqlManager = new SQLManager(directory.toFile());
 
-        System.out.println("Initializing Perms!");
-        try {
-            initPerms();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to initialize perms!", e);
-        }
-
         try {
             Path path = Paths.get(directory + "/logs");
             if (!path.toFile().exists()) {
@@ -80,6 +72,17 @@ public class NetBansBot {
                 logDirectory = path;
             }
             logDirectory = path;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Path path = Paths.get(directory + "/music");
+            if (!path.toFile().exists()) {
+                path.toFile().mkdir();
+                musicDirectory = path;
+            }
+            musicDirectory = path;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -103,13 +106,28 @@ public class NetBansBot {
         System.out.println("Registering Commands...");
         // old
         this.jda.addEventListener(framework = new CommandFramework(this));
-        this.jda.addEventListener(listener = new CommandListener(this));
         registerCommands();
 
         this.jda.addEventListener(new PrivateMessageListener(this));
         this.jda.addEventListener(new SupportCategoryListener(this));
         this.jda.addEventListener(new TicketChannelsReactionListener(this));
         this.jda.addEventListener(new SuggestionListener(this));
+        this.jda.addEventListener(new HelpMessageReactionListener(this));
+
+        Executors.newSingleThreadExecutor().submit(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    jda.getPresence().setPresence(OnlineStatus.ONLINE, Game.watching(Util.randomUser(bot) + " code!"));
+                    try {
+                        Thread.sleep(Duration.ofMinutes(5).toMillis());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
 
         System.out.println("Loading Music Manager...");
         this.music = new MusicManager();
@@ -122,12 +140,6 @@ public class NetBansBot {
         System.out.println("Initiating Shutdown...");
         // shutdown code here.
         getJDA().shutdown();
-
-        try {
-            this.writePerms();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         System.out.println("Shutdown Complete.");
     }
@@ -156,16 +168,12 @@ public class NetBansBot {
         return this.messenger;
     }
 
+    public long getGuildID() {
+        return Long.valueOf((String)bot.getConf().get("guildID"));
+    }
+
     public MusicManager getMusicManager() {
         return this.music;
-    }
-
-    public CommandRouter getCommandRouter() {
-        return getListener().getRouter();
-    }
-
-    public CommandListener getListener() {
-        return listener;
     }
 
     public SQLManager getSqlManager() {
@@ -201,82 +209,12 @@ public class NetBansBot {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private void initPerms() throws Exception {
-        Path perms = directory.resolve("perms.json");
-        if (!Files.exists(perms)) {
-            Files.createFile(perms);
-
-            JSONObject jo = new JSONObject();
-            JSONArray array = new JSONArray();
-            array.add("97995963137802240");
-            array.add("138051041529692161");
-            jo.put("admin", array);
-            JSONArray modsArray = new JSONArray();
-            jo.put("mod", modsArray);
-
-            try (BufferedWriter writer = Files.newBufferedWriter(perms)) {
-                writer.write(jo.toJSONString());
-                writer.flush();
-            }
-        }
-
-        try (BufferedReader reader = Files.newBufferedReader(perms)) {
-            JSONParser parser = new JSONParser();
-            JSONObject file = (JSONObject) parser.parse(reader);
-
-            this.perms = new EnumMap<>(PermType.class);
-
-            List<Long> admins = new ArrayList<>();
-            for (Object obj : (JSONArray) file.get("admin"))
-                admins.add(Long.valueOf(obj.toString()));
-            this.perms.put(PermType.ADMIN, admins);
-            List<Long> mods = new ArrayList<>();
-            for (Object obj : (JSONArray) file.get("mod"))
-                mods.add(Long.valueOf(obj.toString()));
-            this.perms.put(PermType.MOD, mods);
-            // friends perm group?
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public void writePerms() throws Exception {
-        Path perms = this.directory.resolve("perms.json");
-
-        JSONObject jo = new JSONObject();
-        JSONArray admin = new JSONArray();
-        admin.addAll(this.perms.get(PermType.ADMIN));
-        jo.put("admin", admin);
-
-        JSONArray mod = new JSONArray();
-        mod.addAll(this.perms.get(PermType.MOD));
-        jo.put("mod", mod);
-
-        try (BufferedWriter writer = Files.newBufferedWriter(perms)) {
-            writer.write(jo.toJSONString());
-            writer.flush();
-        }
-    }
-
-    public void reloadPerms() {
-        try {
-            this.writePerms();
-            this.initPerms();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void reloadConfig() {
         try {
             this.initConfig();
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public EnumMap<PermType, List<Long>> getPerms() {
-        return perms;
     }
 
     public JSONObject getConf() {
@@ -291,12 +229,8 @@ public class NetBansBot {
         return logDirectory;
     }
 
-    public PermType getPermForPlayer(long user) {
-        if (this.perms.get(PermType.ADMIN).contains(user))
-            return PermType.ADMIN;
-        if (this.perms.get(PermType.MOD).contains(user))
-            return PermType.MOD;
-        return PermType.DEFAULT;
+    public Path getMusicDirectory() {
+        return musicDirectory;
     }
 
     // potentially un necessary.
@@ -315,7 +249,7 @@ public class NetBansBot {
 
         //Perm Commands And Children
         framework.registerCommands(new Perm());
-        framework.registerCommands(new uk.co.netbans.supportbot.Support.Command.Admin.PermChildren.List());
+        framework.registerCommands(new uk.co.netbans.supportbot.Commands.Admin.PermChildren.List());
         framework.registerCommands(new User());
         framework.registerCommands(new Group());
         framework.registerCommands(new CreateGroup());
@@ -326,13 +260,27 @@ public class NetBansBot {
         framework.registerCommands(new Faq());
         framework.registerCommands(new ConfigReload());
         framework.registerCommands(new Embedify());
+        framework.registerCommands(new Say());
 
         //Moderation Commands
-        framework.registerCommands(new uk.co.netbans.supportbot.Moderation.Purge.User());
+        framework.registerCommands(new uk.co.netbans.supportbot.Commands.Moderation.Purge.User());
         framework.registerCommands(new Link());
 
         //Normal Commands (No Perms)
         framework.registerCommands(new Help());
         framework.registerCommands(new Ticket());
+
+        //Music
+        framework.registerCommands(new Play());
+        framework.registerCommands(new Current());
+        framework.registerCommands(new Export());
+        framework.registerCommands(new Queue());
+        framework.registerCommands(new Reset());
+        framework.registerCommands(new Search());
+        framework.registerCommands(new Shuffle());
+        framework.registerCommands(new Skip());
+        framework.registerCommands(new Volume());
+        framework.registerCommands(new Playlist());
     }
+
 }
