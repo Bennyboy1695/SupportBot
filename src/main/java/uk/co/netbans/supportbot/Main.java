@@ -2,7 +2,9 @@ package uk.co.netbans.supportbot;
 
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
+import java.io.File;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

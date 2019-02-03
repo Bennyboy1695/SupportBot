@@ -12,6 +12,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import uk.co.netbans.supportbot.CommandFramework.CommandFramework;
+import uk.co.netbans.supportbot.Commands.Moderation.Purge.Mention;
 import uk.co.netbans.supportbot.Commands.Music.*;
 import uk.co.netbans.supportbot.Message.Messenger;
 import uk.co.netbans.supportbot.Commands.Moderation.Purge.Link;
@@ -113,6 +114,7 @@ public class NetBansBot {
         this.jda.addEventListener(new TicketChannelsReactionListener(this));
         this.jda.addEventListener(new SuggestionListener(this));
         this.jda.addEventListener(new HelpMessageReactionListener(this));
+        this.jda.addEventListener(new TagListener(this));
 
         Executors.newSingleThreadExecutor().submit(new Runnable() {
             @Override
@@ -158,6 +160,24 @@ public class NetBansBot {
             tipArray.add(put);
         }
         return tipArray;
+    }
+
+    public List<String> getReplies() {
+        List<String> replyArray = new ArrayList<>();
+        try {
+            BufferedReader reader = Files.newBufferedReader(directory.resolve("config.json"));
+            JSONParser jsonParser = new JSONParser();
+            JSONObject result = (JSONObject) jsonParser.parse(reader);
+            JSONArray tips = (JSONArray) result.get("replies");
+            for (Object obj : tips) {
+                JSONObject jsonObject = (JSONObject) obj;
+                String word = (String) jsonObject.get("reply");
+                replyArray.add(word);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return replyArray;
     }
 
     public JDA getJDA() {
@@ -265,6 +285,7 @@ public class NetBansBot {
         //Moderation Commands
         framework.registerCommands(new uk.co.netbans.supportbot.Commands.Moderation.Purge.User());
         framework.registerCommands(new Link());
+        framework.registerCommands(new Mention());
 
         //Normal Commands (No Perms)
         framework.registerCommands(new Help());
