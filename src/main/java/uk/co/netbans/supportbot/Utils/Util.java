@@ -60,7 +60,7 @@ public class Util {
     public static String randomUser(NetBansBot bot) {
         List<String> names = new ArrayList<>();
         for (Role role : bot.getJDA().getGuildById(bot.getGuildID()).getRoles()) {
-            if (role.getName().contains("Leader") || role.getName().contains("Cont") || role.getName().contains("Dev")) {
+            if (role.getName().toLowerCase().contains("leader") || role.getName().toLowerCase().contains("cont") || role.getName().toLowerCase().contains("dev") || role.getName().toLowerCase().contains("admin")) {
                 for (Member user : bot.getJDA().getGuildById(bot.getGuildID()).getMembers()) {
                     if (user.getOnlineStatus().equals(OnlineStatus.ONLINE) || user.getOnlineStatus().equals(OnlineStatus.IDLE)) {
                         if (user.getRoles().contains(role)) {

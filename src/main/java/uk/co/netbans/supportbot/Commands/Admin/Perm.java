@@ -10,7 +10,6 @@ public class Perm {
 
     @Command(name = "perm", displayName = "perm", aliases = "perms,permission", permission = "supportbot.command.admin.perm", usage = "perm <user|group|list|creategroup> <group|groups|user> [add|set|remove> <perm>]", category = CommandCategory.ADMIN)
     public CommandResult onPerm(CommandArgs args) {
-        System.out.println("Perm being called!");
-        return CommandResult.INVALIDARGS;
+        return CommandResult.SUCCESS;
     }
 }

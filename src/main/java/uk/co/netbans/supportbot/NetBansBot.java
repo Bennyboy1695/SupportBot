@@ -281,6 +281,8 @@ public class NetBansBot {
         framework.registerCommands(new Skip());
         framework.registerCommands(new Volume());
         framework.registerCommands(new Playlist());
+        framework.registerCommands(new Panic());
+        framework.registerCommands(new Repeat());
     }
 
 }

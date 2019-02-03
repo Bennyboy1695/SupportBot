@@ -20,7 +20,7 @@ public class User{
         String[] args = commandArgs.getArgs();
         NetBansBot bot = commandArgs.getBot();
         TextChannel channel = (TextChannel) commandArgs.getChannel();
-        if (args.length <= 3)
+        if (args.length <= 2)
             return CommandResult.INVALIDARGS;
         for (Role roles1 : bot.getJDA().getGuildById(Long.valueOf((String) bot.getConf().get("guildID"))).getRoles()) {
             if (roles1.getName().toLowerCase().equals(args[3].toLowerCase())) {
@@ -30,21 +30,15 @@ public class User{
         Member member = bot.getJDA().getGuildById(Long.valueOf((String) bot.getConf().get("guildID"))).getMemberById(args[1].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", ""));
         switch (args[2].toLowerCase()) {
             case "set":
-                if (bot.getSqlManager().groupAlreadyExist(args[3])) {
-                    StringBuilder groupStrings = new StringBuilder();
-                    for (String group : bot.getSqlManager().getUsersGroups(member.getUser().getIdLong())) {
-                        bot.getSqlManager().removeGroupFromUser(member.getUser().getIdLong(), group);
-                        groupStrings.append(group);
-                    }
-                    if (bot.getSqlManager().addGroupToUser(member.getUser().getIdLong(), args[3])) {
+                if (!bot.getSqlManager().userAlreadyHasPerm(member.getUser().getIdLong(), args[3])) {
+                    if (bot.getSqlManager().addNewPermToUser(member.getUser().getIdLong(), args[3])) {
                         bot.getMessenger().sendEmbed(channel, new EmbedBuilder().setTitle("Successful")
                                 .setColor(Color.GREEN)
-                                .addField("**Removed:**", groupStrings.toString(), true)
-                                .addField("**Added:**", args[3], true).build(), 15);
+                                .setDescription("Successfully added `" + args[3] + "` to user: " + member.getEffectiveName()).build(), 15);
                         return CommandResult.SUCCESS;
                     }
                 } else {
-                    bot.getMessenger().sendEmbed(channel, Messenger.GROUP_DOESNT_EXIST, 10);
+                    bot.getMessenger().sendEmbed(channel, Messenger.USER_HAS_PERM, 10);
                 }
                 break;
             case "add":

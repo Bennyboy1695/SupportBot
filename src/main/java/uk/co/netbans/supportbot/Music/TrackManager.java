@@ -10,27 +10,25 @@ import net.dv8tion.jda.core.entities.VoiceChannel;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class TrackManager extends AudioEventAdapter {
     private final AudioPlayer player;
     private final Queue<TrackInfo> queue;
+    private boolean shuffle = false;
+    private boolean loop = false;
 
     public TrackManager(AudioPlayer player) {
         this.player = player;
         this.queue = new LinkedBlockingQueue<>();
     }
 
-    public void queue(AudioTrack track, Member author, boolean shuffle) {
+    public void queue(AudioTrack track, Member author) {
         TrackInfo info = new TrackInfo(track, author);
         queue.add(info);
 
         if (player.getPlayingTrack() == null) {
-            if (shuffle) {
-                shuffleQueue();
-                player.playTrack(track);
-            } else {
-                player.playTrack(track);
-            }
+            player.playTrack(track);
         }
     }
 
@@ -51,18 +49,24 @@ public class TrackManager extends AudioEventAdapter {
         if (queue.isEmpty()) {
             g.getAudioManager().closeAudioConnection();
         } else {
-            player.playTrack(queue.element().getTrack());
+            TrackInfo info = queue.element();
+            if (info.getAuthor().getVoiceState().getChannel().getMembers().size() == 1) {
+                g.getAudioManager().closeAudioConnection();
+            }
+            if (shuffle) {
+                player.playTrack(shuffle().getTrack());
+            } else if (loop) {
+                player.playTrack(track);
+            } else {
+                player.playTrack(queue.element().getTrack());
+            }
         }
     }
 
-    public void shuffleQueue() {
-        List<TrackInfo> tQueue = new ArrayList<>(getQueuedTracks());
-        TrackInfo current = tQueue.get(0);
-        tQueue.remove(0);
-        if (!queue.isEmpty()) Collections.shuffle(tQueue);
-        tQueue.add(0, current);
-        purgeQueue();
-        queue.addAll(tQueue);
+    public TrackInfo shuffle() {
+        ArrayList<TrackInfo> tracks = new ArrayList<>(getQueuedTracks());
+        int random = ThreadLocalRandom.current().nextInt(getQueuedTracks().size());
+        return tracks.get(random);
     }
 
     public Set<TrackInfo> getQueuedTracks() {
@@ -79,5 +83,21 @@ public class TrackManager extends AudioEventAdapter {
 
     public TrackInfo getTrackInfo(AudioTrack track) {
         return queue.stream().filter(trackInfo -> trackInfo.getTrack().equals(track)).findFirst().orElse(null);
+    }
+
+    public void setShuffle(boolean shuffle) {
+        this.shuffle = shuffle;
+    }
+
+    public boolean isLoop() {
+        return loop;
+    }
+
+    public boolean isShuffle() {
+        return shuffle;
+    }
+
+    public void setLoop(boolean loop) {
+        this.loop = loop;
     }
 }

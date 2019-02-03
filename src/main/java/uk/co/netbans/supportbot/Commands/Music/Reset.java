@@ -19,7 +19,7 @@ public class Reset {
         MusicManager musicPlayer = bot.getMusicManager();
         String[] args = commandArgs.getArgs();
         if (musicPlayer.canBotPlayMusic(member, channel, bot)) {
-            bot.getMusicManager().reset(channel.getGuild());
+            bot.getMusicManager().stop(channel.getGuild());
             bot.getMessenger().sendMessage(channel, "\uD83D\uDD04 Resetting the music player..", 10);
         }
         return CommandResult.SUCCESS;

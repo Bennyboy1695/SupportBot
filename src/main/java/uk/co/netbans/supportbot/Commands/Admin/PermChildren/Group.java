@@ -39,7 +39,7 @@ public class Group{
                         return CommandResult.SUCCESS;
                     }
                 } else {
-                    bot.getMessenger().sendEmbed(channel, Messenger.PERM_ALREADY_EXIST, 10);
+                    bot.getMessenger().sendEmbed(channel, Messenger.GROUP_HAS_PERM, 10);
                 }
                 break;
             case "remove":
@@ -51,7 +51,7 @@ public class Group{
                         return CommandResult.SUCCESS;
                     }
                 } else {
-                    bot.getMessenger().sendEmbed(channel, Messenger.PERM_ALREADY_EXIST, 10);
+                    bot.getMessenger().sendEmbed(channel, Messenger.GROUP_HAS_PERM, 10);
                 }
                 break;
             case "adddiscordrole":

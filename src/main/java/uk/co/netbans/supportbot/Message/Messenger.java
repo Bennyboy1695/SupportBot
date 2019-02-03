@@ -76,7 +76,8 @@ public class Messenger {
     public static MessageEmbed GROUP_DOESNT_EXIST = new EmbedBuilder().setColor(Color.RED).setDescription("This group doesn't exist!").build();
     public static MessageEmbed GROUP_ALREADY_EXIST = new EmbedBuilder().setColor(Color.RED).setDescription("This group already exists!").build();
     public static MessageEmbed DISCORD_ROLE_DOESNT_EXIST = new EmbedBuilder().setColor(Color.RED).setDescription("This Discord role doesn't exist!").build();
-    public static MessageEmbed PERM_ALREADY_EXIST = new EmbedBuilder().setColor(Color.RED).setDescription("This group already has this perm!").build();
+    public static MessageEmbed GROUP_HAS_PERM = new EmbedBuilder().setColor(Color.RED).setDescription("This group already has this perm!").build();
+    public static MessageEmbed USER_HAS_PERM = new EmbedBuilder().setColor(Color.RED).setDescription("This user already has this perm!").build();
     public static MessageEmbed INCOMPATIBLE_ARG = new EmbedBuilder().setColor(Color.RED).setDescription("This arg is incompatible with your current set of args!").build();
     public static MessageEmbed AMOUNT_TOO_HIGH = new EmbedBuilder().setColor(Color.RED).setDescription("The max amount allowed for this is 100!").build();
     public static MessageEmbed NO_MESSAGES_FOUND = new EmbedBuilder().setColor(Color.RED).setDescription("No messages matching your query was found!").build();

@@ -2,6 +2,7 @@ package uk.co.netbans.supportbot.Commands.Support;
 
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.TextChannel;
 import uk.co.netbans.supportbot.CommandFramework.Command;
@@ -24,6 +25,11 @@ public class Help {
         String[] args = commandArgs.getArgs();
         Member sender = commandArgs.getMember();
         TextChannel channel = (TextChannel) commandArgs.getChannel();
+
+        Message message = bot.getMessenger().sendEmbed(channel, Help.helpPages(bot, 1), 30);
+
+        message.addReaction("\u25C0").complete();
+        message.addReaction("\u25B6").complete();
 
         return CommandResult.SUCCESS;
     }
