@@ -1,11 +1,15 @@
 package uk.co.netbans.supportbot.Utils;
 
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.*;
 import uk.co.netbans.supportbot.Music.MusicManager;
 import uk.co.netbans.supportbot.NetBansBot;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -64,13 +68,68 @@ public class Util {
                 for (Member user : bot.getJDA().getGuildById(bot.getGuildID()).getMembers()) {
                     if (user.getOnlineStatus().equals(OnlineStatus.ONLINE) || user.getOnlineStatus().equals(OnlineStatus.IDLE)) {
                         if (user.getRoles().contains(role)) {
-                            names.add(user.getEffectiveName());
+                            if (!user.getUser().isBot())
+                                names.add(user.getEffectiveName());
                         }
                     }
                 }
             }
         }
         return names.get(ThreadLocalRandom.current().nextInt(names.size()));
+    }
+
+    public static ArrayList<TextChannel> getSupportChannels(NetBansBot bot) {
+        ArrayList<TextChannel> channels = new ArrayList<>();
+        for (TextChannel channel : bot.getJDA().getGuildById(bot.getGuildID()).getCategoryById(bot.getSupportCategoryID()).getTextChannels()) {
+            channels.add(channel);
+            if (channel.getIdLong() == 526622624655343626L || channel.getIdLong() == 521478045924589568L) {
+                channels.remove(channel);
+            }
+        }
+        return channels;
+    }
+
+    public static void doExpiryCheck(NetBansBot bot) {
+        int expiryCount = 0;
+        for (TextChannel channel : getSupportChannels(bot)) {
+            for (Message message : channel.getHistory().retrievePast(5).complete()) {
+                if (!channel.getMessageById(channel.getLatestMessageId()).complete().getAuthor().isBot()) {
+                    if (message.getAuthor().equals(channel.getPinnedMessages().complete().get(0).getMentionedUsers().get(0))) {
+                        if (message.getCreationTime().isBefore(OffsetDateTime.now().minusMinutes(1))) {
+                            expiryCount++;
+                        }
+                    }
+                }
+            }
+            if (expiryCount > 0) {
+                expireChannel(bot, channel);
+            }
+        }
+    }
+
+    private static void expireChannel(NetBansBot bot, TextChannel channel) {
+        for (Message message : channel.getPinnedMessages().complete()) {
+            if (message.getAuthor().isBot()) {
+                for (Member member : message.getMentionedMembers()) {
+                    String reason = "This issue has not been replied to in over a week by the Ticket Creator!";
+                    member.getUser().openPrivateChannel().complete().sendMessage(new EmbedBuilder()
+                            .setTitle("Issue Expired!")
+                            .setDescription("This issue has not been replied to in over a week by the Ticket Creator!" + " \nBecause of this we have sent you a log file containing the history, so that you may look at it incase you encounter the issue again!")
+                            .addField("Next Step: ", "If the issue still persists, please create a github issue using the link provided below!\n" +
+                                    "https://github.com/NetBans/NetBans/issues/new", false)
+                            .build()).complete();
+                    member.getUser().openPrivateChannel().complete()
+                            .sendFile(bot.getLogDirectory().resolve(channel.getName() + ".log").toFile())
+                            .complete();
+                    bot.getJDA().getGuildById(bot.getGuildID()).getTextChannelById(Long.valueOf((String) bot.getConf().get("logChannelID")))
+                            .sendFile(bot.getLogDirectory().resolve(channel.getName() + ".log").toFile(), new MessageBuilder()
+                                    .append(reason)
+                                    .build())
+                            .complete();
+                    channel.delete().reason("Issue Expired!").complete();
+                }
+            }
+        }
     }
 
     public static String[] quotesOrSpaceSplits(String str) {

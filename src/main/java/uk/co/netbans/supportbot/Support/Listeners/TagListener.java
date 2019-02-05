@@ -4,6 +4,7 @@ import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.Utils.Util;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -20,6 +21,7 @@ public class TagListener extends ListenerAdapter {
         Member botMember = bot.getJDA().getGuildById(bot.getGuildID()).getMemberById(bot.getJDA().asBot().getApplicationInfo().complete().getIdLong());
         if (event.getMessage().getMentionedMembers().contains(botMember)) {
             bot.getMessenger().sendMessage(event.getChannel(), randomReplies(), 10);
+            Util.doExpiryCheck(bot);
         }
     }
 

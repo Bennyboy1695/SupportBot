@@ -26,6 +26,7 @@ import uk.co.netbans.supportbot.Music.MusicManager;
 import uk.co.netbans.supportbot.Commands.Support.Help;
 import uk.co.netbans.supportbot.Commands.Support.Ticket;
 import uk.co.netbans.supportbot.Support.Listeners.*;
+import uk.co.netbans.supportbot.Task.ExpiryCheckTask;
 import uk.co.netbans.supportbot.Utils.Util;
 
 import java.io.BufferedReader;
@@ -37,6 +38,8 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -130,6 +133,23 @@ public class NetBansBot {
             }
         });
 
+        Executors.newSingleThreadExecutor().submit(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    Util.getSupportChannels(bot);
+                    try {
+                        Thread.sleep(Duration.ofMinutes(10).toMillis());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        TimerTask timerTask = new ExpiryCheckTask(this);
+        Timer timer = new Timer(true);
+        timer.schedule(timerTask, Duration.ofMinutes(0).toMillis(), Duration.ofMinutes(15).toMillis());
 
         System.out.println("Loading Music Manager...");
         this.music = new MusicManager();
@@ -190,6 +210,10 @@ public class NetBansBot {
 
     public long getGuildID() {
         return Long.valueOf((String)bot.getConf().get("guildID"));
+    }
+
+    public long getSupportCategoryID() {
+        return Long.valueOf((String)bot.getConf().get("category"));
     }
 
     public MusicManager getMusicManager() {
