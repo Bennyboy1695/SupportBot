@@ -95,7 +95,7 @@ public class Util {
             for (Message message : channel.getHistory().retrievePast(5).complete()) {
                 if (!channel.getMessageById(channel.getLatestMessageId()).complete().getAuthor().isBot()) {
                     if (message.getAuthor().equals(channel.getPinnedMessages().complete().get(0).getMentionedUsers().get(0))) {
-                        if (message.getCreationTime().isBefore(OffsetDateTime.now().minusMinutes(1))) {
+                        if (message.getCreationTime().isBefore(OffsetDateTime.now().minusWeeks(1))) {
                             expiryCount++;
                         }
                     }

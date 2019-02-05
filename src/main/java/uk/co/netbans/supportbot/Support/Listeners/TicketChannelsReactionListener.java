@@ -3,7 +3,9 @@ package uk.co.netbans.supportbot.Support.Listeners;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.core.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import uk.co.netbans.supportbot.Message.Messenger;
 import uk.co.netbans.supportbot.NetBansBot;
@@ -57,11 +59,10 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                         }
                     } else if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD12")) {
                         if (bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.channel.lock")) {
-                            channel.sendTyping().queue();
+                            channel.getManager().putPermissionOverride(channel.getPinnedMessages().complete().get(0).getMentionedMembers().get(0), 101440L, 0L).complete();
                             for (Role role : bot.getJDA().getGuildById(bot.getGuildID()).getRoles()) {
                                 channel.getManager().putPermissionOverride(role, 0L, 76800L).complete();
                             }
-                            channel.getManager().putPermissionOverride(channel.getPinnedMessages().complete().get(0).getMentionedMembers().get(0), 101440L, 0L).complete();
                             bot.getMessenger().sendEmbed(channel, Messenger.CHANNEL_LOCKED);
                             System.out.println("Locked channel: " + channel.getName());
                         }
@@ -70,4 +71,24 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
             }
         }
     }
+
+    @Override
+    public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
+        if (event.isFromType(ChannelType.TEXT)) {
+            TextChannel channel = (TextChannel) event.getChannel();
+            if (channel.getParent().getIdLong() == Long.valueOf((String) bot.getConf().get("category")) || channel.getName().contains("manual")) {
+                for (Message message : channel.getPinnedMessages().complete()) {
+                    if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD12")) {
+                        if (bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.channel.lock")) {
+                            channel.getManager().sync().complete();
+                            channel.getManager().putPermissionOverride(channel.getPinnedMessages().complete().get(0).getMentionedMembers().get(0), 101440L, 0L).complete();
+                            bot.getMessenger().sendEmbed(channel, Messenger.CHANNEL_UNLOCKED);
+                            System.out.println("Unlocked channel: " + channel.getName());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }

@@ -85,6 +85,7 @@ public class Messenger {
     public static MessageEmbed VOLUME_TOO_LOW = new EmbedBuilder().setColor(Color.RED).setDescription("The min volume allowed is 1!").build();
     public static MessageEmbed HASTEBIN = new EmbedBuilder().setTitle("Exported List").setDescription("Successfully exported list to Json").setColor(Color.GREEN).build();
     public static MessageEmbed CHANNEL_LOCKED = getCommonEmbed().setDescription("\uD83D\uDD12 Channel has been locked to just Project Leaders and the Ticket Creator!").setColor(Color.GREEN).build();
+    public static MessageEmbed CHANNEL_UNLOCKED = getCommonEmbed().setDescription("\uD83D\uDD13 Channel has been unlocked, it is now back as it was before it was locked!").setColor(Color.GREEN).build();
 
     public static MessageEmbed INVALID_ARGS(String usage) {
         return new EmbedBuilder().setTitle("Invalid Args!").setDescription("Correct Usage: \n " + usage).setColor(Color.RED).build();
