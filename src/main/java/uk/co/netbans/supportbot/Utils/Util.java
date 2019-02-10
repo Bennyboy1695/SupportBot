@@ -61,21 +61,21 @@ public class Util {
         return m.find();
     }
 
-    public static String randomUser(NetBansBot bot) {
-        List<String> names = new ArrayList<>();
+    public static Member randomMember(NetBansBot bot) {
+        List<Member> members = new ArrayList<>();
         for (Role role : bot.getJDA().getGuildById(bot.getGuildID()).getRoles()) {
             if (role.getName().toLowerCase().contains("leader") || role.getName().toLowerCase().contains("cont") || role.getName().toLowerCase().contains("dev") || role.getName().toLowerCase().contains("admin")) {
-                for (Member user : bot.getJDA().getGuildById(bot.getGuildID()).getMembers()) {
-                    if (user.getOnlineStatus().equals(OnlineStatus.ONLINE) || user.getOnlineStatus().equals(OnlineStatus.IDLE)) {
-                        if (user.getRoles().contains(role)) {
-                            if (!user.getUser().isBot())
-                                names.add(user.getEffectiveName());
+                for (Member member : bot.getJDA().getGuildById(bot.getGuildID()).getMembers()) {
+                    if (member.getOnlineStatus().equals(OnlineStatus.ONLINE) || member.getOnlineStatus().equals(OnlineStatus.IDLE)) {
+                        if (member.getRoles().contains(role)) {
+                            if (!member.getUser().isBot())
+                                members.add(member);
                         }
                     }
                 }
             }
         }
-        return names.get(ThreadLocalRandom.current().nextInt(names.size()));
+        return members.get(ThreadLocalRandom.current().nextInt(members.size()));
     }
 
     public static ArrayList<TextChannel> getSupportChannels(NetBansBot bot) {

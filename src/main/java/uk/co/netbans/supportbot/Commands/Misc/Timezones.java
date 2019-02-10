@@ -21,7 +21,7 @@ import java.time.zone.ZoneRulesException;
 
 public class Timezones {
 
-    @Command(name = "timezones", displayName = "timezones", aliases = "times", usage = "times")
+    @Command(name = "time", displayName = "time", aliases = "times,timezones", usage = "time")
     public CommandResult onExecute(CommandArgs args) {
         NetBansBot bot = args.getBot();
         JSONArray arr = (JSONArray) bot.getConf().get("timezones");
@@ -40,7 +40,7 @@ public class Timezones {
                 continue;
             }
             ZonedDateTime time = ZonedDateTime.ofInstant(Instant.now(), zone);
-            sb.append("In ").append(o.toString()).append(" it is ").append(time.format(DateTimeFormatter.ofPattern("hh:mm:ss , MMM dd")).replace(",", "on")).append("\n");
+            sb.append(o.toString().replaceAll("/.*", "")).append(": ").append(time.format(DateTimeFormatter.ofPattern("kk:mmzzz , EEE dd MMM")).replace(",", "on")).append("\n");
         }
         embed.setDescription(sb.toString());
 

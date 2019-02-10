@@ -5,6 +5,8 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.RichPresence;
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.hooks.InterfacedEventManager;
 import org.json.simple.JSONArray;
@@ -123,14 +125,18 @@ public class NetBansBot {
         Executors.newSingleThreadExecutor().submit(new Runnable() {
             @Override
             public void run() {
-                while (true) {
-                    jda.getPresence().setPresence(OnlineStatus.ONLINE, Game.watching(Util.randomUser(bot) + " code!"));
+                    Member member = Util.randomMember(bot);
+                    if (member.getGame() != null) {
+                        if (member.getGame().asRichPresence().getDetails().toLowerCase().contains("netbans"))
+                            jda.getPresence().setPresence(OnlineStatus.ONLINE, Game.watching(member.getUser().getName() + " work on me!"));
+                    } else {
+                        jda.getPresence().setPresence(OnlineStatus.ONLINE, Game.watching(member.getUser().getName() +  (member.getGame() != null ? " play " + member.getGame().getName() : "") + "!"));
+                    }
                     try {
                         Thread.sleep(Duration.ofMinutes(5).toMillis());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }
             }
         });
 

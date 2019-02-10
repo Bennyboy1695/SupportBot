@@ -13,7 +13,7 @@ import uk.co.netbans.supportbot.NetBansBot;
 public class Mention {
 
     @Command(name = "purge~mention", displayName = "mention", permission = "supportbot.command.moderation.purge.mention", usage = "purge mention amount", category = CommandCategory.MODERATION)
-    public CommandResult onPurgeUser(CommandArgs commandArgs) {
+    public CommandResult onMentionUser(CommandArgs commandArgs) {
         NetBansBot bot = commandArgs.getBot();
         String[] args = commandArgs.getArgs();
         TextChannel channel = (TextChannel) commandArgs.getChannel();
