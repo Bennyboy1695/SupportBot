@@ -39,6 +39,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -140,16 +144,13 @@ public class NetBansBot {
             }
         });
 
-        Executors.newSingleThreadExecutor().submit(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    Util.getSupportChannels(bot);
-                    try {
-                        Thread.sleep(Duration.ofMinutes(10).toMillis());
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+        Executors.newSingleThreadExecutor().submit((Runnable) () -> {
+            while (true) {
+                Util.getSupportChannels(bot);
+                try {
+                    Thread.sleep(Duration.ofMinutes(10).toMillis());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -161,6 +162,7 @@ public class NetBansBot {
         System.out.println("Loading Music Manager...");
         this.music = new MusicManager();
 
+        System.out.println("Started Bot (" + ZonedDateTime.ofInstant(Instant.now(), ZoneId.of("America/New_York")).format(DateTimeFormatter.ofPattern("hh:mm:ss")) + ")");
         System.out.println("Finished Loading | Now accepting input.");
 
     }
@@ -249,13 +251,20 @@ public class NetBansBot {
 
             try (BufferedWriter writer = Files.newBufferedWriter(config)) {
                 writer.write(jo.toJSONString());
-                writer.flush();
             }
         }
 
         try (BufferedReader reader = Files.newBufferedReader(config)) {
             JSONParser parser = new JSONParser();
             this.conf = (JSONObject) parser.parse(reader);
+        }
+    }
+
+    public void saveConfig() {
+        try (BufferedWriter writer = Files.newBufferedWriter(directory.resolve("config.json"))) {
+            writer.write(conf.toJSONString());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
