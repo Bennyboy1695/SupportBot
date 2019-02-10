@@ -12,6 +12,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import uk.co.netbans.supportbot.CommandFramework.CommandFramework;
+import uk.co.netbans.supportbot.Commands.Misc.Timezones;
 import uk.co.netbans.supportbot.Commands.Moderation.Purge.Mention;
 import uk.co.netbans.supportbot.Commands.Music.*;
 import uk.co.netbans.supportbot.Message.Messenger;
@@ -238,6 +239,7 @@ public class NetBansBot {
             jo.put("logChannelID", "add_me");
             jo.put("guildID", "add_me");
             jo.put("commandPrefix", "!");
+            jo.put("timezones", new JSONArray());
 
             try (BufferedWriter writer = Files.newBufferedWriter(config)) {
                 writer.write(jo.toJSONString());
@@ -312,6 +314,7 @@ public class NetBansBot {
         //Normal Commands (No Perms)
         framework.registerCommands(new Help());
         framework.registerCommands(new Ticket());
+        framework.registerCommands(new Timezones());
 
         //Music
         framework.registerCommands(new Play());
@@ -324,7 +327,6 @@ public class NetBansBot {
         framework.registerCommands(new Skip());
         framework.registerCommands(new Volume());
         framework.registerCommands(new Playlist());
-        framework.registerCommands(new Panic());
         framework.registerCommands(new Repeat());
     }
 

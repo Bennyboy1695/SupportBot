@@ -27,7 +27,7 @@ public class User{
                 bot.getMessenger().sendEmbed(channel, Messenger.INCOMPATIBLE_ARG, 10);
             }
         }
-        Member member = bot.getJDA().getGuildById(Long.valueOf((String) bot.getConf().get("guildID"))).getMemberById(args[1].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", ""));
+        Member member = bot.getJDA().getGuildById(Long.valueOf((String) bot.getConf().get("guildID"))).getMemberById(Long.valueOf(args[1].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", "")));
         switch (args[2].toLowerCase()) {
             case "set":
                 if (!bot.getSqlManager().userAlreadyHasPerm(member.getUser().getIdLong(), args[3])) {
@@ -42,7 +42,7 @@ public class User{
                 }
                 break;
             case "add":
-                if (bot.getSqlManager().addGroupToUser(member.getUser().getIdLong(), args[3])) {
+                if (bot.getSqlManager().addNewPermToUser(member.getUser().getIdLong(), args[3])) {
                     bot.getMessenger().sendEmbed(channel, new EmbedBuilder().setTitle("Successful")
                             .setColor(Color.GREEN)
                             .addField("**Added:**", args[3], true).build(), 15);
