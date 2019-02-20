@@ -1,6 +1,7 @@
 package uk.co.netbans.supportbot.Commands.Misc;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
@@ -34,16 +35,16 @@ public class Timezones {
 
         if (arguments.length == 0) {
             StringBuilder sb = new StringBuilder();
-            for (Object o : arr) {
+            for (JsonElement o : arr) {
                 ZoneId zone;
                 try {
-                    zone = ZoneId.of(o.toString());
+                    zone = ZoneId.of(o.getAsString());
                 } catch (ZoneRulesException ignored) {
-                    System.out.println("Failed to parse zone '" + o.toString() + "'. It does not exist.");
+                    System.out.println("Failed to parse zone '" + o.getAsString() + "'. It does not exist.");
                     continue;
                 }
                 ZonedDateTime time = ZonedDateTime.ofInstant(Instant.now(), zone);
-                sb.append(o.toString().replaceAll("/.*", "")).append(": ").append(time.format(DateTimeFormatter.ofPattern("kk:mmzzz , EEE dd MMM")).replace(",", "on")).append("\n");
+                sb.append(o.getAsString().replaceAll("/.*", "")).append(": ").append(time.format(DateTimeFormatter.ofPattern("kk:mmzzz , EEE dd MMM")).replace(",", "on")).append("\n");
             }
             embed.setDescription(sb.toString());
         } else if (arguments.length == 2) {
@@ -69,8 +70,8 @@ public class Timezones {
                         embed.setDescription("The target was not enabled previously.");
                     break;
             }
-            bot.reloadConfig();
             bot.getConfig().saveConfig();
+            bot.reloadConfig();
         }
 
         bot.getMessenger().sendEmbed((TextChannel) args.getChannel(), embed.build());

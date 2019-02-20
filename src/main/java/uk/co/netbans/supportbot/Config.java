@@ -11,11 +11,11 @@ public class Config {
 
     private NetBansBot bot;
     private JsonElement conf;
+    Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public Config(NetBansBot bot) {
         this.bot = bot;
         Path config = bot.getDirectory().resolve("config.json");
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             if (!Files.exists(config)) {
                 Files.createFile(config);
@@ -40,7 +40,7 @@ public class Config {
 
     public void saveConfig() {
         try (BufferedWriter writer = Files.newBufferedWriter(bot.getDirectory().resolve("config.json"))) {
-            writer.write(conf.toString());
+            writer.write(gson.toJson(conf));
         } catch (Exception e) {
             e.printStackTrace();
         }
