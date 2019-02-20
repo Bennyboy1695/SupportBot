@@ -23,7 +23,7 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
         if (event.isFromType(ChannelType.TEXT)) {
             TextChannel channel = (TextChannel) event.getChannel();
-            if (channel.getParent().getIdLong() == Long.valueOf((String) bot.getConf().get("category")) || channel.getName().contains("manual")) {
+            if (channel.getParent().getIdLong() == Long.valueOf(bot.getConfig().getConfigValue("category").getAsString()) || channel.getName().contains("manual")) {
                 for (Message message : channel.getPinnedMessages().complete()) {
                     if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\u2705")) {
                         for (Member member : message.getMentionedMembers()) {
@@ -49,7 +49,7 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                                 member.getUser().openPrivateChannel().complete()
                                         .sendFile(bot.getLogDirectory().resolve(channel.getName()+ ".log").toFile())
                                         .complete();
-                                bot.getJDA().getGuildById(bot.getGuildID()).getTextChannelById(Long.valueOf((String)bot.getConf().get("logChannelID")))
+                                bot.getJDA().getGuildById(bot.getGuildID()).getTextChannelById(Long.valueOf(bot.getConfig().getConfigValue("logChannelID").getAsString()))
                                         .sendFile(bot.getLogDirectory().resolve(channel.getName()+ ".log").toFile(), new MessageBuilder()
                                                 .append(reason.replaceFirst("you", event.getMember().getAsMention()))
                                                 .build())
@@ -76,7 +76,7 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
     public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
         if (event.isFromType(ChannelType.TEXT)) {
             TextChannel channel = (TextChannel) event.getChannel();
-            if (channel.getParent().getIdLong() == Long.valueOf((String) bot.getConf().get("category")) || channel.getName().contains("manual")) {
+            if (channel.getParent().getIdLong() == Long.valueOf(bot.getConfig().getConfigValue("category").getAsString()) || channel.getName().contains("manual")) {
                 for (Message message : channel.getPinnedMessages().complete()) {
                     if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD12")) {
                         if (bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.channel.lock")) {

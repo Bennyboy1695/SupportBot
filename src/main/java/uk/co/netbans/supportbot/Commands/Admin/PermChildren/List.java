@@ -37,7 +37,7 @@ public class List {
                     bot.getMessenger().sendEmbed(channel, builder.addField("", groupsList.toString(), false).build(), 30);
                     return CommandResult.SUCCESS;
                 } else if (args[0].contains(args[0].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", ""))) {
-                    Member member = bot.getJDA().getGuildById(Long.valueOf((String) bot.getConf().get("guildID"))).getMemberById(args[0].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", ""));
+                    Member member = bot.getJDA().getGuildById(bot.getGuildID()).getMemberById(args[0].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", ""));
                     EmbedBuilder builder = new EmbedBuilder().setColor(Color.CYAN).setTitle(member.getEffectiveName() + "'s Perm List");
                     StringBuilder perms = new StringBuilder();
                     for (String str : bot.getSqlManager().getUsersGroups(member.getUser().getIdLong())) {

@@ -3,7 +3,6 @@ package uk.co.netbans.supportbot.Support.Listeners;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import org.json.simple.parser.ParseException;
 import uk.co.netbans.supportbot.NetBansBot;
 import uk.co.netbans.supportbot.Utils.Util;
 
@@ -35,9 +34,7 @@ public class SuggestionListener extends ListenerAdapter {
         List<String[]> tips = new ArrayList<>();
         try {
             tips = bot.getTips();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         for (String[] sugg : tips) {

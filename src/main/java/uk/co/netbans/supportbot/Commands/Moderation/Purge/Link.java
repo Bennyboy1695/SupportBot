@@ -27,7 +27,7 @@ public class Link {
         }
 
         if (args.length == 3) {
-            member = bot.getJDA().getGuildById(Long.valueOf((String) bot.getConf().get("guildID"))).getMemberById(args[2].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", ""));
+            member = bot.getJDA().getGuildById(bot.getGuildID()).getMemberById(args[2].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", ""));
         }
         for (Message msg : channel.getHistory().retrievePast(100).complete()) {
             if (member != null && Util.containsLink(msg.getContentRaw()) && count < amount) {

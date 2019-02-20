@@ -38,7 +38,7 @@ public class CreateGroup {
                             return CommandResult.SUCCESS;
                         }
                     } else {
-                        for (Role roles : bot.getJDA().getGuildById(Long.valueOf((String) bot.getConf().get("guildID"))).getRoles()) {
+                        for (Role roles : bot.getJDA().getGuildById(bot.getGuildID()).getRoles()) {
                             if (roles.getName().toLowerCase().equals(args[2].toLowerCase())) {
                                 if (bot.getSqlManager().addNewGroup(args[1], roles.getIdLong())) {
                                     bot.getMessenger().sendEmbed(channel, new EmbedBuilder().setTitle("Successful")
@@ -52,7 +52,7 @@ public class CreateGroup {
                         }
                     }
                 } else if (args.length == 4) {
-                    for (Role roles : bot.getJDA().getGuildById(Long.valueOf((String) bot.getConf().get("guildID"))).getRoles()) {
+                    for (Role roles : bot.getJDA().getGuildById(bot.getGuildID()).getRoles()) {
                         if (roles.getName().toLowerCase().equals(args[3].toLowerCase())) {
                             if (bot.getSqlManager().addNewGroup(args[1], args[2], roles.getIdLong())) {
                                 bot.getMessenger().sendEmbed(channel, new EmbedBuilder().setTitle("Successful")

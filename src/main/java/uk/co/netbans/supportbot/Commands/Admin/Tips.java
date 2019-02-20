@@ -3,7 +3,6 @@ package uk.co.netbans.supportbot.Commands.Admin;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
-import org.json.simple.parser.ParseException;
 import uk.co.netbans.supportbot.CommandFramework.Command;
 import uk.co.netbans.supportbot.CommandFramework.CommandArgs;
 import uk.co.netbans.supportbot.CommandFramework.CommandCategory;
@@ -26,9 +25,7 @@ public class Tips {
         List<String[]> tips = new ArrayList<>();
         try {
             tips = bot.getTips();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         EmbedBuilder builder = new EmbedBuilder().setColor(Color.CYAN).setTitle("Tips").setDescription("This is the trigger words and what the bot will send upon receiving the trigger word!");

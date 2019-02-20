@@ -24,7 +24,7 @@ public class User {
             return CommandResult.INVALIDARGS;
         }
 
-        Member member = bot.getJDA().getGuildById(Long.valueOf((String) bot.getConf().get("guildID"))).getMemberById(args[1].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", ""));
+        Member member = bot.getJDA().getGuildById(bot.getGuildID()).getMemberById(args[1].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", ""));
         for (Message msg : channel.getHistory().retrievePast(amount).complete()) {
                 if (msg.getAuthor() == member.getUser()) {
                     msg.delete().reason("purge requested by " + commandArgs.getMember().getEffectiveName()).complete();

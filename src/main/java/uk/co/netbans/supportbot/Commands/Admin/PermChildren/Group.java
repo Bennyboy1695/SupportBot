@@ -21,7 +21,7 @@ public class Group{
         String[] args = commandArgs.getArgs();
         if (args.length <= 4)
             return CommandResult.INVALIDARGS;
-        for (Role roles : bot.getJDA().getGuildById(Long.valueOf((String) bot.getConf().get("guildID"))).getRoles()) {
+        for (Role roles : bot.getJDA().getGuildById(bot.getGuildID()).getRoles()) {
             if (roles.getName().toLowerCase().equals(args[3].toLowerCase())) {
                 bot.getMessenger().sendEmbed(channel, Messenger.INCOMPATIBLE_ARG, 10);
             }
@@ -56,7 +56,7 @@ public class Group{
                 break;
             case "adddiscordrole":
                 if (bot.getSqlManager().groupAlreadyExist(args[1])) {
-                    for (Role roles2 : bot.getJDA().getGuildById(Long.valueOf((String) bot.getConf().get("guildID"))).getRoles()) {
+                    for (Role roles2 : bot.getJDA().getGuildById(bot.getGuildID()).getRoles()) {
                         if (roles2.getName().toLowerCase().equals(args[3].toLowerCase())) {
                             if (bot.getSqlManager().addRoleToGroup(args[1], roles2.getIdLong())) {
                                 bot.getMessenger().sendEmbed(channel, new EmbedBuilder().setTitle("Successful")

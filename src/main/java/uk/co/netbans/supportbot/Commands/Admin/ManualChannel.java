@@ -28,9 +28,9 @@ public class ManualChannel {
                 DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
                 TextChannel supportChannel;
 
-                Member member = bot.getJDA().getGuildById(Long.valueOf((String) bot.getConf().get("guildID"))).getMemberById(args[1].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", ""));
+                Member member = bot.getJDA().getGuildById(bot.getGuildID()).getMemberById(args[1].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", ""));
                 if (args.length != 3) {
-                    supportChannel = (TextChannel) bot.getJDA().getCategoryById(Long.valueOf((String) bot.getConf().get("category")))
+                    supportChannel = (TextChannel) bot.getJDA().getCategoryById(Long.valueOf(bot.getConfig().getConfigValue("category").getAsString()))
                             .createTextChannel(member.getEffectiveName() + "-" + "manual").complete();
                 } else {
                     supportChannel = (TextChannel) bot.getJDA().getTextChannelById(args[2].replaceAll("<", "").replaceAll("#", "").replaceAll(">", "")).getParent().createTextChannel(member.getEffectiveName() + "-" + "manual").complete();
@@ -52,7 +52,7 @@ public class ManualChannel {
                 supportMessage.addReaction("\u2705").complete();
                 member.getUser().openPrivateChannel().complete().sendMessage(new EmbedBuilder()
                         .setTitle("Support Channel")
-                        .setDescription("https://discordapp.com/channels/" + bot.getConf().get("guildID") + "/" + supportChannel.getIdLong())
+                        .setDescription("https://discordapp.com/channels/" + bot.getGuildID() + "/" + supportChannel.getIdLong())
                         .setColor(new Color(127, 255, 212))
                         .build()).complete();
                 return CommandResult.SUCCESS;

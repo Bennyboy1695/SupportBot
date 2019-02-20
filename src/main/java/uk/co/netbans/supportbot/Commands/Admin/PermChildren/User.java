@@ -22,12 +22,12 @@ public class User{
         TextChannel channel = (TextChannel) commandArgs.getChannel();
         if (args.length <= 2)
             return CommandResult.INVALIDARGS;
-        for (Role roles1 : bot.getJDA().getGuildById(Long.valueOf((String) bot.getConf().get("guildID"))).getRoles()) {
+        for (Role roles1 : bot.getJDA().getGuildById(bot.getGuildID()).getRoles()) {
             if (roles1.getName().toLowerCase().equals(args[3].toLowerCase())) {
                 bot.getMessenger().sendEmbed(channel, Messenger.INCOMPATIBLE_ARG, 10);
             }
         }
-        Member member = bot.getJDA().getGuildById(Long.valueOf((String) bot.getConf().get("guildID"))).getMemberById(Long.valueOf(args[1].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", "")));
+        Member member = bot.getJDA().getGuildById(bot.getGuildID()).getMemberById(Long.valueOf(args[1].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", "")));
         switch (args[2].toLowerCase()) {
             case "set":
                 if (!bot.getSqlManager().userAlreadyHasPerm(member.getUser().getIdLong(), args[3])) {

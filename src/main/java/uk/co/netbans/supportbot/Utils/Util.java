@@ -4,12 +4,9 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.*;
-import uk.co.netbans.supportbot.Music.MusicManager;
 import uk.co.netbans.supportbot.NetBansBot;
 
-import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -17,23 +14,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Util {
-    private static final MusicManager musicManager = new MusicManager();
-
-    public static MusicManager getMusicManager() {
-        return musicManager;
-    }
-
-    private static void sendMessage(MessageChannel channel, Message message) {
-        channel.sendMessage(message).queue(null, null);
-    }
-
-    public static void sendMessage(MessageChannel channel, MessageEmbed embed) {
-        sendMessage(channel, new MessageBuilder().setEmbed(embed).build());
-    }
-
-    public static void sendMessage(MessageChannel channel, String message) {
-        sendMessage(channel, new MessageBuilder().append(message).build());
-    }
 
     public static String filter(String msgContent) {
         return msgContent.length() > 2000
@@ -121,7 +101,7 @@ public class Util {
                     member.getUser().openPrivateChannel().complete()
                             .sendFile(bot.getLogDirectory().resolve(channel.getName() + ".log").toFile())
                             .complete();
-                    bot.getJDA().getGuildById(bot.getGuildID()).getTextChannelById(Long.valueOf((String) bot.getConf().get("logChannelID")))
+                    bot.getJDA().getGuildById(bot.getGuildID()).getTextChannelById(Long.valueOf(bot.getConfig().getConfigValue("logChannelID").getAsString()))
                             .sendFile(bot.getLogDirectory().resolve(channel.getName() + ".log").toFile(), new MessageBuilder()
                                     .append(reason)
                                     .build())

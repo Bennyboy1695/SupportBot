@@ -31,7 +31,7 @@ public class PrivateMessageListener extends ListenerAdapter {
 
         Member member = bot.getJDA().getGuildById(bot.getGuildID()).getMember(event.getAuthor());
 
-        if (member.getRoles().contains(bot.getJDA().getGuildById(bot.getGuildID()).getRoleById((String)bot.getConf().get("noHelpRoleID")))) {
+        if (member.getRoles().contains(bot.getJDA().getGuildById(bot.getGuildID()).getRoleById(bot.getConfig().getConfigValue("noHelpRoleID").getAsString()))) {
             member.getUser().openPrivateChannel().complete().sendMessage("No channel has been created because you have the anti-support role!").complete();
             return;
         }
@@ -40,7 +40,7 @@ public class PrivateMessageListener extends ListenerAdapter {
                 return;
         }
 
-        for (TextChannel channel : bot.getJDA().getCategoryById(Long.valueOf((String) bot.getConf().get("category"))).getTextChannels()) {
+        for (TextChannel channel : bot.getJDA().getCategoryById(Long.valueOf(bot.getConfig().getConfigValue("category").getAsString())).getTextChannels()) {
             if (channel.getName().startsWith(event.getAuthor().getName())) {
                 userCount++;
                 if (userCount >= 3) {
@@ -50,7 +50,7 @@ public class PrivateMessageListener extends ListenerAdapter {
             }
         }
 
-        TextChannel supportChannel = (TextChannel) bot.getJDA().getCategoryById(Long.valueOf((String) bot.getConf().get("category")))
+        TextChannel supportChannel = (TextChannel) bot.getJDA().getCategoryById(Long.valueOf(bot.getConfig().getConfigValue("category").getAsString()))
                 .createTextChannel(event.getAuthor().getName() + "-" + ThreadLocalRandom.current().nextInt(99999)).complete();
 
         supportChannel.createPermissionOverride(member).setAllow(101440).complete();

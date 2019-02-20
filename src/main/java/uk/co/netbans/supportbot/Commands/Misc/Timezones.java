@@ -1,11 +1,12 @@
 package uk.co.netbans.supportbot.Commands.Misc;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonPrimitive;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.requests.RestAction;
-import org.json.simple.JSONArray;
 import uk.co.netbans.supportbot.CommandFramework.Command;
 import uk.co.netbans.supportbot.CommandFramework.CommandArgs;
 import uk.co.netbans.supportbot.CommandFramework.CommandResult;
@@ -24,7 +25,7 @@ public class Timezones {
     @Command(name = "time", displayName = "time", aliases = "times,timezones", usage = "time")
     public CommandResult onExecute(CommandArgs args) {
         NetBansBot bot = args.getBot();
-        JSONArray arr = (JSONArray) bot.getConf().get("timezones");
+        JsonArray arr = bot.getConfig().getConfigValue("timezones");
         String[] arguments = args.getArgs();
 
         EmbedBuilder embed = Messenger.getCommonEmbed();
@@ -48,7 +49,8 @@ public class Timezones {
         } else if (arguments.length == 2) {
             switch (arguments[0]) {
                 case "add":
-                    if (!arr.contains(arguments[1])) {
+
+                    if (!arr.contains(new JsonPrimitive(arguments[1]))) {
                         try {
                             ZoneId.of(arguments[1]);
                             arr.add(arguments[1]);
@@ -60,15 +62,15 @@ public class Timezones {
                         embed.setDescription("Timezone already added!");
                     break;
                 case "remove":
-                    if (arr.contains(arguments[1])) {
-                        arr.remove(arguments[1]);
+                    if (arr.contains(new JsonPrimitive(arguments[1]))) {
+                        arr.remove(new JsonPrimitive(arguments[1]));
                         embed.setDescription("Removed timezone!");
                     } else
                         embed.setDescription("The target was not enabled previously.");
                     break;
             }
-            bot.saveConfig();
             bot.reloadConfig();
+            bot.getConfig().saveConfig();
         }
 
         bot.getMessenger().sendEmbed((TextChannel) args.getChannel(), embed.build());

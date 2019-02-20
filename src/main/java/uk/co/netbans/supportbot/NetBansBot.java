@@ -1,18 +1,15 @@
 package uk.co.netbans.supportbot;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.RichPresence;
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.hooks.InterfacedEventManager;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import uk.co.netbans.supportbot.CommandFramework.CommandFramework;
 import uk.co.netbans.supportbot.Commands.Misc.Timezones;
 import uk.co.netbans.supportbot.Commands.Moderation.Purge.Mention;
@@ -58,7 +55,7 @@ public class NetBansBot {
     private Path directory;
     private Path logDirectory;
     private Path musicDirectory;
-    private JSONObject conf;
+    private Config config;
     private SQLManager sqlManager;
     private CommandFramework framework;
     private NetBansBot bot = this;
@@ -98,14 +95,13 @@ public class NetBansBot {
             e.printStackTrace();
         }
 
-
-        if (conf.get("token") == "add_me") {
+        if (config.getConfigValue("token").getAsString().equals("add_me")) {
             System.out.println("Found unedited config. Please add the token.");
             System.exit(1);
         }
 
         this.jda = new JDABuilder(AccountType.BOT)
-                .setToken((String) conf.get("token"))
+                .setToken(config.getConfigValue("token").getAsString())
                 .setBulkDeleteSplittingEnabled(false)
                 .setEventManager(new ThreadedEventManager())
                 .build();
@@ -160,9 +156,8 @@ public class NetBansBot {
         timer.schedule(timerTask, Duration.ofMinutes(0).toMillis(), Duration.ofMinutes(15).toMillis());
 
         System.out.println("Loading Music Manager...");
-        this.music = new MusicManager();
+        this.music = new MusicManager(this);
 
-        System.out.println("Started Bot (" + ZonedDateTime.ofInstant(Instant.now(), ZoneId.of("America/New_York")).format(DateTimeFormatter.ofPattern("hh:mm:ss")) + ")");
         System.out.println("Finished Loading | Now accepting input.");
 
     }
@@ -173,16 +168,13 @@ public class NetBansBot {
         System.out.println("Shutdown Complete.");
     }
 
-    public List<String[]> getTips() throws IOException, ParseException {
-        BufferedReader reader = Files.newBufferedReader(directory.resolve("config.json"));
-        JSONParser jsonParser = new JSONParser();
-        JSONObject result = (JSONObject) jsonParser.parse(reader);
-        JSONArray tips = (JSONArray) result.get("tips");
+    public List<String[]> getTips(){
+        JsonArray tips = config.getConfigValue("tips");
         List<String[]> tipArray = new ArrayList<>();
         for (Object obj : tips) {
-            JSONObject jsonObject = (JSONObject) obj;
-            String word = (String) jsonObject.get("word");
-            String suggestion = (String) jsonObject.get("suggestion");
+            JsonObject jsonObject = (JsonObject) obj;
+            String word = jsonObject.get("word").getAsString();
+            String suggestion = jsonObject.get("suggestion").getAsString();
             String[] put = new String[]{word, suggestion};
             tipArray.add(put);
         }
@@ -191,19 +183,12 @@ public class NetBansBot {
 
     public List<String> getReplies() {
         List<String> replyArray = new ArrayList<>();
-        try {
-            BufferedReader reader = Files.newBufferedReader(directory.resolve("config.json"));
-            JSONParser jsonParser = new JSONParser();
-            JSONObject result = (JSONObject) jsonParser.parse(reader);
-            JSONArray tips = (JSONArray) result.get("replies");
-            for (Object obj : tips) {
-                JSONObject jsonObject = (JSONObject) obj;
-                String word = (String) jsonObject.get("reply");
+            JsonArray replies = config.getConfigValue("replies");
+            for (Object obj : replies) {
+                JsonObject jsonObject = (JsonObject) obj;
+                String word = jsonObject.get("reply").getAsString();
                 replyArray.add(word);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return replyArray;
     }
 
@@ -215,12 +200,8 @@ public class NetBansBot {
         return this.messenger;
     }
 
-    public long getGuildID() {
-        return Long.valueOf((String)bot.getConf().get("guildID"));
-    }
-
-    public long getSupportCategoryID() {
-        return Long.valueOf((String)bot.getConf().get("category"));
+    public Path getDirectory() {
+        return directory;
     }
 
     public MusicManager getMusicManager() {
@@ -235,37 +216,28 @@ public class NetBansBot {
         return framework;
     }
 
-    @SuppressWarnings("unchecked")
-    private void initConfig() throws Exception {
-        Path config = directory.resolve("config.json");
-        if (!Files.exists(config)) {
-            Files.createFile(config);
-
-            JSONObject jo = new JSONObject();
-            jo.put("token", "add_me");
-            jo.put("category","add_me");
-            jo.put("logChannelID", "add_me");
-            jo.put("guildID", "add_me");
-            jo.put("commandPrefix", "!");
-            jo.put("timezones", new JSONArray());
-
-            try (BufferedWriter writer = Files.newBufferedWriter(config)) {
-                writer.write(jo.toJSONString());
-            }
-        }
-
-        try (BufferedReader reader = Files.newBufferedReader(config)) {
-            JSONParser parser = new JSONParser();
-            this.conf = (JSONObject) parser.parse(reader);
-        }
-    }
-
-    public void saveConfig() {
-        try (BufferedWriter writer = Files.newBufferedWriter(directory.resolve("config.json"))) {
-            writer.write(conf.toJSONString());
+    private void initConfig(){
+        try {
+            config = new Config(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Config getConfig() {
+        return config;
+    }
+
+    public long getGuildID() {
+        return Long.valueOf(config.getConfigValue("guildID").getAsString());
+    }
+
+    public long getSupportCategoryID() {
+        return Long.valueOf(config.getConfigValue("category").getAsString());
+    }
+
+    public String getCommandPrefix() {
+        return config.getConfigValue("commandPrefix").getAsString();
     }
 
     public void reloadConfig() {
@@ -274,14 +246,6 @@ public class NetBansBot {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public JSONObject getConf() {
-        return conf;
-    }
-
-    public String getCommandPrefix() {
-        return (String) getConf().get("commandPrefix");
     }
 
     public Path getLogDirectory() {

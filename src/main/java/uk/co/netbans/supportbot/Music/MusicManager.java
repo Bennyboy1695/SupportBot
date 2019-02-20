@@ -32,8 +32,10 @@ public class MusicManager extends ListenerAdapter {
 
     private final AudioPlayerManager myManager = new DefaultAudioPlayerManager();
     private final Map<String, Map.Entry<AudioPlayer, TrackManager>> players = new HashMap<>();
+    private NetBansBot bot;
 
-    public MusicManager() {
+    public MusicManager(NetBansBot bot) {
+        this.bot = bot;
         AudioSourceManagers.registerRemoteSources(myManager);
     }
 
@@ -104,7 +106,7 @@ public class MusicManager extends ListenerAdapter {
 
     public void loadTrack(String identifier, Member author, TextChannel channel, boolean shuffle) {
         if (author.getVoiceState().getChannel() == null) {
-            Util.sendMessage(channel, "You must be in a voice channel to summon me :D");
+            bot.getMessenger().sendMessage(channel, "You must be in a voice channel to summon me :D");
             return;
         }
 
@@ -160,7 +162,7 @@ public class MusicManager extends ListenerAdapter {
 
     public void setVolume(Guild guild, TextChannel channel, int volume) {
         getPlayer(guild).setVolume(volume);
-        Util.sendMessage(channel, "Set volume to " + volume + "!");
+        bot.getMessenger().sendMessage(channel, "Set volume to " + volume + "!");
     }
 
     public String buildQueueMessage(TrackInfo info) {
@@ -184,6 +186,6 @@ public class MusicManager extends ListenerAdapter {
     }
 
     public void sendEmbed(MessageChannel channel, String title, String description) {
-        Util.sendMessage(channel, new EmbedBuilder().setTitle(title, null).setDescription(description).build());
+        bot.getMessenger().sendEmbed((TextChannel) channel, new EmbedBuilder().setTitle(title, null).setDescription(description).build());
     }
 }
