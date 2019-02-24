@@ -79,6 +79,7 @@ public class PrivateMessageListener extends ListenerAdapter {
         supportChannel.getHistory().retrievePast(1).queue(l -> l.forEach(m -> m.delete().queue()));
         supportMessage.addReaction("\u2705").complete();
         supportMessage.addReaction("\uD83D\uDD12").complete();
+        supportMessage.addReaction("\uD83D\uDD13").complete();
         event.getAuthor().openPrivateChannel().complete().sendMessage(new EmbedBuilder()
                 .setTitle("Support Channel")
                 .setDescription("https://discordapp.com/channels/" + bot.getGuildID()  + "/" + supportChannel.getIdLong())

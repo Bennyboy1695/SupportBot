@@ -66,6 +66,12 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                             bot.getMessenger().sendEmbed(channel, Messenger.CHANNEL_LOCKED);
                             System.out.println("Locked channel: " + channel.getName());
                         }
+                    } else if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD13")) {
+                        if (bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.channel.unlock.everyone")) {
+                            channel.getManager().putPermissionOverride(bot.getJDA().getGuildById(bot.getGuildID()).getPublicRole(), 117824L, 0L).complete();
+                            bot.getMessenger().sendEmbed(channel, Messenger.CHANNEL_FULLY_UNLOCKED);
+                            System.out.println("Fully unlocked channel: " + channel.getName());
+                        }
                     }
                 }
             }

@@ -28,6 +28,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.5'
     compile 'com.vdurmont:emoji-java:4.0.0'
     compile 'org.xerial:sqlite-jdbc:3.23.1'
+    compile 'org.reflections:reflections:0.9.11'
 }
 
 

@@ -10,10 +10,15 @@ import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.hooks.InterfacedEventManager;
+import org.reflections.Reflections;
+import org.reflections.scanners.MethodAnnotationsScanner;
+import org.reflections.scanners.SubTypesScanner;
+import uk.co.netbans.supportbot.CommandFramework.Command;
 import uk.co.netbans.supportbot.CommandFramework.CommandFramework;
 import uk.co.netbans.supportbot.Commands.Misc.Timezones;
 import uk.co.netbans.supportbot.Commands.Moderation.Purge.Mention;
 import uk.co.netbans.supportbot.Commands.Music.*;
+import uk.co.netbans.supportbot.Commands.Music.Queue;
 import uk.co.netbans.supportbot.Message.Messenger;
 import uk.co.netbans.supportbot.Commands.Moderation.Purge.Link;
 import uk.co.netbans.supportbot.Commands.Moderation.Purge.Purge;
@@ -32,6 +37,7 @@ import uk.co.netbans.supportbot.Utils.Util;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,10 +46,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -267,46 +270,23 @@ public class NetBansBot {
     }
 
     private void registerCommands() {
-        framework.registerCommands(new Test());
-        framework.registerCommands(new Purge());
+        Set<Method> methods = new HashSet<>();
+        try {
+            Reflections reflections = new Reflections("uk.co.netbans.supportbot.Commands", new MethodAnnotationsScanner());
+            methods = reflections.getMethodsAnnotatedWith(Command.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        //Perm Commands And Children
-        framework.registerCommands(new Perm());
-        framework.registerCommands(new uk.co.netbans.supportbot.Commands.Admin.PermChildren.List());
-        framework.registerCommands(new User());
-        framework.registerCommands(new Group());
-        framework.registerCommands(new CreateGroup());
-
-        //Other Admin Commands
-        framework.registerCommands(new Tips());
-        framework.registerCommands(new ManualChannel());
-        framework.registerCommands(new Faq());
-        framework.registerCommands(new ConfigReload());
-        framework.registerCommands(new Embedify());
-        framework.registerCommands(new Say());
-
-        //Moderation Commands
-        framework.registerCommands(new uk.co.netbans.supportbot.Commands.Moderation.Purge.User());
-        framework.registerCommands(new Link());
-        framework.registerCommands(new Mention());
-
-        //Normal Commands (No Perms)
-        framework.registerCommands(new Help());
-        framework.registerCommands(new Ticket());
-        framework.registerCommands(new Timezones());
-
-        //Music
-        framework.registerCommands(new Play());
-        framework.registerCommands(new Current());
-        framework.registerCommands(new Export());
-        framework.registerCommands(new Queue());
-        framework.registerCommands(new Reset());
-        framework.registerCommands(new Search());
-        framework.registerCommands(new Shuffle());
-        framework.registerCommands(new Skip());
-        framework.registerCommands(new Volume());
-        framework.registerCommands(new Playlist());
-        framework.registerCommands(new Repeat());
+        for (Method method : methods) {
+            try {
+                framework.registerCommands(method.getDeclaringClass().newInstance());
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
