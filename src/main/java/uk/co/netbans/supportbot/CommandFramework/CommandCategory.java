@@ -5,5 +5,6 @@ public enum CommandCategory {
     DEFAULT(),
     MUSIC(),
     MODERATION(),
+    MISC(),
     ADMIN();
 }

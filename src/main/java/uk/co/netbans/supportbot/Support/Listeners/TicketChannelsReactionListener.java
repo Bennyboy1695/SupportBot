@@ -64,13 +64,13 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                                 channel.getManager().putPermissionOverride(role, 0L, 76800L).complete();
                             }
                             bot.getMessenger().sendEmbed(channel, Messenger.CHANNEL_LOCKED);
-                            System.out.println("Locked channel: " + channel.getName());
+                            bot.getLogger().info("Locked channel: " + channel.getName());
                         }
                     } else if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD13")) {
                         if (bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.channel.unlock.everyone")) {
                             channel.getManager().putPermissionOverride(bot.getJDA().getGuildById(bot.getGuildID()).getPublicRole(), 117824L, 0L).complete();
                             bot.getMessenger().sendEmbed(channel, Messenger.CHANNEL_FULLY_UNLOCKED);
-                            System.out.println("Fully unlocked channel: " + channel.getName());
+                            bot.getLogger().info("Fully unlocked channel: " + channel.getName());
                         }
                     }
                 }
@@ -89,7 +89,14 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                             channel.getManager().sync().complete();
                             channel.getManager().putPermissionOverride(channel.getPinnedMessages().complete().get(0).getMentionedMembers().get(0), 101440L, 0L).complete();
                             bot.getMessenger().sendEmbed(channel, Messenger.CHANNEL_UNLOCKED);
-                            System.out.println("Unlocked channel: " + channel.getName());
+                            bot.getLogger().info("Unlocked channel: " + channel.getName());
+                        }
+                    } else if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD13")) {
+                        if (bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.channel.lock.everyone")) {
+                            channel.getManager().sync().complete();
+                            channel.getManager().putPermissionOverride(channel.getPinnedMessages().complete().get(0).getMentionedMembers().get(0), 101440L, 0L).complete();
+                            bot.getMessenger().sendEmbed(channel, Messenger.CHANNEL_UNLOCKED);
+                            bot.getLogger().info("Relocked channel: " + channel.getName());
                         }
                     }
                 }

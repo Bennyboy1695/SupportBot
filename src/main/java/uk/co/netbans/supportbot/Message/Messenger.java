@@ -6,10 +6,14 @@ import net.dv8tion.jda.core.entities.*;
 
 import java.awt.*;
 import java.time.Instant;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 public class Messenger {
     private final ScheduledExecutorService executor;

@@ -13,6 +13,8 @@ import net.dv8tion.jda.core.hooks.InterfacedEventManager;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.reflections.scanners.SubTypesScanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.co.netbans.supportbot.CommandFramework.Command;
 import uk.co.netbans.supportbot.CommandFramework.CommandFramework;
 import uk.co.netbans.supportbot.Commands.Misc.Timezones;
@@ -62,18 +64,21 @@ public class NetBansBot {
     private SQLManager sqlManager;
     private CommandFramework framework;
     private NetBansBot bot = this;
+    private Logger logger;
 
     public void init(Path directory) throws Exception {
         this.directory = directory;
 
-        System.out.println("Initializing Config!");
+        logger = LoggerFactory.getLogger("SupportBot");
+
+        logger.info("Initializing Config!");
         try {
             initConfig();
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize config!", e);
         }
 
-        System.out.println("Loading SQL!");
+        logger.info("Loading SQL!");
         sqlManager = new SQLManager(directory.toFile());
 
         try {
@@ -99,7 +104,7 @@ public class NetBansBot {
         }
 
         if (config.getConfigValue("token").getAsString().equals("add_me")) {
-            System.out.println("Found unedited config. Please add the token.");
+            logger.error("Found unedited config. Please add the token.");
             System.exit(1);
         }
 
@@ -110,10 +115,10 @@ public class NetBansBot {
                 .build();
         jda.awaitReady();
 
-        System.out.println("Loading Messenger...");
+        logger.info("Loading Messenger...");
         this.messenger = new Messenger();
 
-        System.out.println("Registering Commands...");
+        logger.info("Registering Commands...");
         // old
         this.jda.addEventListener(framework = new CommandFramework(this));
         registerCommands();
@@ -158,17 +163,17 @@ public class NetBansBot {
         Timer timer = new Timer(true);
         timer.schedule(timerTask, Duration.ofMinutes(0).toMillis(), Duration.ofMinutes(15).toMillis());
 
-        System.out.println("Loading Music Manager...");
+        logger.info("Loading Music Manager...");
         this.music = new MusicManager(this);
 
-        System.out.println("Finished Loading | Now accepting input.");
+        logger.info("Finished Loading | Now accepting input.");
 
     }
 
     public void shutdown() {
-        System.out.println("Initiating Shutdown...");
+        logger.info("Initiating Shutdown...");
         getJDA().shutdown();
-        System.out.println("Shutdown Complete.");
+        logger.info("Shutdown Complete.");
     }
 
     public List<String[]> getTips(){
@@ -231,6 +236,10 @@ public class NetBansBot {
         return config;
     }
 
+    public Logger getLogger() {
+        return logger;
+    }
+
     public long getGuildID() {
         return Long.valueOf(config.getConfigValue("guildID").getAsString());
     }
@@ -290,7 +299,7 @@ public class NetBansBot {
                 e.printStackTrace();
             }
         }
-        System.out.println(builder.toString().substring(0, 1));
+        logger.info(builder.toString().substring(0, 1));
     }
 
 }

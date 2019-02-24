@@ -65,7 +65,7 @@ public class Help {
             case 2:
                 embed.setDescription("Help Page 2");
                 for (Command cmd : commandsList) {
-                    if (cmd.category() == CommandCategory.MODERATION) {
+                    if (cmd.category() == CommandCategory.MODERATION || cmd.category() == CommandCategory.MISC) {
                         StringBuilder commands = new StringBuilder();
                         String output = cmd.name().substring(0, 1).toUpperCase() + cmd.name().substring(1);
                         commands.append("**" + output + ":**" + "\n" +

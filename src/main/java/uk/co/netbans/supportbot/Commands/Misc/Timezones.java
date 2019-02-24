@@ -40,7 +40,7 @@ public class Timezones {
                 try {
                     zone = ZoneId.of(o.getAsString());
                 } catch (ZoneRulesException ignored) {
-                    System.out.println("Failed to parse zone '" + o.getAsString() + "'. It does not exist.");
+                    bot.getLogger().error("Failed to parse zone '" + o.getAsString() + "'. It does not exist.");
                     continue;
                 }
                 ZonedDateTime time = ZonedDateTime.ofInstant(Instant.now(), zone);
