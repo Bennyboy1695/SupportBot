@@ -278,15 +278,19 @@ public class NetBansBot {
             e.printStackTrace();
         }
 
+        StringBuilder builder = new StringBuilder();
+        builder.append("Registered Commands: ");
         for (Method method : methods) {
             try {
                 framework.registerCommands(method.getDeclaringClass().newInstance());
+                builder.append(method.getDeclaringClass().getSimpleName() + ", ");
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
+        System.out.println(builder.toString().substring(0, 1));
     }
 
 }
