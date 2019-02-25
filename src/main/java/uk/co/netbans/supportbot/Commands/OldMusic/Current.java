@@ -1,4 +1,4 @@
-package uk.co.netbans.supportbot.Commands.Music;
+package uk.co.netbans.supportbot.Commands.OldMusic;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.entities.Member;
@@ -7,7 +7,7 @@ import uk.co.netbans.supportbot.CommandFramework.Command;
 import uk.co.netbans.supportbot.CommandFramework.CommandArgs;
 import uk.co.netbans.supportbot.CommandFramework.CommandCategory;
 import uk.co.netbans.supportbot.CommandFramework.CommandResult;
-import uk.co.netbans.supportbot.Music.MusicManager;
+import uk.co.netbans.supportbot.OldMusic.MusicManager;
 import uk.co.netbans.supportbot.NetBansBot;
 import uk.co.netbans.supportbot.Utils.Util;
 

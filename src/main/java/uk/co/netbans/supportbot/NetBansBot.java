@@ -17,37 +17,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.netbans.supportbot.CommandFramework.Command;
 import uk.co.netbans.supportbot.CommandFramework.CommandFramework;
-import uk.co.netbans.supportbot.Commands.Misc.Timezones;
-import uk.co.netbans.supportbot.Commands.Moderation.Purge.Mention;
-import uk.co.netbans.supportbot.Commands.Music.*;
-import uk.co.netbans.supportbot.Commands.Music.Queue;
 import uk.co.netbans.supportbot.Message.Messenger;
-import uk.co.netbans.supportbot.Commands.Moderation.Purge.Link;
-import uk.co.netbans.supportbot.Commands.Moderation.Purge.Purge;
+import uk.co.netbans.supportbot.Music.AudioPlayerHandler;
+import uk.co.netbans.supportbot.OldMusic.MusicManager;
 import uk.co.netbans.supportbot.Storage.SQLManager;
-import uk.co.netbans.supportbot.Commands.Admin.*;
-import uk.co.netbans.supportbot.Commands.Admin.PermChildren.CreateGroup;
-import uk.co.netbans.supportbot.Commands.Admin.PermChildren.Group;
-import uk.co.netbans.supportbot.Commands.Admin.PermChildren.User;
-import uk.co.netbans.supportbot.Music.MusicManager;
-import uk.co.netbans.supportbot.Commands.Support.Help;
-import uk.co.netbans.supportbot.Commands.Support.Ticket;
 import uk.co.netbans.supportbot.Support.Listeners.*;
 import uk.co.netbans.supportbot.Task.ExpiryCheckTask;
 import uk.co.netbans.supportbot.Utils.Util;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -65,6 +46,9 @@ public class NetBansBot {
     private CommandFramework framework;
     private NetBansBot bot = this;
     private Logger logger;
+
+    // Music New
+    private AudioPlayerHandler audioHandler = new AudioPlayerHandler(this);
 
     public void init(Path directory) throws Exception {
         this.directory = directory;
@@ -130,22 +114,19 @@ public class NetBansBot {
         this.jda.addEventListener(new HelpMessageReactionListener(this));
         this.jda.addEventListener(new TagListener(this));
 
-        Executors.newSingleThreadExecutor().submit(new Runnable() {
-            @Override
-            public void run() {
-                    Member member = Util.randomMember(bot);
-                    if (member.getGame() != null) {
-                        if (member.getGame().asRichPresence().getDetails().toLowerCase().contains("netbans"))
-                            jda.getPresence().setPresence(OnlineStatus.ONLINE, Game.watching(member.getUser().getName() + " work on me!"));
-                    } else {
-                        jda.getPresence().setPresence(OnlineStatus.ONLINE, Game.watching(member.getUser().getName() +  (member.getGame() != null ? " play " + member.getGame().getName() : "") + "!"));
-                    }
-                    try {
-                        Thread.sleep(Duration.ofMinutes(5).toMillis());
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-            }
+        Executors.newSingleThreadExecutor().submit(() -> {
+                Member member = Util.randomMember(bot);
+                if (member.getGame() != null) {
+                    if (member.getGame().asRichPresence().getDetails().toLowerCase().contains("netbans"))
+                        jda.getPresence().setPresence(OnlineStatus.ONLINE, Game.watching(member.getUser().getName() + " work on me!"));
+                } else {
+                    jda.getPresence().setPresence(OnlineStatus.ONLINE, Game.watching(member.getUser().getName() +  (member.getGame() != null ? " play " + member.getGame().getName() : "") + "!"));
+                }
+                try {
+                    Thread.sleep(Duration.ofMinutes(5).toMillis());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
         });
 
         Executors.newSingleThreadExecutor().submit((Runnable) () -> {
@@ -165,6 +146,9 @@ public class NetBansBot {
 
         logger.info("Loading Music Manager...");
         this.music = new MusicManager(this);
+
+        // Music New
+        this.audioHandler.init();
 
         logger.info("Finished Loading | Now accepting input.");
 
@@ -266,6 +250,10 @@ public class NetBansBot {
 
     public Path getMusicDirectory() {
         return musicDirectory;
+    }
+
+    public AudioPlayerHandler getAudioHandler() {
+        return audioHandler;
     }
 
     // potentially un necessary.

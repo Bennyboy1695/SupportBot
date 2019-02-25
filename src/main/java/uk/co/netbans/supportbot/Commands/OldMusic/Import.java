@@ -1,4 +1,4 @@
-package uk.co.netbans.supportbot.Commands.Music;
+package uk.co.netbans.supportbot.Commands.OldMusic;
 
 import uk.co.netbans.supportbot.CommandFramework.Command;
 import uk.co.netbans.supportbot.CommandFramework.CommandArgs;

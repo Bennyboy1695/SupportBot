@@ -1,4 +1,4 @@
-package uk.co.netbans.supportbot.Music;
+package uk.co.netbans.supportbot.OldMusic;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;

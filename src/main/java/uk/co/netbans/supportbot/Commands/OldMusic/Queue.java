@@ -1,4 +1,4 @@
-package uk.co.netbans.supportbot.Commands.Music;
+package uk.co.netbans.supportbot.Commands.OldMusic;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
@@ -10,8 +10,8 @@ import uk.co.netbans.supportbot.CommandFramework.Command;
 import uk.co.netbans.supportbot.CommandFramework.CommandArgs;
 import uk.co.netbans.supportbot.CommandFramework.CommandCategory;
 import uk.co.netbans.supportbot.CommandFramework.CommandResult;
-import uk.co.netbans.supportbot.Music.TrackInfo;
-import uk.co.netbans.supportbot.Music.MusicManager;
+import uk.co.netbans.supportbot.OldMusic.TrackInfo;
+import uk.co.netbans.supportbot.OldMusic.MusicManager;
 import uk.co.netbans.supportbot.NetBansBot;
 
 import java.util.Set;
