@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class Queue {
 
-    @Command(name = "queue", displayName = "queue", permission = "supportbot.command.music.queue", category = CommandCategory.MUSIC)
+    @Command(name = "queue", displayName = "queue", category = CommandCategory.MUSIC)
     public CommandResult onQueue(CommandArgs commandArgs) {
         NetBansBot bot = commandArgs.getBot();
         Member member = commandArgs.getMember();

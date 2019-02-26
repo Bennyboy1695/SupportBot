@@ -12,7 +12,7 @@ import uk.co.netbans.supportbot.NetBansBot;
 
 public class Shuffle {
 
-    @Command(name = "shuffle", displayName = "shuffle", permission = "supportbot.command.music.shuffle", category = CommandCategory.MUSIC)
+    @Command(name = "shuffle", displayName = "shuffle", category = CommandCategory.MUSIC)
     public CommandResult onShuffle(CommandArgs commandArgs) {
         NetBansBot bot = commandArgs.getBot();
         Member member = commandArgs.getMember();

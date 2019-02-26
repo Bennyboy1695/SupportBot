@@ -19,7 +19,7 @@ import java.nio.file.Path;
 
 public class Export {
 
-    @Command(name = "export", displayName = "export", permission = "supportbot.command.music.export", category = CommandCategory.MUSIC)
+    @Command(name = "export", displayName = "export", category = CommandCategory.MUSIC)
     public CommandResult onExport(CommandArgs commandArgs) {
         NetBansBot bot = commandArgs.getBot();
         Member member = commandArgs.getMember();

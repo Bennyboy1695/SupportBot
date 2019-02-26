@@ -12,7 +12,7 @@ import uk.co.netbans.supportbot.NetBansBot;
 
 public class Volume {
 
-    @Command(name = "volume", displayName = "volume", permission = "supportbot.command.music.volume", category = CommandCategory.MUSIC)
+    @Command(name = "volume", displayName = "volume", category = CommandCategory.MUSIC)
     public CommandResult onVolume(CommandArgs commandArgs) {
         NetBansBot bot = commandArgs.getBot();
         Member member = commandArgs.getMember();

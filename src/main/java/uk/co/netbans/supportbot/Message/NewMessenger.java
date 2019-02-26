@@ -38,7 +38,7 @@ public class NewMessenger {
         sendMessage(channel, new MessageBuilder().setEmbed(embed).build(), lifetime, onRemove);
     }
 
-    private EditableMessage sendMessage(TextChannel channel, Message message, int lifetime) {
+    EditableMessage sendMessage(TextChannel channel, Message message, int lifetime) {
         Message sent = channel.sendMessage(message).complete();
         if (lifetime != -1)
             murderer.schedule(() -> sent.delete().queue(), lifetime, TimeUnit.SECONDS);

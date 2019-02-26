@@ -7,7 +7,7 @@ import uk.co.netbans.supportbot.CommandFramework.CommandResult;
 
 public class Import {
 
-    @Command(name = "import", displayName = "import", permission = "supportbot.command.music.import", category = CommandCategory.MUSIC)
+    @Command(name = "import", displayName = "import", category = CommandCategory.MUSIC)
     public CommandResult onImport(CommandArgs commandArgs) {
 
         return CommandResult.SUCCESS;

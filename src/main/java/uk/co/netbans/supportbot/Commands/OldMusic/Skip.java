@@ -11,7 +11,7 @@ import uk.co.netbans.supportbot.NetBansBot;
 
 public class Skip {
 
-    @Command(name = "skip", displayName = "skip", permission = "supportbot.command.music.skip", category = CommandCategory.MUSIC)
+    @Command(name = "skip", displayName = "skip", category = CommandCategory.MUSIC)
     public CommandResult onSkip(CommandArgs commandArgs) {
         NetBansBot bot = commandArgs.getBot();
         Member member = commandArgs.getMember();

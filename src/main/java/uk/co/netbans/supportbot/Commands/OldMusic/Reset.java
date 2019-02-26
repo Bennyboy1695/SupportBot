@@ -11,7 +11,7 @@ import uk.co.netbans.supportbot.NetBansBot;
 
 public class Reset {
 
-    @Command(name = "stop", displayName = "stop", permission = "supportbot.command.music.stop", category = CommandCategory.MUSIC)
+    @Command(name = "stop", displayName = "stop", category = CommandCategory.MUSIC)
     public CommandResult onStop(CommandArgs commandArgs) {
         NetBansBot bot = commandArgs.getBot();
         Member member = commandArgs.getMember();

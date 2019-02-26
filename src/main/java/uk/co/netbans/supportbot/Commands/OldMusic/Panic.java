@@ -11,7 +11,7 @@ import uk.co.netbans.supportbot.NetBansBot;
 
 public class Panic {
 
-    @Command(name = "panic", displayName = "panic!", permission = "supportbot.command.music.panic", category = CommandCategory.MUSIC, aliases = "panic!")
+    @Command(name = "panic", displayName = "panic!", category = CommandCategory.MUSIC, aliases = "panic!")
     public CommandResult onPanic(CommandArgs args) {
         NetBansBot bot = args.getBot();
         Member member = args.getMember();

@@ -12,13 +12,13 @@ import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.hooks.InterfacedEventManager;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
-import org.reflections.scanners.SubTypesScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.netbans.supportbot.CommandFramework.Command;
 import uk.co.netbans.supportbot.CommandFramework.CommandFramework;
 import uk.co.netbans.supportbot.Message.Messenger;
-import uk.co.netbans.supportbot.Music.AudioPlayerHandler;
+import uk.co.netbans.supportbot.Message.NewMessenger;
+import uk.co.netbans.supportbot.Music.AudioHandler;
 import uk.co.netbans.supportbot.OldMusic.MusicManager;
 import uk.co.netbans.supportbot.Storage.SQLManager;
 import uk.co.netbans.supportbot.Support.Listeners.*;
@@ -47,8 +47,11 @@ public class NetBansBot {
     private NetBansBot bot = this;
     private Logger logger;
 
+    // Messenger New
+    private NewMessenger newMessenger = new NewMessenger();
+
     // Music New
-    private AudioPlayerHandler audioHandler = new AudioPlayerHandler(this);
+    private AudioHandler audioHandler = new AudioHandler(this);
 
     public void init(Path directory) throws Exception {
         this.directory = directory;
@@ -148,7 +151,7 @@ public class NetBansBot {
         this.music = new MusicManager(this);
 
         // Music New
-        this.audioHandler.init();
+
 
         logger.info("Finished Loading | Now accepting input.");
 
@@ -252,8 +255,12 @@ public class NetBansBot {
         return musicDirectory;
     }
 
-    public AudioPlayerHandler getAudioHandler() {
+    public AudioHandler getAudioHandler() {
         return audioHandler;
+    }
+
+    public NewMessenger getNewMessenger() {
+        return newMessenger;
     }
 
     // potentially un necessary.

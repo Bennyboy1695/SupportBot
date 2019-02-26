@@ -11,7 +11,7 @@ import uk.co.netbans.supportbot.NetBansBot;
 
 public class Play {
 
-    @Command(name = "play", displayName = "play", permission = "supportbot.command.music.play", category = CommandCategory.MUSIC)
+    @Command(name = "play", displayName = "play", category = CommandCategory.MUSIC)
     public CommandResult onPlay(CommandArgs commandArgs) {
         NetBansBot bot = commandArgs.getBot();
         Member member = commandArgs.getMember();

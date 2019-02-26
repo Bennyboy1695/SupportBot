@@ -11,7 +11,7 @@ import uk.co.netbans.supportbot.NetBansBot;
 
 public class Search {
 
-    @Command(name = "search", displayName = "search", permission = "supportbot.command.music.search", category = CommandCategory.MUSIC)
+    @Command(name = "search", displayName = "search", category = CommandCategory.MUSIC)
     public CommandResult onSearch(CommandArgs commandArgs) {
         NetBansBot bot = commandArgs.getBot();
         Member member = commandArgs.getMember();

@@ -1,111 +1,148 @@
 package uk.co.netbans.supportbot.Music;
 
+import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
+import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
+import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
-import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.audio.AudioSendHandler;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import uk.co.netbans.supportbot.Message.EmbedTemplates;
+import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.Utils.Pair;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-public class AudioHandler extends AudioEventAdapter implements AudioSendHandler {
-    private final AudioPlayerHandler handler;
-    private final Guild guild;
-    private final AudioPlayer player;
+public class AudioHandler extends ListenerAdapter {
+    private final NetBansBot bot;
+    private final AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
+    private final Map<Long, Pair<AudioPlayer, TrackHandler>> players = new HashMap<>();
 
-    private final LinkedList<AudioTrack> queue = new LinkedList<>();
-    private AudioFrame lastFrame;
-
-    AudioHandler(AudioPlayerHandler handler, Guild guild, AudioPlayer player) {
-        this.handler = handler;
-        this.guild = guild;
-        this.player = player;
+    public AudioHandler(NetBansBot bot) {
+        this.bot = bot;
+        AudioSourceManagers.registerRemoteSources(playerManager);
     }
 
-    public int addTrackFirst(AudioTrack track) {
-        if (player.getPlayingTrack() == null) {
-            player.playTrack(track);
-            return -1;
-        } else {
-            queue.addFirst(track);
-            return 0;
+    @Override
+    public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
+//        Pair<AudioPlayer, TrackHandler> playerHandler = players.get(event.getGuild().getIdLong());
+//        if (playerHandler == null) return;
+//        AudioPlayer player = playerHandler.getKey();
+//        TrackHandler handler = playerHandler.getValue();
+//
+//        handler.getQueuedTracks().stream()
+//                .filter(track ->
+//                        !track.getTrack().equals(player.getPlayingTrack()) &&
+//                        track.getOwner().getUser().equals(event.getMember().getUser()))
+//                .forEach(handler::removeTrack);
+        // todo the above removes tracks added by a user when they disconnect. That is probably unwanted behaviour
+    }
+
+    @Override
+    public void onGuildLeave(GuildLeaveEvent event) {
+        stop(event.getGuild());
+    }
+
+    public boolean hasPlayer(Guild guild) {
+        return players.containsKey(guild.getIdLong());
+    }
+    public AudioPlayer getPlayer(Guild guild) {
+        return hasPlayer(guild) ? players.get(guild.getIdLong()).getKey() : createPlayer(guild);
+    }
+    public AudioPlayer createPlayer(Guild guild) {
+        AudioPlayer newPlayer = playerManager.createPlayer();
+        TrackHandler newHandler = new TrackHandler(newPlayer);
+        newPlayer.addListener(newHandler);
+        guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(newPlayer));
+        players.put(guild.getIdLong(), new Pair<>(newPlayer, newHandler));
+        return newPlayer;
+    }
+
+    public TrackHandler getTrackHandler(Guild guild) {
+        return players.get(guild.getIdLong()).getValue();
+    }
+
+    public void stop(Guild guild) {
+        players.remove(guild.getIdLong());
+        getPlayer(guild).destroy();
+        getTrackHandler(guild).clearQueue();
+        guild.getAudioManager().setAutoReconnect(false);
+        guild.getAudioManager().closeAudioConnection();
+    }
+
+    // Track Management Methods
+
+    public void loadTrack(String id, Member author, TextChannel channel, boolean shuffle) {
+        if (author.getVoiceState().getChannel() == null) {
+            bot.getNewMessenger().sendEmbed(channel,
+                    EmbedTemplates.ERROR.getEmbed().setDescription("You must be in a voice channel to play music!").build(),
+                    10);
+            return;
         }
+        Guild guild = author.getGuild();
+        getPlayer(guild);
+
+        channel.sendTyping().queue();
+        playerManager.loadItemOrdered(guild, id, new AudioLoadResultHandler() {
+            @Override
+            public void trackLoaded(AudioTrack track) {
+                bot.getNewMessenger().sendEmbed(channel,
+                        EmbedTemplates.SUCCESS.getEmbed().setDescription("Successfully queued a new song... i need a better message haha").build(),
+                        10);
+                getTrackHandler(guild).queue(track, author);
+                getTrackHandler(guild).setShuffle(shuffle);
+            }
+
+            @Override
+            public void playlistLoaded(AudioPlaylist playlist) {
+                if (playlist.getSelectedTrack() != null) {
+                    trackLoaded(playlist.getSelectedTrack());
+                } else if (playlist.isSearchResult()) {
+                    trackLoaded(playlist.getTracks().get(0));
+                } else {
+                    bot.getNewMessenger().sendEmbed(channel,
+                            EmbedTemplates.SUCCESS.getEmbed().setDescription("Successfully queued a new playlist... i need a better message haha").build(),
+                            10);
+                    for (int i = 0; i < Math.min(playlist.getTracks().size(), 1000); i++) {
+                        getTrackHandler(guild).queue(playlist.getTracks().get(i), author);
+                        getTrackHandler(guild).setShuffle(shuffle);
+                    }
+                }
+            }
+
+            @Override
+            public void noMatches() {
+                bot.getNewMessenger().sendEmbed(channel,
+                        EmbedTemplates.ERROR.getEmbed().setDescription("No playable songs were found!").build(),
+                        10);
+            }
+
+            @Override
+            public void loadFailed(FriendlyException exception) {
+                bot.getNewMessenger().sendEmbed(channel,
+                        EmbedTemplates.SUCCESS.getEmbed().setDescription("Failed to load song due to exception below VVV\n" + exception.getMessage()).build(),
+                        10);
+            }
+        });
     }
 
-    public int addTrack(AudioTrack track) {
-        if (player.getPlayingTrack() == null) {
-            player.playTrack(track);
-            return -1;
-        } else {
-            queue.add(track);
-            return queue.size() - 1;
-        }
+    public void skipTrack(Guild guild) {
+        getPlayer(guild).stopTrack();
     }
 
-    public LinkedList<AudioTrack> getQueue() {
-        return queue;
+    public void setVolume(Guild guild, int volume) {
+        getPlayer(guild).setVolume(volume);
     }
 
-    public void stop() {
-        queue.clear();
-        player.stopTrack();
+    public boolean isIdle(Guild guild) {
+        return !hasPlayer(guild) || getPlayer(guild).getPlayingTrack() == null;
     }
-
-    public boolean isPlaying() {
-        return guild.getSelfMember().getVoiceState().inVoiceChannel() && player.getPlayingTrack() != null;
-    }
-
-    public AudioPlayer getPlayer() {
-        return player;
-    }
-
-    public long getRequester() {
-        if (player.getPlayingTrack() == null || player.getPlayingTrack().getUserData(Long.class) == null)
-            return 0;
-        return player.getPlayingTrack().getUserData(Long.class);
-    }
-
-    // Handler Methods
-    @Override
-    public boolean canProvide() {
-        if (lastFrame == null)
-            lastFrame = player.provide();
-        return lastFrame != null;
-    }
-
-    @Override
-    public byte[] provide20MsAudio() {
-        if (lastFrame == null)
-            lastFrame = player.provide();
-        byte[] data = lastFrame != null ? lastFrame.getData() : null;
-        lastFrame = null;
-        return data;
-    }
-
-    @Override
-    public boolean isOpus() {
-        return true;
-    }
-
-    // Events
-    @Override
-    public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        if (queue.isEmpty()) {
-            System.out.println("I NEED TO LEAVE THE CHANNEL HERE BUT I DONT REMEMBER HOW TO DO THAT"); //todo leave channel
-        } else {
-            player.playTrack(queue.getFirst());
-            queue.removeFirst();
-        }
-    }
-
-    @Override
-    public void onTrackStart(AudioPlayer player, AudioTrack track) {
-        System.out.println("UPDATE NOW PLAYING THING!");
-    }
-
-    // todo now playing stuffs
 }

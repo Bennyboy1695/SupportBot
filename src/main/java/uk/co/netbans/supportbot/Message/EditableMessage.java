@@ -1,5 +1,6 @@
 package uk.co.netbans.supportbot.Message;
 
+import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -11,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 public class EditableMessage {
-    private final Message message;
+    private Message message;
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> task = null;
 
@@ -51,5 +52,9 @@ public class EditableMessage {
 
     public Message getMessage() {
         return message;
+    }
+
+    public void refreshMessage(JDA jda) {
+        message = jda.getTextChannelById(message.getChannel().getIdLong()).getMessageById(message.getIdLong()).complete();
     }
 }

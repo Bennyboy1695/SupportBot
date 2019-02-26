@@ -11,7 +11,7 @@ import uk.co.netbans.supportbot.NetBansBot;
 
 public class Repeat {
 
-    @Command(name = "repeat", displayName = "repeat", permission = "supportbot.command.music.repeat", category = CommandCategory.MUSIC)
+    @Command(name = "repeat", displayName = "repeat", category = CommandCategory.MUSIC)
     public CommandResult onRepeat(CommandArgs commandArgs) {
         NetBansBot bot = commandArgs.getBot();
         Member member = commandArgs.getMember();
