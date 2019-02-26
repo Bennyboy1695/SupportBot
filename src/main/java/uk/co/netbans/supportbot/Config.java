@@ -57,6 +57,7 @@ public class Config {
         jo.add("timezones", new JsonArray());
         jo.add("tips", new JsonArray());
         jo.add("replies", new JsonArray());
+        jo.add("emotes", new JsonArray());
         return jo;
     }
 

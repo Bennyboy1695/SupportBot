@@ -118,6 +118,7 @@ public class NetBansBot {
         this.jda.addEventListener(new SuggestionListener(this));
         this.jda.addEventListener(new HelpMessageReactionListener(this));
         this.jda.addEventListener(new TagListener(this));
+        this.jda.addEventListener(new EmoteRemoverListener(this));
 
         Executors.newSingleThreadExecutor().submit(() -> {
                 Member member = Util.randomMember(bot);

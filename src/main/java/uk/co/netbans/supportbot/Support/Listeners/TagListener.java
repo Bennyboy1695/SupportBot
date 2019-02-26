@@ -18,8 +18,6 @@ public class TagListener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        if (event.getMessage().getContentRaw().contains("\uD83D\uDCA2"))
-            event.getMessage().delete().queue();
         Member botMember = bot.getJDA().getGuildById(bot.getGuildID()).getMemberById(bot.getJDA().asBot().getApplicationInfo().complete().getIdLong());
         if (event.getMessage().getMentionedMembers().contains(botMember)) {
             bot.getMessenger().sendMessage(event.getChannel(), randomReplies(), 10);
