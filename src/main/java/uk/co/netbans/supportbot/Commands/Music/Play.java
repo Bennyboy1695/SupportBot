@@ -8,12 +8,9 @@ import uk.co.netbans.supportbot.CommandFramework.CommandResult;
 import uk.co.netbans.supportbot.Message.EmbedTemplates;
 import uk.co.netbans.supportbot.Message.ReactionMenu;
 
-// proximity 549805463416340481
 public class Play {
-
-
     @Command(name = "newplay", displayName = "newplay", category = CommandCategory.MUSIC, usage = "newplay <url>")
-    public CommandResult onPlaylist(CommandArgs args) {
+    public CommandResult onPlay(CommandArgs args) {
         if (args.getArgs().length == 0) {
             new ReactionMenu.Builder(args.getBot())
                     .setEmbed(EmbedTemplates.ERROR.getEmbed().setDescription("You must either specify a url to load or you can choose a playlist from below.").build())
@@ -65,6 +62,11 @@ public class Play {
                     .buildAndDisplay((TextChannel) args.getChannel());
             return CommandResult.SUCCESS;
         }
-        return CommandResult.SUCCESS;
+        if (args.getArgs().length == 1) {
+
+
+            return CommandResult.SUCCESS;
+        } else
+            return CommandResult.INVALIDARGS;
     }
 }
