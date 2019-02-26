@@ -12,7 +12,7 @@ public class Say {
 
     @Command(name = "say", displayName = "say", permission = "command.admin.say", category = CommandCategory.ADMIN)
     public CommandResult onSay(CommandArgs args) {
-        args.getBot().getMessenger().sendMessage((TextChannel) args.getChannel(), Arrays.toString(args.getArgs()).replace("[","").replaceAll(",", "").replace("]", ""), 30);
+        args.getBot().getMessenger().sendMessage((TextChannel) args.getChannel(), String.join(" ", args.getArgs()), 30);
         return CommandResult.SUCCESS;
     }
 }

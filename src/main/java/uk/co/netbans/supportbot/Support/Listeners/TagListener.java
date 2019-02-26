@@ -1,5 +1,6 @@
 package uk.co.netbans.supportbot.Support.Listeners;
 
+import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -17,6 +18,8 @@ public class TagListener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+        if (event.getMessage().getContentRaw().contains("\uD83D\uDCA2"))
+            event.getMessage().delete().queue();
         Member botMember = bot.getJDA().getGuildById(bot.getGuildID()).getMemberById(bot.getJDA().asBot().getApplicationInfo().complete().getIdLong());
         if (event.getMessage().getMentionedMembers().contains(botMember)) {
             bot.getMessenger().sendMessage(event.getChannel(), randomReplies(), 10);
