@@ -4,8 +4,10 @@ import com.google.gson.*;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 
 public class Config {
 
@@ -21,20 +23,35 @@ public class Config {
         try {
             if (!Files.exists(config)) {
                 Files.createFile(config);
-
-                JsonObject object = writeDefaults().getAsJsonObject();
-
-                try (BufferedWriter writer = Files.newBufferedWriter(config)) {
-                    writer.write(gson.toJson(object));
-                    writer.flush();
-                }
+                write(config, writeDefaults());
             }
-
-            try (BufferedReader reader = Files.newBufferedReader(config)) {
-                JsonParser parser = new JsonParser();
-                this.conf = parser.parse(reader);
+            if (hasAllEntries(read(config).getAsJsonObject())) {
+                this.conf = read(config);
+            } else {
+                write(config, writeNotFoundDefaults(read(config).getAsJsonObject()));
+                this.conf = read(config);
             }
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private JsonElement read(Path config) {
+        JsonElement element = null;
+        try (BufferedReader reader = Files.newBufferedReader(config)) {
+            JsonParser parser = new JsonParser();
+            element = parser.parse(reader);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return element;
+    }
+
+    private void write(Path config, JsonObject object) {
+        try (BufferedWriter writer = Files.newBufferedWriter(config)) {
+            writer.write(gson.toJson(object));
+            writer.flush();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -59,6 +76,28 @@ public class Config {
         jo.add("replies", new JsonArray());
         jo.add("emotes", new JsonArray());
         return jo;
+    }
+
+    public JsonObject writeNotFoundDefaults(JsonObject config) {
+        JsonObject finished = new JsonObject();
+        for (Map.Entry<String, JsonElement> entrySet : writeDefaults().entrySet()) {
+            if (!config.has(entrySet.getKey())) {
+                finished.add(entrySet.getKey(), entrySet.getValue());
+            } else {
+                finished.add(entrySet.getKey(), config.get(entrySet.getKey()));
+            }
+        }
+        return finished;
+    }
+
+    public boolean hasAllEntries(JsonObject config) {
+        int count = 0;
+        for (Map.Entry<String, JsonElement> entrySet : writeDefaults().entrySet()) {
+            if (config.has(entrySet.getKey())) {
+                count++;
+            }
+        }
+        return (count == writeDefaults().size());
     }
 
     public <T extends JsonElement> T getConfigValue(String key) {
