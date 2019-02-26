@@ -3,6 +3,8 @@ package uk.co.netbans.supportbot;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.io.File;
+import java.net.URI;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -13,6 +15,16 @@ public class Main extends ListenerAdapter {
     public static void main(String[] args) throws Exception {
         final ExecutorService console = Executors.newSingleThreadExecutor();
         final NetBansBot bot = new NetBansBot();
+        Path mainDirectory = Paths.get(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent();
+        Path configDirectory = Paths.get(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent();
+
+        if (args.length > 0) {
+            if (args[0].startsWith("configDirectory=")) {
+                configDirectory = mainDirectory.resolve(args[0].replace("configDirectory=", ""));
+            } else {
+                System.out.println("You have given a startup argument! But it doesn't match any we use!");
+            }
+        }
 
         console.submit(() -> {
             final Scanner input = new Scanner(System.in);
@@ -29,6 +41,8 @@ public class Main extends ListenerAdapter {
             bot.shutdown();
             System.exit(0);
         });
-        bot.init(Paths.get(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent());
+        if (!configDirectory.toFile().exists())
+            configDirectory.toFile().mkdir();
+        bot.init(mainDirectory, configDirectory);
     }
 }

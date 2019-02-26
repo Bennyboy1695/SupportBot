@@ -10,12 +10,14 @@ import java.nio.file.Path;
 public class Config {
 
     private NetBansBot bot;
+    private Path configDirectory;
     private JsonElement conf;
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    Config(NetBansBot bot) {
+    Config(NetBansBot bot, Path configDirectory) {
         this.bot = bot;
-        Path config = bot.getDirectory().resolve("config.json");
+        this.configDirectory = configDirectory;
+        Path config = configDirectory.resolve("config.json");
         try {
             if (!Files.exists(config)) {
                 Files.createFile(config);
@@ -38,7 +40,7 @@ public class Config {
     }
 
     public void saveConfig() {
-        try (BufferedWriter writer = Files.newBufferedWriter(bot.getDirectory().resolve("config.json"))) {
+        try (BufferedWriter writer = Files.newBufferedWriter(configDirectory.resolve("config.json"))) {
             writer.write(gson.toJson(conf));
         } catch (Exception e) {
             e.printStackTrace();

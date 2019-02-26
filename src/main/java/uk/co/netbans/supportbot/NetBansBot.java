@@ -45,6 +45,7 @@ public class NetBansBot {
     private SQLManager sqlManager;
     private CommandFramework framework;
     private NetBansBot bot = this;
+    private Path configDirectory;
     private Logger logger;
 
     // Messenger New
@@ -53,14 +54,15 @@ public class NetBansBot {
     // Music New
     private AudioHandler audioHandler = new AudioHandler(this);
 
-    public void init(Path directory) throws Exception {
+    public void init(Path directory, Path configDirectory) throws Exception {
         this.directory = directory;
+        this.configDirectory = configDirectory;
 
         logger = LoggerFactory.getLogger("SupportBot");
 
         logger.info("Initializing Config!");
         try {
-            initConfig();
+            initConfig(configDirectory);
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize config!", e);
         }
@@ -199,6 +201,10 @@ public class NetBansBot {
         return directory;
     }
 
+    public Path getConfigDirectory() {
+        return configDirectory;
+    }
+
     public MusicManager getMusicManager() {
         return this.music;
     }
@@ -211,9 +217,9 @@ public class NetBansBot {
         return framework;
     }
 
-    private void initConfig(){
+    private void initConfig(Path configDirectory){
         try {
-            config = new Config(this);
+            config = new Config(this, configDirectory);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -241,7 +247,7 @@ public class NetBansBot {
 
     public void reloadConfig() {
         try {
-            this.initConfig();
+            this.initConfig(getConfigDirectory());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -294,7 +300,7 @@ public class NetBansBot {
                 e.printStackTrace();
             }
         }
-        logger.info(builder.toString().substring(0, 1));
+        logger.info(builder.toString().substring(0, builder.length() - 2));
     }
 
 }
