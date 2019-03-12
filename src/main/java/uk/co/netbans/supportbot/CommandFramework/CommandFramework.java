@@ -1,6 +1,10 @@
 package uk.co.netbans.supportbot.CommandFramework;
 
+import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.MessageUpdateEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import uk.co.netbans.supportbot.Message.Messenger;
 import uk.co.netbans.supportbot.NetBansBot;
@@ -47,10 +51,22 @@ public class CommandFramework extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent e) {
         if (!e.getMessage().getContentRaw().startsWith(bot.getCommandPrefix()) || e.getAuthor().isBot() || e.getMessage().getContentRaw().length() <= 1)
             return;
+        doCommandFromMessage(e.getMessage(), e.getTextChannel(), e.getMember());
+    }
 
+    @Override
+    public void onMessageUpdate(MessageUpdateEvent e) {
+        if (!e.getMessage().getContentRaw().startsWith(bot.getCommandPrefix()) || e.getAuthor().isBot() || e.getMessage().getContentRaw().length() <= 1)
+            return;
+        if (e.getMessage().getCreationTime().minusMinutes(1).isBefore(e.getMessage().getEditedTime().minusMinutes(1)))
+            return;
+        doCommandFromMessage(e.getMessage(), e.getTextChannel(), e.getMember());
+    }
+
+    private void doCommandFromMessage(Message message, TextChannel channel, Member member) {
         CommandResult result = CommandResult.INVALIDCOMMAND;
-        String label = getCommandLabel(e.getMessage().getContentRaw()).replaceAll("([!?])", "");
-        String[] args = quotesOrSpaceSplits(e.getMessage().getContentRaw());
+        String label = getCommandLabel(message.getContentRaw()).replaceAll("([!?])", "");
+        String[] args = quotesOrSpaceSplits(message.getContentRaw());
         args[0] = args[0].substring(1);
         List<String> list = new ArrayList<String>(Arrays.asList(args));
         list.remove(args[0]);
@@ -66,9 +82,9 @@ public class CommandFramework extends ListenerAdapter {
                 Method method = commandMap.get(cmdLabel).getKey();
                 Object methodObject = commandMap.get(cmdLabel).getValue();
                 Command command = method.getAnnotation(Command.class);
-                if (command.permission().equals("none") || userHasPerm(e.getMember().getUser().getIdLong(), command.permission())) {
+                if (command.permission().equals("none") || userHasPerm(member.getUser().getIdLong(), command.permission())) {
                     try {
-                        result = (CommandResult) method.invoke(methodObject, new CommandArgs(bot, e.getTextChannel(), e.getMember(), e.getMessage(), cmdLabel, args, cmdLabel.split("\\.").length - 1));
+                        result = (CommandResult) method.invoke(methodObject, new CommandArgs(bot, channel, member, message, cmdLabel, args, cmdLabel.split("\\.").length - 1));
                     } catch (IllegalAccessException e1) {
                         e1.printStackTrace();
                     } catch (IllegalArgumentException e1) {
@@ -78,18 +94,18 @@ public class CommandFramework extends ListenerAdapter {
                     }
                 } else {
                     result = CommandResult.NOPERMS;
-                    bot.getMessenger().sendEmbed(e.getTextChannel(), Messenger.NO_PERMS(command.permission()), 10);
+                    bot.getMessenger().sendEmbed(channel, Messenger.NO_PERMS(command.permission()), 10);
                 }
                 if (result == CommandResult.INVALIDCOMMAND) {
-                    bot.getMessenger().sendEmbed(e.getTextChannel(), Messenger.INVALID_COMMAND, 10);
+                    bot.getMessenger().sendEmbed(channel, Messenger.INVALID_COMMAND, 10);
                 }
                 if (result == CommandResult.INVALIDARGS) {
-                    bot.getMessenger().sendEmbed(e.getTextChannel(), Messenger.INVALID_ARGS(command.usage()), 10);
+                    bot.getMessenger().sendEmbed(channel, Messenger.INVALID_ARGS(command.usage()), 10);
                 }
             } else {
                 result = CommandResult.DEFAULT;
             }
-            bot.getMessenger().delMessage(e.getTextChannel(), e.getMessageIdLong(), 5);
+            bot.getMessenger().delMessage(channel, message.getIdLong(), 10);
         }
     }
 

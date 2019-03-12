@@ -16,7 +16,6 @@ public class Test {
     @Command(name = "test", displayName = "test", aliases = "tester", usage = "test", permission = "command.test.new", category = CommandCategory.ADMIN)
     public CommandResult onTest(CommandArgs args) {
         NetBansBot bot = args.getBot();
-        bot.getMessenger().sendMessage((TextChannel) args.getChannel(), new MessageBuilder().append("Test").build(), 20);
         return CommandResult.SUCCESS;
     }
 }
