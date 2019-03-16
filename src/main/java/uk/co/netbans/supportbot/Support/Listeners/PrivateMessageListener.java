@@ -44,7 +44,7 @@ public class PrivateMessageListener extends ListenerAdapter {
             if (channel.getName().startsWith(event.getAuthor().getName())) {
                 userCount++;
                 if (userCount >= 3) {
-                    member.getUser().openPrivateChannel().complete().sendMessage("No channel has been created because you multiple channels open already. Please complete these issue first!").complete();
+                    member.getUser().openPrivateChannel().complete().sendMessage("No channel has been created because you have multiple channels open already. Please complete these issue first!").complete();
                     return;
                 }
             }
