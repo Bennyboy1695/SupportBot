@@ -1,21 +1,21 @@
 package uk.co.netbans.supportbot.Commands.Admin;
 
-import net.dv8tion.jda.core.MessageBuilder;
+import me.bhop.bjdautilities.command.annotation.Execute;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
-import uk.co.netbans.supportbot.CommandFramework.Command;
-import uk.co.netbans.supportbot.CommandFramework.CommandArgs;
-import uk.co.netbans.supportbot.CommandFramework.CommandCategory;
 import uk.co.netbans.supportbot.NetBansBot;
 import uk.co.netbans.supportbot.CommandFramework.CommandResult;
 
+import java.util.List;
 import java.util.Optional;
 
+@me.bhop.bjdautilities.command.annotation.Command(label = "test")
 public class Test {
 
-    @Command(name = "test", displayName = "test", aliases = "tester", usage = "test", permission = "command.test.new", category = CommandCategory.ADMIN)
-    public CommandResult onTest(CommandArgs args) {
-        NetBansBot bot = args.getBot();
+    @Execute
+    public CommandResult onTest(Member member, TextChannel channel, Message message, String label, List<String> args, NetBansBot bot) {
+        channel.sendMessage("test").complete();
         return CommandResult.SUCCESS;
     }
 }

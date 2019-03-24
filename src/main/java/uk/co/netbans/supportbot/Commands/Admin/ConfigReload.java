@@ -1,22 +1,24 @@
 package uk.co.netbans.supportbot.Commands.Admin;
 
+import me.bhop.bjdautilities.command.annotation.Command;
+import me.bhop.bjdautilities.command.annotation.Execute;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
-import uk.co.netbans.supportbot.CommandFramework.Command;
-import uk.co.netbans.supportbot.CommandFramework.CommandArgs;
-import uk.co.netbans.supportbot.CommandFramework.CommandCategory;
 import uk.co.netbans.supportbot.NetBansBot;
 import uk.co.netbans.supportbot.CommandFramework.CommandResult;
 
 import java.awt.*;
+import java.util.List;
 
+@Command(label = {"configreload","reloadconfig"}, permission = Permission.ADMINISTRATOR)
 public class ConfigReload{
 
-    @Command(name = "configreload", displayName = "configreload", aliases = "reloadconfig", permission = "supportbot.command.admin.configreload", usage = "configreload", category = CommandCategory.ADMIN)
-    public CommandResult onConfigReload(CommandArgs args) {
-        NetBansBot bot = args.getBot();
-        TextChannel channel = (TextChannel) args.getChannel();
-        if (args.getArgs().length > 0) return CommandResult.INVALIDARGS;
+    @Execute
+    public CommandResult onConfigReload(Member member, TextChannel channel, Message message, String label, List<String> args, NetBansBot bot) {
+        if (args.size() > 0) return CommandResult.INVALIDARGS;
         try {
             bot.reloadConfig();
             bot.getMessenger().sendEmbed(channel, new EmbedBuilder().setDescription("Reloaded Config!").setColor(Color.GREEN).build());

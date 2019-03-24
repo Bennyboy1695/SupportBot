@@ -2,6 +2,9 @@ package uk.co.netbans.supportbot;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import me.bhop.bjdautilities.command.CommandHandler;
+import me.bhop.bjdautilities.command.CommandHandlerBuilder;
+import me.bhop.bjdautilities.command.annotation.Command;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -12,9 +15,9 @@ import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.hooks.InterfacedEventManager;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.co.netbans.supportbot.CommandFramework.Command;
 import uk.co.netbans.supportbot.CommandFramework.CommandFramework;
 import uk.co.netbans.supportbot.Message.Messenger;
 import uk.co.netbans.supportbot.Message.NewMessenger;
@@ -43,7 +46,8 @@ public class NetBansBot {
     private Path musicDirectory;
     private Config config;
     private SQLManager sqlManager;
-    private CommandFramework framework;
+    //private CommandFramework framework;
+    private CommandHandler commandHandler;
     private NetBansBot bot = this;
     private Path configDirectory;
     private Logger logger;
@@ -109,14 +113,14 @@ public class NetBansBot {
 
         logger.info("Registering Commands...");
         // old
-        this.jda.addEventListener(framework = new CommandFramework(this));
+        commandHandler = new CommandHandlerBuilder(jda).addCustomParameter(bot).setPrefix(getCommandPrefix()).setDeleteCommandTime(10).setGenerateHelp(true).setSendTyping(true).setEntriesPerHelpPage(6).build();
         registerCommands();
 
         this.jda.addEventListener(new PrivateMessageListener(this));
         this.jda.addEventListener(new SupportCategoryListener(this));
         this.jda.addEventListener(new TicketChannelsReactionListener(this));
         this.jda.addEventListener(new SuggestionListener(this));
-        this.jda.addEventListener(new HelpMessageReactionListener(this));
+        //this.jda.addEventListener(new HelpMessageReactionListener(this));
         this.jda.addEventListener(new TagListener(this));
         this.jda.addEventListener(new EmoteRemoverListener(this));
 
@@ -214,8 +218,8 @@ public class NetBansBot {
         return sqlManager;
     }
 
-    public CommandFramework getFramework() {
-        return framework;
+    public CommandHandler getCommandHandler() {
+        return commandHandler;
     }
 
     private void initConfig(Path configDirectory){
@@ -281,20 +285,20 @@ public class NetBansBot {
     }
 
     private void registerCommands() {
-        Set<Method> methods = new HashSet<>();
+        Set<Class<?>> methods = new HashSet<>();
         try {
-            Reflections reflections = new Reflections("uk.co.netbans.supportbot.Commands", new MethodAnnotationsScanner());
-            methods = reflections.getMethodsAnnotatedWith(Command.class);
+            Reflections reflections = new Reflections("uk.co.netbans.supportbot.Commands", new TypeAnnotationsScanner());
+            methods = reflections.getTypesAnnotatedWith(Command.class, true);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         StringBuilder builder = new StringBuilder();
         builder.append("Registered Commands: ");
-        for (Method method : methods) {
+        for (Class<?> method : methods) {
             try {
-                framework.registerCommands(method.getDeclaringClass().newInstance());
-                builder.append(method.getDeclaringClass().getSimpleName() + ", ");
+                commandHandler.register(method.newInstance());
+                builder.append(method.getSimpleName() + ", ");
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
