@@ -85,12 +85,12 @@ public class MusicManager extends ListenerAdapter {
 
     public boolean canBotPlayMusic(Member sender, TextChannel channel, NetBansBot bot) {
         if (sender.getVoiceState().getChannel() == null) {
-            bot.getMessenger().sendEmbed(channel, Messenger.NOT_VOICE, 10);
+            //bot.getMessenger().sendEmbed(channel, Messenger.NOT_VOICE, 10);
             return false;
         }
         Member botMember = bot.getJDA().getGuildById(bot.getGuildID()).getMemberById(bot.getJDA().asBot().getApplicationInfo().complete().getIdLong());
         if (botMember.getVoiceState().inVoiceChannel() && !sender.getVoiceState().getChannel().getMembers().contains(bot.getJDA().getGuildById(bot.getGuildID()).getMemberById(bot.getJDA().asBot().getApplicationInfo().complete().getIdLong()))) {
-            bot.getMessenger().sendEmbed(channel, Messenger.NOT_SAME_VOICE, 10);
+            //bot.getMessenger().sendEmbed(channel, Messenger.NOT_SAME_VOICE, 10);
             return false;
         }
         return true;

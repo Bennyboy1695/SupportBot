@@ -108,7 +108,7 @@ public class NetBansBot {
 
         logger.info("Registering Commands...");
         // old
-        commandHandler = new CommandHandlerBuilder(jda).addCustomParameter(bot).setPrefix(getCommandPrefix()).setDeleteCommandTime(10).setGenerateHelp(true).setSendTyping(true).setEntriesPerHelpPage(6).build();
+        commandHandler = new CommandHandlerBuilder(jda).addCustomParameter(bot).setPrefix("!").setDeleteCommandTime(10).setGenerateHelp(true).setSendTyping(true).setEntriesPerHelpPage(6).build();
         registerCommands();
 
         this.jda.addEventListener(new PrivateMessageListener(this));

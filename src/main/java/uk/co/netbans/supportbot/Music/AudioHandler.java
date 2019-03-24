@@ -14,7 +14,7 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import uk.co.netbans.supportbot.Message.EmbedTemplates;
+import uk.co.netbans.supportbot.EmbedTemplates;
 import uk.co.netbans.supportbot.NetBansBot;
 import uk.co.netbans.supportbot.Utils.Pair;
 
@@ -82,7 +82,7 @@ public class AudioHandler extends ListenerAdapter {
 
     public void loadTrack(String id, Member author, TextChannel channel, boolean shuffle) {
         if (author.getVoiceState().getChannel() == null) {
-            bot.getNewMessenger().sendEmbed(channel,
+            bot.getMessenger().sendEmbed(channel,
                     EmbedTemplates.ERROR.getEmbed().setDescription("You must be in a voice channel to play music!").build(),
                     10);
             return;
@@ -94,7 +94,7 @@ public class AudioHandler extends ListenerAdapter {
         playerManager.loadItemOrdered(guild, id, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                bot.getNewMessenger().sendEmbed(channel,
+                bot.getMessenger().sendEmbed(channel,
                         EmbedTemplates.SUCCESS.getEmbed().setDescription("Successfully queued a new song... i need a better message haha").build(),
                         10);
                 getTrackHandler(guild).queue(track, author);
@@ -108,7 +108,7 @@ public class AudioHandler extends ListenerAdapter {
                 } else if (playlist.isSearchResult()) {
                     trackLoaded(playlist.getTracks().get(0));
                 } else {
-                    bot.getNewMessenger().sendEmbed(channel,
+                    bot.getMessenger().sendEmbed(channel,
                             EmbedTemplates.SUCCESS.getEmbed().setDescription("Successfully queued a new playlist... i need a better message haha").build(),
                             10);
                     for (int i = 0; i < Math.min(playlist.getTracks().size(), 1000); i++) {
@@ -120,14 +120,14 @@ public class AudioHandler extends ListenerAdapter {
 
             @Override
             public void noMatches() {
-                bot.getNewMessenger().sendEmbed(channel,
+                bot.getMessenger().sendEmbed(channel,
                         EmbedTemplates.ERROR.getEmbed().setDescription("No playable songs were found!").build(),
                         10);
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
-                bot.getNewMessenger().sendEmbed(channel,
+                bot.getMessenger().sendEmbed(channel,
                         EmbedTemplates.SUCCESS.getEmbed().setDescription("Failed to load song due to exception below VVV\n" + exception.getMessage()).build(),
                         10);
             }

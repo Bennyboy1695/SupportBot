@@ -11,7 +11,7 @@ import uk.co.netbans.supportbot.NetBansBot;
 
 import java.util.List;
 
-@Command(label = "purge", permission = Permission.MESSAGE_MANAGE, children = {Link.class,Mention.class, User.class})
+@Command(label = "purge", permission = Permission.MESSAGE_MANAGE, children = {Link.class, Mention.class, User.class})
 public class Purge {
 
     @Execute
