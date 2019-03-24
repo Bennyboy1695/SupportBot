@@ -17,7 +17,7 @@ public class Say {
 
     @Execute
     public CommandResult onSay(Member member, TextChannel channel, Message message, String label, List<String> args, NetBansBot bot) {
-        bot.getMessenger().sendMessage((TextChannel) channel, String.join(" ", args), 30);
+        bot.getMessenger().sendMessage(channel, String.join(" ", args), 30);
         return CommandResult.SUCCESS;
     }
 }

@@ -1,6 +1,5 @@
 package uk.co.netbans.supportbot.Commands.Moderation.Purge;
 
-import me.bhop.bjdautilities.Messenger;
 import me.bhop.bjdautilities.command.annotation.Command;
 import me.bhop.bjdautilities.command.annotation.Execute;
 import net.dv8tion.jda.core.Permission;
@@ -8,7 +7,7 @@ import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 import uk.co.netbans.supportbot.CommandFramework.CommandResult;
-//import uk.co.netbans.supportbot.Message.Messenger;
+import uk.co.netbans.supportbot.EmbedTemplates;
 import uk.co.netbans.supportbot.NetBansBot;
 
 import java.util.List;
@@ -22,7 +21,7 @@ public class User {
         int amount = Integer.parseInt(arguments[2]);
         int count = 0;
         if (amount > 100) {
-            //bot.getMessenger().sendEmbed(channel, Messenger.AMOUNT_TOO_HIGH, 10);
+            bot.getMessenger().sendEmbed(channel, EmbedTemplates.AMOUNT_TOO_HIGH.getEmbed(100).build(), 10);
             return CommandResult.INVALIDARGS;
         }
 
@@ -34,7 +33,7 @@ public class User {
                 }
         }
         if (count > 0){
-            //bot.getMessenger().sendEmbed(channel, Messenger.DELETED_AMOUNT_OF_MESSAGES(count, member2.getEffectiveName()), 10);
+            bot.getMessenger().sendEmbed(channel, EmbedTemplates.DELETED_X_MESSAGES_FROM.getEmbed(count, member2.getEffectiveName()).build(), 10);
             return CommandResult.SUCCESS;
         }
         return CommandResult.TARGETNOTFOUND;

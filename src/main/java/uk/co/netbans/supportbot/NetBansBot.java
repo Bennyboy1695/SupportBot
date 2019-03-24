@@ -12,6 +12,8 @@ import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.MessageEmbed;
+import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.hooks.InterfacedEventManager;
 import org.reflections.Reflections;
@@ -288,13 +290,10 @@ public class NetBansBot {
             try {
                 commandHandler.register(method.newInstance());
                 builder.append(method.getSimpleName() + ", ");
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
+            } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
         logger.info(builder.toString().substring(0, builder.length() - 2));
     }
-
 }

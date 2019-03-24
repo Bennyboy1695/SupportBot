@@ -7,7 +7,7 @@ import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 import uk.co.netbans.supportbot.CommandFramework.CommandResult;
-//import uk.co.netbans.supportbot.Message.Messenger;
+import uk.co.netbans.supportbot.EmbedTemplates;
 import uk.co.netbans.supportbot.NetBansBot;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class Mention {
         int amount = Integer.parseInt(arguments[1]);
         int count = 0;;
         if (amount > 100) {
-            //bot.getMessenger().sendEmbed(channel, Messenger.AMOUNT_TOO_HIGH, 10);
+            bot.getMessenger().sendEmbed(channel, EmbedTemplates.AMOUNT_TOO_HIGH.getEmbed(100).build(), 10);
             return CommandResult.INVALIDARGS;
         }
         for (Message msg : channel.getHistory().retrievePast(amount).complete()) {
@@ -32,7 +32,7 @@ public class Mention {
             }
         }
         if (count > 0){
-            //bot.getMessenger().sendEmbed(channel, Messenger.DELETED_AMOUNT_OF_MESSAGES(count, member.getEffectiveName()), 10);
+            bot.getMessenger().sendEmbed(channel, EmbedTemplates.DELETED_X_MESSAGES_FROM.getEmbed(count, member.getEffectiveName()).build(), 10);
             return CommandResult.SUCCESS;
         }
         return CommandResult.TARGETNOTFOUND;
