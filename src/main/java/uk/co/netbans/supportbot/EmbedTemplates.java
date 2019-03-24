@@ -12,10 +12,10 @@ public enum EmbedTemplates {
     SUCCESS(BASE.getEmbed().setColor(Color.GREEN)),
     PRETTY_SUCCESSFULL(BASE.getEmbed().setColor(Color.CYAN)),
 
-    // Command
-    INVALID_COMMAND(ERROR.getEmbed().setDescription("This is not a valid command!")),
+    // General
+    UNKNOWN_TARGET(ERROR.getEmbed().setDescription("Target not found! also prob should edit this message i didnt know what to put here.")),
 
-    //CHANNEL
+    // Support Channel
     CHANNEL_LOCKED(SUCCESS.getEmbed().setDescription("\uD83D\uDD12 Channel has been locked to just Project Leaders and the Ticket Creator!")),
     CHANNEL_UNLOCKED(SUCCESS.getEmbed().setDescription("\uD83D\uDD13 Channel has been unlocked, it is now back to default ticket perms!")),
     CHANNEL_UNLOCKED_FULL(SUCCESS.getEmbed().setDescription("\uD83D\uDD13 Channel has been unlocked, it is now open to all!")),

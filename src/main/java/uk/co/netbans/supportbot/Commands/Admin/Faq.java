@@ -1,13 +1,14 @@
 package uk.co.netbans.supportbot.Commands.Admin;
 
+
 import me.bhop.bjdautilities.command.annotation.Command;
 import me.bhop.bjdautilities.command.annotation.Execute;
+import me.bhop.bjdautilities.command.result.CommandResult;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
-import uk.co.netbans.supportbot.CommandFramework.CommandResult;
 import uk.co.netbans.supportbot.NetBansBot;
 
 import java.awt.*;
@@ -26,6 +27,6 @@ public class Faq {
         embed.addField("**Why can't I create another channel ?**", "You are unable to create a channel because of multiple reasons. One reason might be that you already have a ticket open, therefore by extension a channel, and to prevent spam we have limited the amount you can have open and how often you can open them! The other reason might be that you abused the system and have been given the anti-support role, meaning you are unable to create a channel for help!", true);
 
         bot.getMessenger().sendEmbed(channel, embed.build());
-        return CommandResult.SUCCESS;
+        return CommandResult.success();
     }
 }

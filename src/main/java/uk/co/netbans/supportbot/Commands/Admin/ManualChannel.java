@@ -1,7 +1,9 @@
 package uk.co.netbans.supportbot.Commands.Admin;
 
+
 import me.bhop.bjdautilities.command.annotation.Command;
 import me.bhop.bjdautilities.command.annotation.Execute;
+import me.bhop.bjdautilities.command.result.CommandResult;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.Permission;
@@ -10,7 +12,6 @@ import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 import uk.co.netbans.supportbot.NetBansBot;
-import uk.co.netbans.supportbot.CommandFramework.CommandResult;
 
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
@@ -54,18 +55,18 @@ public class ManualChannel {
                         .setDescription("https://discordapp.com/channels/" + bot.getGuildID() + "/" + supportChannel.getIdLong())
                         .setColor(new Color(127, 255, 212))
                         .build()).complete();
-                return CommandResult.SUCCESS;
+                return CommandResult.success();
             } else if (args.get(0).equals("move")) {
                 Category original = channel.getParent();
                 TextChannel channelArg = bot.getJDA().getTextChannelById(args.get(1).replaceAll("<", "").replaceAll("#", "").replaceAll(">", ""));
                 channel.getManager().setParent(channelArg.getParent()).complete();
                 channel.getManager().setName(channel.getName().replaceAll("-[0-9]*", "-manual")).complete();
                 channel.sendMessage("**Channel was moved from Category: " + original.getName() + " to Category: " + channelArg.getParent().getName() + "!**").complete();
-                return CommandResult.SUCCESS;
+                return CommandResult.success();
             } else {
-                return CommandResult.INVALIDARGS;
+                return CommandResult.invalidArguments();
             }
         }
-        return CommandResult.INVALIDARGS;
+        return CommandResult.invalidArguments();
     }
 }

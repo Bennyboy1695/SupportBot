@@ -4,22 +4,25 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import me.bhop.bjdautilities.Messenger;
 import me.bhop.bjdautilities.command.CommandHandler;
-import me.bhop.bjdautilities.command.CommandHandlerBuilder;
-import me.bhop.bjdautilities.command.annotation.Command;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.MessageEmbed;
-import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.hooks.InterfacedEventManager;
-import org.reflections.Reflections;
-import org.reflections.scanners.TypeAnnotationsScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.co.netbans.supportbot.Commands.Admin.*;
+import uk.co.netbans.supportbot.Commands.Misc.Emote;
+import uk.co.netbans.supportbot.Commands.Misc.Timezones;
+import uk.co.netbans.supportbot.Commands.Moderation.Purge.Link;
+import uk.co.netbans.supportbot.Commands.Moderation.Purge.Mention;
+import uk.co.netbans.supportbot.Commands.Moderation.Purge.Purge;
+import uk.co.netbans.supportbot.Commands.Moderation.Purge.User;
+import uk.co.netbans.supportbot.Commands.Music.Play;
+import uk.co.netbans.supportbot.Commands.Support.Ticket;
 import uk.co.netbans.supportbot.Music.AudioHandler;
 import uk.co.netbans.supportbot.OldMusic.MusicManager;
 import uk.co.netbans.supportbot.Storage.SQLManager;
@@ -44,7 +47,6 @@ public class NetBansBot {
     private Path musicDirectory;
     private Config config;
     private SQLManager sqlManager;
-    //private CommandFramework framework;
     private CommandHandler commandHandler;
     private NetBansBot bot = this;
     private Path configDirectory;
@@ -108,8 +110,33 @@ public class NetBansBot {
 
         logger.info("Registering Commands...");
         // old
-        commandHandler = new CommandHandlerBuilder(jda).addCustomParameter(bot).setPrefix("!").setDeleteCommandTime(10).setGenerateHelp(true).setSendTyping(true).setEntriesPerHelpPage(6).build();
-        registerCommands();
+        commandHandler = new CommandHandler.Builder(jda).addCustomParameter(bot).setPrefix("!").setDeleteCommandTime(10).setGenerateHelp(true).setSendTyping(true).setEntriesPerHelpPage(6).build();
+
+        // Admin
+        commandHandler.register(new ConfigReload());
+        commandHandler.register(new Embedify());
+        commandHandler.register(new Faq());
+        commandHandler.register(new ManualChannel());
+        commandHandler.register(new Say());
+        commandHandler.register(new Tips());
+
+        // Misc
+        commandHandler.register(new Emote());
+        commandHandler.register(new Timezones());
+
+        // Moderation/Purge
+        commandHandler.register(new Purge());
+        commandHandler.register(new Mention());
+        commandHandler.register(new Link());
+        commandHandler.register(new User());
+
+        // Music
+        commandHandler.register(new Play());
+
+        // Support
+        commandHandler.register(new Ticket());
+
+        //registerCommands();
 
         this.jda.addEventListener(new PrivateMessageListener(this));
         this.jda.addEventListener(new SupportCategoryListener(this));
@@ -275,25 +302,25 @@ public class NetBansBot {
         }
     }
 
-    private void registerCommands() {
-        Set<Class<?>> methods = new HashSet<>();
-        try {
-            Reflections reflections = new Reflections("uk.co.netbans.supportbot.Commands", new TypeAnnotationsScanner());
-            methods = reflections.getTypesAnnotatedWith(Command.class, true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        StringBuilder builder = new StringBuilder();
-        builder.append("Registered Commands: ");
-        for (Class<?> method : methods) {
-            try {
-                commandHandler.register(method.newInstance());
-                builder.append(method.getSimpleName() + ", ");
-            } catch (InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
-        logger.info(builder.toString().substring(0, builder.length() - 2));
-    }
+    //private void registerCommands() {
+    //    Set<Class<?>> methods = new HashSet<>();
+    //    try {
+    //        Reflections reflections = new Reflections("uk.co.netbans.supportbot.Commands", new TypeAnnotationsScanner());
+    //        methods = reflections.getTypesAnnotatedWith(Command.class, true);
+    //    } catch (Exception e) {
+    //        e.printStackTrace();
+    //    }
+//
+    //    StringBuilder builder = new StringBuilder();
+    //    builder.append("Registered Commands: ");
+    //    for (Class<?> method : methods) {
+    //        try {
+    //            commandHandler.register(method.newInstance());
+    //            builder.append(method.getSimpleName() + ", ");
+    //        } catch (InstantiationException | IllegalAccessException e) {
+    //            e.printStackTrace();
+    //        }
+    //    }
+    //    logger.info(builder.toString().substring(0, builder.length() - 2));
+    //}
 }

@@ -3,13 +3,14 @@ package uk.co.netbans.supportbot.Commands.Misc;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+
 import me.bhop.bjdautilities.command.annotation.Command;
 import me.bhop.bjdautilities.command.annotation.Execute;
+import me.bhop.bjdautilities.command.result.CommandResult;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
-import uk.co.netbans.supportbot.CommandFramework.CommandResult;
 import uk.co.netbans.supportbot.EmbedTemplates;
 import uk.co.netbans.supportbot.NetBansBot;
 
@@ -73,6 +74,6 @@ public class Timezones {
         }
 
         bot.getMessenger().sendEmbed(channel, embed.build());
-        return CommandResult.SUCCESS;
+        return CommandResult.success();
     }
 }

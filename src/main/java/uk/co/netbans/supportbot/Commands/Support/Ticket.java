@@ -1,13 +1,14 @@
 package uk.co.netbans.supportbot.Commands.Support;
 
+
 import me.bhop.bjdautilities.command.annotation.Command;
 import me.bhop.bjdautilities.command.annotation.Execute;
+import me.bhop.bjdautilities.command.result.CommandResult;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.entities.TextChannel;
-import uk.co.netbans.supportbot.CommandFramework.CommandResult;
 import uk.co.netbans.supportbot.EmbedTemplates;
 import uk.co.netbans.supportbot.NetBansBot;
 
@@ -34,6 +35,6 @@ public class Ticket {
                 .setDescription("To create a ticket simply type a message here and it will be used to create a ticket containing that message you provided! \n" +
                         "Please note: Multiple message will not be combined together so your message needs to be one message NOT multiple little ones! \n" +
                         "Also if you upload a file we will take the file and put it into the support channel too!").build()).complete();
-        return CommandResult.SUCCESS;
+        return CommandResult.success();
     }
 }

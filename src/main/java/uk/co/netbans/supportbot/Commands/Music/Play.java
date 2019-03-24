@@ -1,12 +1,12 @@
 package uk.co.netbans.supportbot.Commands.Music;
 
 import me.bhop.bjdautilities.ReactionMenu;
+import me.bhop.bjdautilities.command.result.CommandResult;
 import me.bhop.bjdautilities.command.annotation.Command;
 import me.bhop.bjdautilities.command.annotation.Execute;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
-import uk.co.netbans.supportbot.CommandFramework.CommandResult;
 import uk.co.netbans.supportbot.EmbedTemplates;
 import uk.co.netbans.supportbot.NetBansBot;
 
@@ -65,13 +65,13 @@ public class Play {
                         menu.destroyIn(2);
                     })
                     .buildAndDisplay(channel);
-            return CommandResult.SUCCESS;
+            return CommandResult.success();
         }
         if (args.size() == 1) {
 
             System.out.println("Play music");
-            return CommandResult.SUCCESS;
+            return CommandResult.success();
         } else
-            return CommandResult.INVALIDARGS;
+            return CommandResult.invalidArguments();
     }
 }

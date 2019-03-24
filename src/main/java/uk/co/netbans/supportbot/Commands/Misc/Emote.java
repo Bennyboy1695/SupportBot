@@ -1,12 +1,13 @@
 package uk.co.netbans.supportbot.Commands.Misc;
 
+
 import me.bhop.bjdautilities.command.annotation.Command;
 import me.bhop.bjdautilities.command.annotation.Execute;
+import me.bhop.bjdautilities.command.result.CommandResult;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
-import uk.co.netbans.supportbot.CommandFramework.CommandResult;
 import uk.co.netbans.supportbot.NetBansBot;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class Emote {
             builder.append(String.valueOf(chars)).append("   _").append(Character.getName(code)).append("_");
         });
         bot.getMessenger().sendMessage(channel, builder.toString(), 30);
-        return CommandResult.SUCCESS;
+        return CommandResult.success();
 
     }
 }

@@ -1,12 +1,13 @@
 package uk.co.netbans.supportbot.Commands.Moderation.Purge;
 
+
 import me.bhop.bjdautilities.command.annotation.Command;
 import me.bhop.bjdautilities.command.annotation.Execute;
+import me.bhop.bjdautilities.command.result.CommandResult;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
-import uk.co.netbans.supportbot.CommandFramework.CommandResult;
 import uk.co.netbans.supportbot.EmbedTemplates;
 import uk.co.netbans.supportbot.NetBansBot;
 
@@ -22,7 +23,7 @@ public class Mention {
         int count = 0;;
         if (amount > 100) {
             bot.getMessenger().sendEmbed(channel, EmbedTemplates.AMOUNT_TOO_HIGH.getEmbed(100).build(), 10);
-            return CommandResult.INVALIDARGS;
+            return CommandResult.invalidArguments();
         }
         for (Message msg : channel.getHistory().retrievePast(amount).complete()) {
             if (!msg.getMentionedMembers().isEmpty()) {
@@ -31,10 +32,10 @@ public class Mention {
                 count++;
             }
         }
-        if (count > 0){
+        if (count > 0)
             bot.getMessenger().sendEmbed(channel, EmbedTemplates.DELETED_X_MESSAGES_FROM.getEmbed(count, member.getEffectiveName()).build(), 10);
-            return CommandResult.SUCCESS;
-        }
-        return CommandResult.TARGETNOTFOUND;
+        else
+            bot.getMessenger().sendEmbed(channel, EmbedTemplates.UNKNOWN_TARGET.getBuilt(), 10);
+        return CommandResult.success();
     }
 }

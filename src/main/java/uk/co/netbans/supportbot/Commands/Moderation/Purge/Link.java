@@ -1,12 +1,13 @@
 package uk.co.netbans.supportbot.Commands.Moderation.Purge;
 
+
 import me.bhop.bjdautilities.command.annotation.Command;
 import me.bhop.bjdautilities.command.annotation.Execute;
+import me.bhop.bjdautilities.command.result.CommandResult;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
-import uk.co.netbans.supportbot.CommandFramework.CommandResult;
 import uk.co.netbans.supportbot.EmbedTemplates;
 import uk.co.netbans.supportbot.NetBansBot;
 import uk.co.netbans.supportbot.Utils.Util;
@@ -24,7 +25,7 @@ public class Link {
         Member member2 = null;
         if (amount > 100) {
             bot.getMessenger().sendEmbed(channel, EmbedTemplates.AMOUNT_TOO_HIGH.getEmbed(100).build(), 10);
-            return CommandResult.INVALIDARGS;
+            return CommandResult.invalidArguments();
         }
 
         if (arguments.length == 3) {
@@ -45,10 +46,9 @@ public class Link {
             } else {
                 bot.getMessenger().sendEmbed(channel, EmbedTemplates.DELETED_X_MESSAGES.getEmbed(count).build(), 10);
             }
-            return CommandResult.SUCCESS;
         } else {
             bot.getMessenger().sendEmbed(channel, EmbedTemplates.NO_MESSAGES_FOUND.getBuilt(), 10);
         }
-        return CommandResult.TARGETNOTFOUND;
+        return CommandResult.success();
     }
 }
