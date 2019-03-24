@@ -2,6 +2,7 @@ package uk.co.netbans.supportbot;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import me.bhop.bjdautilities.Messenger;
 import me.bhop.bjdautilities.command.CommandHandler;
 import me.bhop.bjdautilities.command.CommandHandlerBuilder;
 import me.bhop.bjdautilities.command.annotation.Command;
@@ -14,13 +15,9 @@ import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.hooks.InterfacedEventManager;
 import org.reflections.Reflections;
-import org.reflections.scanners.MethodAnnotationsScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.co.netbans.supportbot.CommandFramework.CommandFramework;
-import uk.co.netbans.supportbot.Message.Messenger;
-import uk.co.netbans.supportbot.Message.NewMessenger;
 import uk.co.netbans.supportbot.Music.AudioHandler;
 import uk.co.netbans.supportbot.OldMusic.MusicManager;
 import uk.co.netbans.supportbot.Storage.SQLManager;
@@ -28,7 +25,6 @@ import uk.co.netbans.supportbot.Support.Listeners.*;
 import uk.co.netbans.supportbot.Task.ExpiryCheckTask;
 import uk.co.netbans.supportbot.Utils.Util;
 
-import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
@@ -51,9 +47,6 @@ public class NetBansBot {
     private NetBansBot bot = this;
     private Path configDirectory;
     private Logger logger;
-
-    // Messenger New
-    private NewMessenger newMessenger = new NewMessenger();
 
     // Music New
     private AudioHandler audioHandler = new AudioHandler(this);
@@ -268,10 +261,6 @@ public class NetBansBot {
 
     public AudioHandler getAudioHandler() {
         return audioHandler;
-    }
-
-    public NewMessenger getNewMessenger() {
-        return newMessenger;
     }
 
     // potentially un necessary.
