@@ -7,7 +7,7 @@ import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionRemov
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import uk.co.netbans.supportbot.Message.Messenger;
+import uk.co.netbans.supportbot.EmbedTemplates;
 import uk.co.netbans.supportbot.NetBansBot;
 
 
@@ -63,13 +63,13 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                             for (Role role : bot.getJDA().getGuildById(bot.getGuildID()).getRoles()) {
                                 channel.getManager().putPermissionOverride(role, 0L, 76800L).complete();
                             }
-                            bot.getMessenger().sendEmbed(channel, Messenger.CHANNEL_LOCKED);
+                            bot.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_LOCKED.getBuilt());
                             bot.getLogger().info("Locked channel: " + channel.getName());
                         }
                     } else if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD13")) {
                         if (bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.channel.unlock.everyone")) {
                             channel.getManager().putPermissionOverride(bot.getJDA().getGuildById(bot.getGuildID()).getPublicRole(), 117824L, 0L).complete();
-                            bot.getMessenger().sendEmbed(channel, Messenger.CHANNEL_FULLY_UNLOCKED);
+                            bot.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_UNLOCKED_FULL.getBuilt());
                             bot.getLogger().info("Fully unlocked channel: " + channel.getName());
                         }
                     }
@@ -88,14 +88,14 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                         if (bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.channel.lock")) {
                             channel.getManager().sync().complete();
                             channel.getManager().putPermissionOverride(channel.getPinnedMessages().complete().get(0).getMentionedMembers().get(0), 101440L, 0L).complete();
-                            bot.getMessenger().sendEmbed(channel, Messenger.CHANNEL_UNLOCKED);
+                            bot.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_UNLOCKED.getBuilt());
                             bot.getLogger().info("Unlocked channel: " + channel.getName());
                         }
                     } else if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD13")) {
                         if (bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.channel.lock.everyone")) {
                             channel.getManager().sync().complete();
                             channel.getManager().putPermissionOverride(channel.getPinnedMessages().complete().get(0).getMentionedMembers().get(0), 101440L, 0L).complete();
-                            bot.getMessenger().sendEmbed(channel, Messenger.CHANNEL_UNLOCKED);
+                            bot.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_UNLOCKED.getBuilt());
                             bot.getLogger().info("Relocked channel: " + channel.getName());
                         }
                     }

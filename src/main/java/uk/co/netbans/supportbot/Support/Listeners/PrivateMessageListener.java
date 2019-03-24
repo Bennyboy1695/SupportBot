@@ -63,7 +63,7 @@ public class PrivateMessageListener extends ListenerAdapter {
                 .append("\n")
                 .append("_To close this ticket please react with a \u2705 to this message!_")
                 .build();
-        Message supportMessage = bot.getMessenger().sendMessage(supportChannel, message, 0);
+        Message supportMessage = bot.getMessenger().sendMessage(supportChannel, message.toString(), 0).getMessage();
         for (Message.Attachment attachment : event.getMessage().getAttachments()) {
                 try {
                     if (!new File(bot.getLogDirectory().toFile(), "tmp").exists()) {
