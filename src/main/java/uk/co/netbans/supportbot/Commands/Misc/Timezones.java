@@ -3,15 +3,16 @@ package uk.co.netbans.supportbot.Commands.Misc;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import me.bhop.bjdautilities.command.annotation.Command;
+import me.bhop.bjdautilities.command.annotation.Execute;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.requests.RestAction;
-import uk.co.netbans.supportbot.CommandFramework.Command;
-import uk.co.netbans.supportbot.CommandFramework.CommandArgs;
 import uk.co.netbans.supportbot.CommandFramework.CommandResult;
-import uk.co.netbans.supportbot.Message.Messenger;
+//import uk.co.netbans.supportbot.Message.Messenger;
 import uk.co.netbans.supportbot.NetBansBot;
 
 import java.awt.*;
@@ -20,17 +21,18 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.zone.ZoneRulesException;
+import java.util.List;
 
+@Command(label = {"times", "time", "timezone", "timezones"})
 public class Timezones {
 
-    @Command(name = "time", displayName = "time", aliases = "times,timezones", usage = "time")
-    public CommandResult onExecute(CommandArgs args) {
-        NetBansBot bot = args.getBot();
+    @Execute
+    public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args, NetBansBot bot) {
         JsonArray arr = bot.getConfig().getConfigValue("timezones");
-        String[] arguments = args.getArgs();
+        String[] arguments = args.toArray(new String[0]);
 
-        EmbedBuilder embed = Messenger.getCommonEmbed();
-        embed.setColor(new Color(1, 175, 68));
+        //EmbedBuilder embed = Messenger.getCommonEmbed();
+        //embed.setColor(new Color(1, 175, 68));
 
 
         if (arguments.length == 0) {
@@ -46,7 +48,7 @@ public class Timezones {
                 ZonedDateTime time = ZonedDateTime.ofInstant(Instant.now(), zone);
                 sb.append(o.getAsString().replaceAll("/.*", "")).append(": ").append(time.format(DateTimeFormatter.ofPattern("kk:mmzzz , EEE dd MMM")).replace(",", "on")).append("\n");
             }
-            embed.setDescription(sb.toString());
+            //embed.setDescription(sb.toString());
         } else if (arguments.length == 2) {
             switch (arguments[0]) {
                 case "add":
@@ -55,26 +57,26 @@ public class Timezones {
                         try {
                             ZoneId.of(arguments[1]);
                             arr.add(arguments[1]);
-                            embed.setDescription("Added timezone field: " + arguments[1]);
+                            //embed.setDescription("Added timezone field: " + arguments[1]);
                         } catch (Exception ignored) {
-                            embed.setDescription("Invalid timezone field!");
+                            //embed.setDescription("Invalid timezone field!");
                         }
                     } else
-                        embed.setDescription("Timezone already added!");
+                        //embed.setDescription("Timezone already added!");
                     break;
                 case "remove":
                     if (arr.contains(new JsonPrimitive(arguments[1]))) {
                         arr.remove(new JsonPrimitive(arguments[1]));
-                        embed.setDescription("Removed timezone!");
+                        //embed.setDescription("Removed timezone!");
                     } else
-                        embed.setDescription("The target was not enabled previously.");
+                        //embed.setDescription("The target was not enabled previously.");
                     break;
             }
             bot.getConfig().saveConfig();
             bot.reloadConfig();
         }
 
-        bot.getMessenger().sendEmbed((TextChannel) args.getChannel(), embed.build());
+        //bot.getMessenger().sendEmbed((TextChannel) channel, embed.build());
         return CommandResult.SUCCESS;
     }
 }

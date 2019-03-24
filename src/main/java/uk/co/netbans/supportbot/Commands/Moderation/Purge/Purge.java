@@ -1,14 +1,21 @@
 package uk.co.netbans.supportbot.Commands.Moderation.Purge;
 
-import uk.co.netbans.supportbot.CommandFramework.Command;
-import uk.co.netbans.supportbot.CommandFramework.CommandArgs;
-import uk.co.netbans.supportbot.CommandFramework.CommandCategory;
+import me.bhop.bjdautilities.command.annotation.Command;
+import me.bhop.bjdautilities.command.annotation.Execute;
+import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.TextChannel;
 import uk.co.netbans.supportbot.CommandFramework.CommandResult;
+import uk.co.netbans.supportbot.NetBansBot;
 
+import java.util.List;
+
+@Command(label = "purge", permission = Permission.MESSAGE_MANAGE, children = {Link.class,Mention.class, User.class})
 public class Purge {
 
-    @Command(name = "purge", displayName = "purge", aliases = "purged", permission = "supportbot.command.moderation.purge", category = CommandCategory.MODERATION)
-    public CommandResult onPurge(CommandArgs args) {
+    @Execute
+    public CommandResult onPurge(Member member, TextChannel channel, Message message, String label, List<String> args, NetBansBot bot) {
         return CommandResult.SUCCESS;
     }
 

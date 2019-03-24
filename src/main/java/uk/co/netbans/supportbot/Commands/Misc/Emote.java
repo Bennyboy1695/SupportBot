@@ -1,18 +1,22 @@
 package uk.co.netbans.supportbot.Commands.Misc;
 
+import me.bhop.bjdautilities.command.annotation.Command;
+import me.bhop.bjdautilities.command.annotation.Execute;
+import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
-import uk.co.netbans.supportbot.CommandFramework.Command;
-import uk.co.netbans.supportbot.CommandFramework.CommandArgs;
-import uk.co.netbans.supportbot.CommandFramework.CommandCategory;
 import uk.co.netbans.supportbot.CommandFramework.CommandResult;
 import uk.co.netbans.supportbot.NetBansBot;
 
+import java.util.List;
+
+@Command(label = {"emote", "emoji"}, permission = Permission.ADMINISTRATOR)
 public class Emote {
 
-    @Command(name = "emote", displayName = "emote", aliases = "emoji", category = CommandCategory.MISC, usage = "emote \u25B6")
-    public CommandResult onEmote(CommandArgs commandArgs) {
-        NetBansBot bot = commandArgs.getBot();
-        String str = commandArgs.getArgs(0);
+    @Execute
+    public CommandResult onEmote(Member member, TextChannel channel, Message message, String label, List<String> args, NetBansBot bot) {
+        String str = args.get(0);
         StringBuilder builder = new StringBuilder("Emoji/Character info:");
         str.codePoints().forEachOrdered(code -> {
             char[] chars = Character.toChars(code);
@@ -32,7 +36,7 @@ public class Emote {
             }
             builder.append(String.valueOf(chars)).append("   _").append(Character.getName(code)).append("_");
         });
-        bot.getMessenger().sendMessage((TextChannel) commandArgs.getChannel(), builder.toString(), 30);
+        bot.getMessenger().sendMessage(channel, builder.toString(), 30);
         return CommandResult.SUCCESS;
 
     }

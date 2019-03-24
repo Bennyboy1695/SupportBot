@@ -1,5 +1,6 @@
 package uk.co.netbans.supportbot.Commands.Admin;
 
+import me.bhop.bjdautilities.command.annotation.Command;
 import me.bhop.bjdautilities.command.annotation.Execute;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
@@ -10,7 +11,7 @@ import uk.co.netbans.supportbot.CommandFramework.CommandResult;
 import java.util.List;
 import java.util.Optional;
 
-@me.bhop.bjdautilities.command.annotation.Command(label = "test")
+@Command(label = "test")
 public class Test {
 
     @Execute

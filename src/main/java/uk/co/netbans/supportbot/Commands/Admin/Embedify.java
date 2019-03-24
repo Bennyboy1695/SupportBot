@@ -1,24 +1,24 @@
 package uk.co.netbans.supportbot.Commands.Admin;
 
+import me.bhop.bjdautilities.command.annotation.Command;
+import me.bhop.bjdautilities.command.annotation.Execute;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
-import uk.co.netbans.supportbot.CommandFramework.Command;
-import uk.co.netbans.supportbot.CommandFramework.CommandArgs;
-import uk.co.netbans.supportbot.CommandFramework.CommandCategory;
 import uk.co.netbans.supportbot.NetBansBot;
 import uk.co.netbans.supportbot.CommandFramework.CommandResult;
 
 import java.awt.*;
+import java.util.List;
 
+@Command(label = {"embed", "embedify"}, permission = Permission.ADMINISTRATOR)
 public class Embedify {
 
-
-    @Command(name = "embed", displayName = "embed", permission = "supportbot.command.admin.embed", usage = "embed <title> <link|token> <username|token> [<password>]", category = CommandCategory.ADMIN)
-    public CommandResult onEmbedify(CommandArgs commandArgs) {
-        NetBansBot bot = commandArgs.getBot();
-        String[] args = commandArgs.getArgs();
-        TextChannel channel = (TextChannel) commandArgs.getChannel();
-        if (args.length > 2) {
+    @Execute
+    public CommandResult onEmbedify(Member member, TextChannel channel, Message message, String label, List<String> args, NetBansBot bot) {
+        if (args.size() > 2) {
             EmbedBuilder embed = new EmbedBuilder();
             embed.setColor(new Color(247, 207, 13));
             embed.setThumbnail("https://i.imgur.com/sBIoRP4.png");
@@ -27,20 +27,20 @@ public class Embedify {
                 System.out.println(str);
             }
 
-            if (!args[1].startsWith("`http")) {
-                embed.setTitle(args[0].replaceAll("\"", ""));
+            if (!args.get(1).startsWith("`http")) {
+                embed.setTitle(args.get(0).replaceAll("\"", ""));
             } else {
-                embed.setTitle(args[0].replaceAll("\"", ""), args[1].replaceAll("`", ""));
+                embed.setTitle(args.get(0).replaceAll("\"", ""), args.get(1).replaceAll("`", ""));
             }
-            if (args.length == 4) {
-                embed.addField("**Username:**", args[2].replaceAll("`", ""), true);
-                embed.addField("**Password:**", args[3].replaceAll("`", ""), true);
+            if (args.size() == 4) {
+                embed.addField("**Username:**", args.get(2).replaceAll("`", ""), true);
+                embed.addField("**Password:**", args.get(3).replaceAll("`", ""), true);
             } else {
-                if (!args[1].contains("Token") || !args[1].contains("token")) {
-                    embed.addField("**Username:**", args[1].replaceAll("`", ""), true);
-                    embed.addField("**Password:**", args[2].replaceAll("`", ""), true);
+                if (!args.get(1).contains("Token") || !args.get(1).contains("token")) {
+                    embed.addField("**Username:**", args.get(1).replaceAll("`", ""), true);
+                    embed.addField("**Password:**", args.get(2).replaceAll("`", ""), true);
                 } else {
-                    embed.addField("**" + args[1].replaceAll("`", "") + "**:", args[2].replaceAll("`", ""), false);
+                    embed.addField("**" + args.get(1).replaceAll("`", "") + "**:", args.get(2).replaceAll("`", ""), false);
                 }
             }
             channel.sendMessage(embed.build()).complete();
