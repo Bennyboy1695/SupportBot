@@ -27,7 +27,7 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                 for (Message message : channel.getPinnedMessages().complete()) {
                     if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\u2705")) {
                         for (Member member : message.getMentionedMembers()) {
-                            if (event.getMember() == member || bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.ticket.close")) {
+                            //if (event.getMember() == member || bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.ticket.close")) {
                                 Message historyMessage = channel.getHistory().retrievePast(1).complete().get(0);
                                 String memberMention = "";
                                 if (member.getUser().getIdLong() == event.getMember().getUser().getIdLong()) {
@@ -56,22 +56,22 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
                                         .complete();
                                 channel.delete().reason("Issue completed!").complete();
                             }
-                        }
+                        //}
                     } else if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD12")) {
-                        if (bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.channel.lock")) {
+                        //if (bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.channel.lock")) {
                             channel.getManager().putPermissionOverride(channel.getPinnedMessages().complete().get(0).getMentionedMembers().get(0), 101440L, 0L).complete();
                             for (Role role : bot.getJDA().getGuildById(bot.getGuildID()).getRoles()) {
                                 channel.getManager().putPermissionOverride(role, 0L, 76800L).complete();
                             }
                             bot.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_LOCKED.getBuilt());
                             bot.getLogger().info("Locked channel: " + channel.getName());
-                        }
+                       // }
                     } else if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD13")) {
-                        if (bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.channel.unlock.everyone")) {
+                        //if (bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.channel.unlock.everyone")) {
                             channel.getManager().putPermissionOverride(bot.getJDA().getGuildById(bot.getGuildID()).getPublicRole(), 117824L, 0L).complete();
                             bot.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_UNLOCKED_FULL.getBuilt());
                             bot.getLogger().info("Fully unlocked channel: " + channel.getName());
-                        }
+                       // }
                     }
                 }
             }
@@ -85,19 +85,19 @@ public class TicketChannelsReactionListener extends ListenerAdapter {
             if (channel.getParent().getIdLong() == Long.valueOf(bot.getConfig().getConfigValue("category").getAsString()) || channel.getName().contains("manual")) {
                 for (Message message : channel.getPinnedMessages().complete()) {
                     if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD12")) {
-                        if (bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.channel.lock")) {
+                        //if (bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.channel.lock")) {
                             channel.getManager().sync().complete();
                             channel.getManager().putPermissionOverride(channel.getPinnedMessages().complete().get(0).getMentionedMembers().get(0), 101440L, 0L).complete();
                             bot.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_UNLOCKED.getBuilt());
                             bot.getLogger().info("Unlocked channel: " + channel.getName());
-                        }
+                       // }
                     } else if (message.getAuthor().isBot() && event.getReactionEmote().getName().equals("\uD83D\uDD13")) {
-                        if (bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.channel.lock.everyone")) {
+                        //if (bot.getSqlManager().userAlreadyHasPerm(event.getUser().getIdLong(), "supportbot.admin.channel.lock.everyone")) {
                             channel.getManager().sync().complete();
                             channel.getManager().putPermissionOverride(channel.getPinnedMessages().complete().get(0).getMentionedMembers().get(0), 101440L, 0L).complete();
                             bot.getMessenger().sendEmbed(channel, EmbedTemplates.CHANNEL_UNLOCKED.getBuilt());
                             bot.getLogger().info("Relocked channel: " + channel.getName());
-                        }
+                        //}
                     }
                 }
             }

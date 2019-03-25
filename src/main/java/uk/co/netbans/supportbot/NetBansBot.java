@@ -16,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.netbans.supportbot.Commands.Admin.*;
 import uk.co.netbans.supportbot.Commands.Misc.Emote;
+import uk.co.netbans.supportbot.Commands.Misc.Remind.Add;
+import uk.co.netbans.supportbot.Commands.Misc.Remind.Remind;
 import uk.co.netbans.supportbot.Commands.Misc.Timezones;
 import uk.co.netbans.supportbot.Commands.Moderation.Purge.Link;
 import uk.co.netbans.supportbot.Commands.Moderation.Purge.Mention;
@@ -110,7 +112,7 @@ public class NetBansBot {
 
         logger.info("Registering Commands...");
         // old
-        commandHandler = new CommandHandler.Builder(jda).addCustomParameter(bot).setPrefix("!").setDeleteCommandTime(10).setGenerateHelp(true).setSendTyping(true).setEntriesPerHelpPage(6).build();
+        commandHandler = new CommandHandler.Builder(jda).addCustomParameter(bot).setPrefix(getCommandPrefix()).setDeleteCommandTime(10).setGenerateHelp(true).setSendTyping(true).setEntriesPerHelpPage(6).build();
 
         // Admin
         commandHandler.register(new ConfigReload());
@@ -123,6 +125,9 @@ public class NetBansBot {
         // Misc
         commandHandler.register(new Emote());
         commandHandler.register(new Timezones());
+        commandHandler.register(new Remind());
+        commandHandler.register(new Add());
+        commandHandler.register(new uk.co.netbans.supportbot.Commands.Misc.Remind.List());
 
         // Moderation/Purge
         commandHandler.register(new Purge());
