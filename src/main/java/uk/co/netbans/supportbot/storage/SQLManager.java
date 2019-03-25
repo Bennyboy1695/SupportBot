@@ -63,7 +63,7 @@ public class SQLManager {
 
     public boolean removeRemind(Reminder reminder) {
         try (Connection c = database.openConnection()) {
-            String statement = "DELETE * FROM reminds WHERE user='" + reminder.getUserID() + "' AND creation='" + reminder.getCreation() + "' AND expiry='" + reminder.getExpiry() + "' AND message='" + reminder.getMessage() + "';";
+            String statement = "DELETE FROM reminds WHERE user='" + reminder.getUserID() + "' AND creation='" + reminder.getCreation() + "' AND expiry='" + reminder.getExpiry() + "' AND message='" + reminder.getMessage() + "';";
             try (PreparedStatement ps = c.prepareStatement(statement)) {
                 ps.executeQuery();
                 return true;
