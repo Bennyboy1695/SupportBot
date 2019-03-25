@@ -1,4 +1,4 @@
-package uk.co.netbans.supportbot.Commands.Music;
+package uk.co.netbans.supportbot.commands.music;
 
 import me.bhop.bjdautilities.ReactionMenu;
 import me.bhop.bjdautilities.command.result.CommandResult;

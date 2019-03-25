@@ -1,4 +1,4 @@
-package uk.co.netbans.supportbot.OldMusic;
+package uk.co.netbans.supportbot.oldmusic;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.entities.Member;

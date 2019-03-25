@@ -1,4 +1,4 @@
-package uk.co.netbans.supportbot.Utils;
+package uk.co.netbans.supportbot.utils;
 
 public class Pair<K, V> {
     private final K k;

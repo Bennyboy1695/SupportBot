@@ -1,4 +1,4 @@
-package uk.co.netbans.supportbot.Commands.Misc.Remind;
+package uk.co.netbans.supportbot.commands.misc.remind;
 
 import me.bhop.bjdautilities.ReactionMenu;
 import me.bhop.bjdautilities.command.annotation.Command;
@@ -12,7 +12,6 @@ import uk.co.netbans.supportbot.EmbedTemplates;
 import uk.co.netbans.supportbot.NetBansBot;
 
 import java.time.Instant;
-import java.time.OffsetDateTime;
 import java.util.concurrent.TimeUnit;
 
 @Command(value = "list")

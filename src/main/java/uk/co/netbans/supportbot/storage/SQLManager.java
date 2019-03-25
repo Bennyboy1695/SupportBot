@@ -1,6 +1,6 @@
-package uk.co.netbans.supportbot.Storage;
+package uk.co.netbans.supportbot.storage;
 
-import uk.co.netbans.supportbot.Commands.Misc.Remind.Reminder;
+import uk.co.netbans.supportbot.commands.misc.remind.Reminder;
 
 import java.io.File;
 import java.sql.Connection;
@@ -8,7 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class SQLManager {
 

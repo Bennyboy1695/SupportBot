@@ -1,4 +1,4 @@
-package uk.co.netbans.supportbot.Support.Listeners;
+package uk.co.netbans.supportbot.support.listeners;
 
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;

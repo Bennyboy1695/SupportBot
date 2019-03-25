@@ -1,4 +1,4 @@
-package uk.co.netbans.supportbot.Commands.Misc.Remind;
+package uk.co.netbans.supportbot.commands.misc.remind;
 
 import me.bhop.bjdautilities.ReactionMenu;
 import me.bhop.bjdautilities.command.result.CommandResult;
@@ -10,13 +10,12 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 import uk.co.netbans.supportbot.EmbedTemplates;
 import uk.co.netbans.supportbot.NetBansBot;
-import uk.co.netbans.supportbot.Utils.Util;
+import uk.co.netbans.supportbot.utils.Util;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Command(label = {"add", "create"}, minArgs = 2, usage = "remind add 1d1h1m1s How to use this")
 public class Add {

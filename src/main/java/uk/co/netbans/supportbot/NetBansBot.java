@@ -14,23 +14,23 @@ import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.hooks.InterfacedEventManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.co.netbans.supportbot.Commands.Admin.*;
-import uk.co.netbans.supportbot.Commands.Misc.Emote;
-import uk.co.netbans.supportbot.Commands.Misc.Remind.Add;
-import uk.co.netbans.supportbot.Commands.Misc.Remind.Remind;
-import uk.co.netbans.supportbot.Commands.Misc.Timezones;
-import uk.co.netbans.supportbot.Commands.Moderation.Purge.Link;
-import uk.co.netbans.supportbot.Commands.Moderation.Purge.Mention;
-import uk.co.netbans.supportbot.Commands.Moderation.Purge.Purge;
-import uk.co.netbans.supportbot.Commands.Moderation.Purge.User;
-import uk.co.netbans.supportbot.Commands.Music.Play;
-import uk.co.netbans.supportbot.Commands.Support.Ticket;
-import uk.co.netbans.supportbot.Music.AudioHandler;
-import uk.co.netbans.supportbot.OldMusic.MusicManager;
-import uk.co.netbans.supportbot.Storage.SQLManager;
-import uk.co.netbans.supportbot.Support.Listeners.*;
-import uk.co.netbans.supportbot.Task.ExpiryCheckTask;
-import uk.co.netbans.supportbot.Utils.Util;
+import uk.co.netbans.supportbot.commands.admin.*;
+import uk.co.netbans.supportbot.commands.misc.Emote;
+import uk.co.netbans.supportbot.commands.misc.remind.Add;
+import uk.co.netbans.supportbot.commands.misc.remind.Remind;
+import uk.co.netbans.supportbot.commands.misc.Timezones;
+import uk.co.netbans.supportbot.commands.moderation.purge.Link;
+import uk.co.netbans.supportbot.commands.moderation.purge.Mention;
+import uk.co.netbans.supportbot.commands.moderation.purge.Purge;
+import uk.co.netbans.supportbot.commands.moderation.purge.User;
+import uk.co.netbans.supportbot.commands.music.Play;
+import uk.co.netbans.supportbot.commands.support.Ticket;
+import uk.co.netbans.supportbot.music.AudioHandler;
+import uk.co.netbans.supportbot.oldmusic.MusicManager;
+import uk.co.netbans.supportbot.storage.SQLManager;
+import uk.co.netbans.supportbot.support.listeners.*;
+import uk.co.netbans.supportbot.task.ExpiryCheckTask;
+import uk.co.netbans.supportbot.utils.Util;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -127,7 +127,7 @@ public class NetBansBot {
         commandHandler.register(new Timezones());
         commandHandler.register(new Remind());
         commandHandler.register(new Add());
-        commandHandler.register(new uk.co.netbans.supportbot.Commands.Misc.Remind.List());
+        commandHandler.register(new uk.co.netbans.supportbot.commands.misc.remind.List());
 
         // Moderation/Purge
         commandHandler.register(new Purge());
@@ -140,6 +140,8 @@ public class NetBansBot {
 
         // Support
         commandHandler.register(new Ticket());
+
+        commandHandler.getCommand(Remind.class).ifPresent(cmd -> cmd.addCustomParam(commandHandler));
 
         //registerCommands();
 

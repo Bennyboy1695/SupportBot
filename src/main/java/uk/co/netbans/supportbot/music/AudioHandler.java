@@ -1,4 +1,4 @@
-package uk.co.netbans.supportbot.Music;
+package uk.co.netbans.supportbot.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
@@ -16,7 +16,7 @@ import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import uk.co.netbans.supportbot.EmbedTemplates;
 import uk.co.netbans.supportbot.NetBansBot;
-import uk.co.netbans.supportbot.Utils.Pair;
+import uk.co.netbans.supportbot.utils.Pair;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package uk.co.netbans.supportbot.Commands.Misc.Remind;
+package uk.co.netbans.supportbot.commands.misc.remind;
 
 import me.bhop.bjdautilities.command.CommandHandler;
 import me.bhop.bjdautilities.command.annotation.Command;
@@ -14,6 +14,9 @@ public class Remind {
 
     @Execute
     public CommandResult onRemind(Member member, TextChannel channel, Message message, String label, java.util.List<String> args, NetBansBot bot, CommandHandler handler) {
+        if (!args.get(0).toLowerCase().equals("list") || !args.get(0).toLowerCase().equals("add") || !args.get(0).toLowerCase().equals("remove")) {
+            handler.getCommand(Add.class).ifPresent(cmd -> cmd.execute(member, channel, message, label, args));
+        }
         return CommandResult.success();
     }
 

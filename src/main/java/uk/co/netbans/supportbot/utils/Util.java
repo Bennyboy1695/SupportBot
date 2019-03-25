@@ -1,4 +1,4 @@
-package uk.co.netbans.supportbot.Utils;
+package uk.co.netbans.supportbot.utils;
 
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;

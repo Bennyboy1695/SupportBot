@@ -1,4 +1,4 @@
-package uk.co.netbans.supportbot.Commands.Admin;
+package uk.co.netbans.supportbot.commands.admin;
 
 
 import me.bhop.bjdautilities.command.annotation.Command;
@@ -10,7 +10,6 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 import uk.co.netbans.supportbot.NetBansBot;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Command(label = "say", permission = Permission.MESSAGE_MANAGE)

@@ -1,4 +1,4 @@
-package uk.co.netbans.supportbot.Utils;
+package uk.co.netbans.supportbot.utils;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;

@@ -1,4 +1,4 @@
-package uk.co.netbans.supportbot.Storage;
+package uk.co.netbans.supportbot.storage;
 
 import java.sql.Connection;
 import java.sql.SQLException;

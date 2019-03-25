@@ -1,4 +1,4 @@
-package uk.co.netbans.supportbot.Commands.Admin;
+package uk.co.netbans.supportbot.commands.admin;
 
 
 import me.bhop.bjdautilities.command.annotation.Command;
