@@ -39,8 +39,8 @@ public class Add {
         }
         long duration = TimeUnit.MILLISECONDS.toSeconds(expiry);
         Executors.newSingleThreadScheduledExecutor().schedule(() -> {
-            AtomicReference<Message> tagMsg = new AtomicReference<>();
-            ReactionMenu menu = new ReactionMenu.Builder(bot.getJDA())
+            final Message tagMessage = channel.sendMessage(member.getAsMention() + " here is the reminder you asked for!").complete();
+            new ReactionMenu.Builder(bot.getJDA())
                     .setEmbed(EmbedTemplates.PRETTY_SUCCESSFULL.getEmbed().setTitle("Reminder").addField("Message: " , msg, true).setFooter("To delete this message react with a \u274C!", bot.getJDA().getSelfUser().getAvatarUrl()).build())
                     .setRemoveReactions(true)
                     .onClick("\u274C", (reactionMenu, reactor) -> {
@@ -50,12 +50,8 @@ public class Add {
                             reactionMenu.destroy();
                         }
                     })
-                    .onDisplay(show -> {
-                        tagMsg.set(channel.sendMessage(member.getAsMention() + " here is the reminder you asked for!").complete());
-                    })
-                    .onDelete(delete -> {
-                        tagMsg.get().delete().complete();
-                    }).buildAndDisplay(channel);
+                    .onDelete(delete -> tagMessage.delete().complete())
+                    .buildAndDisplay(channel);
             bot.getSqlManager().removeRemind(reminder);
         }, duration , TimeUnit.SECONDS);
         return CommandResult.success();
