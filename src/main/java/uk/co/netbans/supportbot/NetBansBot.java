@@ -14,8 +14,8 @@ import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.hooks.InterfacedEventManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.co.netbans.supportbot.commands.admin.*;
 import uk.co.netbans.supportbot.commands.misc.Emote;
+import uk.co.netbans.supportbot.commands.misc.bDoc;
 import uk.co.netbans.supportbot.commands.misc.remind.Add;
 import uk.co.netbans.supportbot.commands.misc.remind.Remind;
 import uk.co.netbans.supportbot.commands.misc.Timezones;
@@ -115,12 +115,12 @@ public class NetBansBot {
         commandHandler = new CommandHandler.Builder(jda).addCustomParameter(bot).setPrefix(getCommandPrefix()).setDeleteCommandTime(10).setGenerateHelp(true).setSendTyping(true).setEntriesPerHelpPage(6).build();
 
         // Admin
-        commandHandler.register(new ConfigReload());
-        commandHandler.register(new Embedify());
-        commandHandler.register(new Faq());
-        commandHandler.register(new ManualChannel());
-        commandHandler.register(new Say());
-        commandHandler.register(new Tips());
+        commandHandler.register(new uk.co.netbans.supportbot.commands.admin.ConfigReload());
+        commandHandler.register(new uk.co.netbans.supportbot.commands.admin.Embedify());
+        commandHandler.register(new uk.co.netbans.supportbot.commands.admin.Faq());
+        commandHandler.register(new uk.co.netbans.supportbot.commands.admin.ManualChannel());
+        commandHandler.register(new uk.co.netbans.supportbot.commands.admin.Say());
+        commandHandler.register(new uk.co.netbans.supportbot.commands.admin.Tips());
 
         // Misc
         commandHandler.register(new Emote());
@@ -128,6 +128,8 @@ public class NetBansBot {
         commandHandler.register(new Remind());
         commandHandler.register(new Add());
         commandHandler.register(new uk.co.netbans.supportbot.commands.misc.remind.List());
+
+        commandHandler.register(new bDoc());
 
         // Moderation/Purge
         commandHandler.register(new Purge());

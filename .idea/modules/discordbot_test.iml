@@ -17,6 +17,7 @@
     <orderEntry type="library" name="Gradle: com.vdurmont:emoji-java:4.0.0" level="project" />
     <orderEntry type="library" name="Gradle: org.xerial:sqlite-jdbc:3.23.1" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-simple:1.8.0-beta4" level="project" />
+    <orderEntry type="library" name="Gradle: org.jsoup:jsoup:1.11.3" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:16.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.sedmelluq:lavaplayer-common:1.0.6" level="project" />
@@ -34,7 +35,6 @@
     <orderEntry type="library" name="Gradle: commons-io:commons-io:2.6" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.9.4" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.9.4" level="project" />
-    <orderEntry type="library" name="Gradle: org.jsoup:jsoup:1.11.2" level="project" />
     <orderEntry type="library" name="Gradle: net.iharder:base64:2.3.9" level="project" />
     <orderEntry type="library" name="Gradle: org.javassist:javassist:3.21.0-GA" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.17.2" level="project" />

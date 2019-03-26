@@ -31,6 +31,7 @@ dependencies {
     compile 'org.xerial:sqlite-jdbc:3.23.1'
     compile 'org.reflections:reflections:0.9.11'
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.8.0-beta4'
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
 }
 
 
