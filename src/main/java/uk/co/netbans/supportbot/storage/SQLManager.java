@@ -32,6 +32,7 @@ public class SQLManager {
     private void writeTables() throws SQLException, ClassNotFoundException {
         String RemindTable = "CREATE TABLE IF NOT EXISTS `reminds` (" +
                 "`user`      BIGINT(32)         NOT NULL," +
+                "`channel`      BIGINT(32)         NOT NULL," +
                 "`creation`  BIGINT(64)         NOT NULL," +
                 "`expiry`    BIGINT(64)         NOT NULL," +
                 "`message`   VARCHAR(512)       NOT NULL" +
@@ -44,12 +45,13 @@ public class SQLManager {
 
     public boolean addNewRemind(Reminder reminder) {
         try (Connection c = database.openConnection()) {
-            String statement = "INSERT INTO reminds (user,creation,expiry,message) VALUES(?,?,?,?);";
+            String statement = "INSERT INTO reminds (user,channel,creation,expiry,message) VALUES(?,?,?,?,?);";
             try (PreparedStatement ps = c.prepareStatement(statement)){
                 ps.setLong(1, reminder.getUserID());
-                ps.setLong(2, reminder.getCreation());
-                ps.setLong(3, reminder.getExpiry());
-                ps.setString(4, reminder.getMessage());
+                ps.setLong(2, reminder.getChannelID());
+                ps.setLong(3, reminder.getCreation());
+                ps.setLong(4, reminder.getExpiry());
+                ps.setString(5, reminder.getMessage());
                 ps.executeUpdate();
                 return true;
             }
@@ -63,7 +65,7 @@ public class SQLManager {
 
     public boolean removeRemind(Reminder reminder) {
         try (Connection c = database.openConnection()) {
-            String statement = "DELETE FROM reminds WHERE user='" + reminder.getUserID() + "' AND creation='" + reminder.getCreation() + "' AND expiry='" + reminder.getExpiry() + "' AND message='" + reminder.getMessage() + "';";
+            String statement = "DELETE FROM reminds WHERE user='" + reminder.getUserID() + "' AND channel='" + reminder.getChannelID() + "' AND creation='" + reminder.getCreation() + "' AND expiry='" + reminder.getExpiry() + "' AND message='" + reminder.getMessage() + "';";
             try (PreparedStatement ps = c.prepareStatement(statement)) {
                 ps.executeQuery();
                 return true;
@@ -83,7 +85,7 @@ public class SQLManager {
             try (PreparedStatement ps = c.prepareStatement(statement)) {
                 try (ResultSet rs = ps.executeQuery()) {
                  while (rs.next()) {
-                     reminders.add(new Reminder(rs.getLong("user"), rs.getLong("creation"), rs.getLong("expiry"), rs.getString("message")));
+                     reminders.add(new Reminder(rs.getLong("user"), rs.getLong("channel"), rs.getLong("creation"), rs.getLong("expiry"), rs.getString("message")));
                  }
                 }
             }

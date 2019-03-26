@@ -3,12 +3,14 @@ package uk.co.netbans.supportbot.commands.misc.remind;
 public class Reminder {
 
     private long userID;
+    private long channelID;
     private long creation;
     private long expiry;
     private String message;
 
-    public Reminder(long userID, long creation, long expiry, String message) {
+    public Reminder(long userID, long channelID, long creation, long expiry, String message) {
         this.userID = userID;
+        this.channelID = channelID;
         this.creation = creation;
         this.expiry = expiry;
         this.message = message;
@@ -24,6 +26,10 @@ public class Reminder {
 
     public long getUserID() {
         return userID;
+    }
+
+    public long getChannelID() {
+        return channelID;
     }
 
     public String getMessage() {

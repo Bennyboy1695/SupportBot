@@ -74,6 +74,11 @@ public class Config {
         jo.add("timezones", new JsonArray());
         jo.add("tips", new JsonArray());
         jo.add("replies", new JsonArray());
+        JsonObject mentions = new JsonObject();
+        mentions.add("roles", new JsonArray());
+        mentions.add("users", new JsonArray());
+        jo.add("mentions", mentions);
+        jo.addProperty("mention_channel", "add_me");
         jo.add("emotes", new JsonArray());
         return jo;
     }

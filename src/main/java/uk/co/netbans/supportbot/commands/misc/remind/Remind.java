@@ -15,7 +15,14 @@ public class Remind {
     @Execute
     public CommandResult onRemind(Member member, TextChannel channel, Message message, String label, java.util.List<String> args, NetBansBot bot, CommandHandler handler) {
         if (!args.get(0).toLowerCase().equals("list") || !args.get(0).toLowerCase().equals("add") || !args.get(0).toLowerCase().equals("remove")) {
-            handler.getCommand(Add.class).ifPresent(cmd -> cmd.execute(member, channel, message, label, args));
+            final CommandResult[] result = {CommandResult.success()};
+            handler.getCommand(Add.class).ifPresent(cmd -> {
+               result[0] = cmd.execute(member, channel, message, label, args);
+            });
+            if (result[0].equals(CommandResult.invalidArguments())) {
+                //
+            }
+            return result[0];
         }
         return CommandResult.success();
     }
