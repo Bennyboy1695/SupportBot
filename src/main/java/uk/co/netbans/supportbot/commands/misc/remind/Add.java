@@ -50,7 +50,7 @@ public class Add {
                                 reactionMenu.destroy();
                             }
                         })
-                        .onDelete(delete -> tagMessage.delete().complete())
+                        .onDestroy(delete -> tagMessage.delete().complete())
                         .buildAndDisplay(bot.getJDA().getTextChannelById(reminder.getChannelID()));
                 bot.getSqlManager().removeRemind(reminder);
             }, duration, TimeUnit.SECONDS);
