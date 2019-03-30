@@ -22,6 +22,7 @@ public class TrackHandler extends AudioEventAdapter {
     private boolean loop = false;
 
     private VoiceChannel liveChannel = null;
+    private Track current = null;
 
     public TrackHandler(AudioPlayer player) {
         this.player = player;
@@ -38,6 +39,7 @@ public class TrackHandler extends AudioEventAdapter {
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
         Track t = queue.element();
+        current = t;
         VoiceChannel channel = t.getOwner().getVoiceState().getChannel();
         if (liveChannel == null && channel != null) {
             t.getOwner().getGuild().getAudioManager().openAudioConnection(channel);
@@ -57,15 +59,20 @@ public class TrackHandler extends AudioEventAdapter {
         if (queue.isEmpty())
             guild.getAudioManager().closeAudioConnection();
         else {
-            Track t = queue.element();
-            if (liveChannel == null || liveChannel.getMembers().size() == 1)
+            if (liveChannel == null || liveChannel.getMembers().size() == 1) {
                 guild.getAudioManager().closeAudioConnection();
-            if (shuffle)
-                player.playTrack(getRandomTrack().getTrack());
-            else if (loop)
+                current = null;
+            } if (shuffle) {
+                Track t = getRandomTrack();
+//                current = t;
+                player.playTrack(t.getTrack());
+            } else if (loop)
                 player.playTrack(track);
-            else
-                player.playTrack(queue.element().getTrack());
+            else {
+                Track t = queue.element();
+//                current = t;
+                player.playTrack(t.getTrack());
+            }
         }
     }
 
@@ -79,6 +86,10 @@ public class TrackHandler extends AudioEventAdapter {
 
     public void removeTrack(Track track) {
         queue.remove(track);
+    }
+
+    public Track getCurrentTrack() {
+        return current;
     }
 
     public Set<Track> getQueuedTracks() {

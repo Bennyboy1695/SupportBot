@@ -60,6 +60,15 @@ public class Util {
         return m.find();
     }
 
+    public static String msToTimeString(long millis) {
+        int sec = (int) TimeUnit.MILLISECONDS.toSeconds(millis);
+        String minutes = String.valueOf(sec / 60);
+        String seconds = String.valueOf(sec % 60);
+        return String.format("%s:%s",
+                minutes.length() < 2 ? "0" + minutes : minutes,
+                seconds.length() < 2 ? "0" + seconds : seconds);
+    }
+
     public static Member randomMember(NetBansBot bot) {
         List<Member> members = new ArrayList<>();
         for (Role role : bot.getJDA().getGuildById(bot.getGuildID()).getRoles()) {

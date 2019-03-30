@@ -8,23 +8,29 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.TextChannel;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+import me.bhop.bjdautilities.ReactionMenu;
+import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import uk.co.netbans.supportbot.EmbedTemplates;
 import uk.co.netbans.supportbot.NetBansBot;
 import uk.co.netbans.supportbot.utils.Pair;
+import uk.co.netbans.supportbot.utils.Util;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class AudioHandler extends ListenerAdapter {
     private final NetBansBot bot;
     private final AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
     private final Map<Long, Pair<AudioPlayer, TrackHandler>> players = new HashMap<>();
+
+    private ReactionMenu nowPlaying;
 
     public AudioHandler(NetBansBot bot) {
         this.bot = bot;
@@ -99,6 +105,7 @@ public class AudioHandler extends ListenerAdapter {
                         10);
                 getTrackHandler(guild).queue(track, author);
                 getTrackHandler(guild).setShuffle(shuffle);
+//                createNowPlaying(channel);
             }
 
             @Override
@@ -116,6 +123,7 @@ public class AudioHandler extends ListenerAdapter {
                         getTrackHandler(guild).setShuffle(shuffle);
                     }
                 }
+                createNowPlaying(channel);
             }
 
             @Override
@@ -128,7 +136,7 @@ public class AudioHandler extends ListenerAdapter {
             @Override
             public void loadFailed(FriendlyException exception) {
                 bot.getMessenger().sendEmbed(channel,
-                        EmbedTemplates.SUCCESS.getEmbed().setDescription("Failed to load song due to exception below VVV\n" + exception.getMessage()).build(),
+                        EmbedTemplates.ERROR.getEmbed().setDescription("Failed to load song due to exception:\n" + exception.getMessage()).build(),
                         10);
             }
         });
@@ -144,5 +152,50 @@ public class AudioHandler extends ListenerAdapter {
 
     public boolean isIdle(Guild guild) {
         return !hasPlayer(guild) || getPlayer(guild).getPlayingTrack() == null;
+    }
+
+    private void createNowPlaying(TextChannel channel) {
+        if (nowPlaying != null) {
+            nowPlaying.destroy();
+            nowPlaying = null;
+        }
+        nowPlaying = new ReactionMenu.Builder(channel.getJDA())
+                .setEmbed(buildNowPlayingEmbed(channel))
+                .onClick("\u23EC", menu -> createNowPlaying(channel))
+                .onClick("\u23F9", menu -> {
+                    menu.destroy();
+                    stop(channel.getGuild());
+                })
+                .onClick("\u23E9", menu -> skipTrack(channel.getGuild()))
+                .buildAndDisplay(channel);
+        nowPlaying.getMessage().setEmbedRepeat(() -> buildNowPlayingEmbed(channel), 5);
+    }
+
+    private MessageEmbed buildNowPlayingEmbed(Channel channel) {
+        EmbedBuilder embed = new EmbedBuilder();
+
+        TrackHandler th = getTrackHandler(channel.getGuild());
+        Track current = th.getCurrentTrack();
+        if (current != null) {
+            AudioTrackInfo info = current.getTrack().getInfo();
+            embed.setAuthor("Now Playing \uD83C\uDFB5", null, channel.getJDA().getSelfUser().getAvatarUrl());
+
+            embed.setTitle(info.title, info.uri);
+
+            StringBuilder desc = new StringBuilder();
+            desc.append("by ").append(info.author).append("\n");
+
+            String bar = "\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC\u25AC";
+            int loc = (int) Math.round(bar.length() * ((double) current.getTrack().getPosition()/current.getTrack().getDuration()));
+            desc.append(bar, 0, loc).append("\uD83D\uDD35").append(bar.substring(loc)).append("\n");
+
+            desc.append("``").append(Util.msToTimeString(current.getTrack().getPosition())).append(" / ").append(Util.msToTimeString(current.getTrack().getDuration())).append("``\n");
+
+            embed.setDescription(desc.toString().trim());
+            embed.setTimestamp(Instant.now());
+            embed.setFooter("Queued by " + current.getOwner().getEffectiveName(), current.getOwner().getUser().getAvatarUrl());
+        } else
+            embed.setDescription("No song is currently playing...");
+        return embed.build();
     }
 }
