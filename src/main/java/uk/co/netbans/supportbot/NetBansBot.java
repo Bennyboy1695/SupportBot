@@ -15,6 +15,7 @@ import net.dv8tion.jda.core.hooks.InterfacedEventManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.netbans.supportbot.commands.admin.*;
+import uk.co.netbans.supportbot.commands.misc.Doc;
 import uk.co.netbans.supportbot.commands.misc.Emote;
 import uk.co.netbans.supportbot.commands.misc.remind.Add;
 import uk.co.netbans.supportbot.commands.misc.remind.Remind;
@@ -112,34 +113,36 @@ public class NetBansBot {
 
         logger.info("Registering Commands...");
         // old
-        commandHandler = new CommandHandler.Builder(jda).addCustomParameter(bot).setPrefix(getCommandPrefix()).setDeleteCommandTime(10).setGenerateHelp(true).setSendTyping(true).setEntriesPerHelpPage(6).build();
+        commandHandler = new CommandHandler.Builder(jda).addCustomParameter(bot).setPrefix(getCommandPrefix())
+                .autoRegisterPackage("uk.co.netbans.supportbot.commands").setDeleteCommandTime(10).setGenerateHelp(true).setSendTyping(true).setEntriesPerHelpPage(6).build();
 
         // Admin
-        commandHandler.register(new ConfigReload());
-        commandHandler.register(new Embedify());
-        commandHandler.register(new Faq());
-        commandHandler.register(new ManualChannel());
-        commandHandler.register(new Say());
-        commandHandler.register(new Tips());
-
-        // Misc
-        commandHandler.register(new Emote());
-        commandHandler.register(new Timezones());
-        commandHandler.register(new Remind());
-        commandHandler.register(new Add());
-        commandHandler.register(new uk.co.netbans.supportbot.commands.misc.remind.List());
-
-        // Moderation/Purge
-        commandHandler.register(new Purge());
-        commandHandler.register(new Mention());
-        commandHandler.register(new Link());
-        commandHandler.register(new User());
-
-        // Music
-        commandHandler.register(new Play());
-
-        // Support
-        commandHandler.register(new Ticket());
+        //commandHandler.register(new ConfigReload());
+        //commandHandler.register(new Embedify());
+        //commandHandler.register(new Faq());
+        //commandHandler.register(new ManualChannel());
+        //commandHandler.register(new Say());
+        //commandHandler.register(new Tips());
+//
+        //// Misc
+        //commandHandler.register(new Emote());
+        //commandHandler.register(new Timezones());
+        //commandHandler.register(new Remind());
+        //commandHandler.register(new Add());
+        //commandHandler.register(new uk.co.netbans.supportbot.commands.misc.remind.List());
+        //commandHandler.register(new Doc());
+//
+        //// Moderation/Purge
+        //commandHandler.register(new Purge());
+        //commandHandler.register(new Mention());
+        //commandHandler.register(new Link());
+        //commandHandler.register(new User());
+//
+        //// Music
+        //commandHandler.register(new Play());
+//
+        //// Support
+        //commandHandler.register(new Ticket());
 
         commandHandler.getCommand(Remind.class).ifPresent(cmd -> cmd.addCustomParam(commandHandler));
 

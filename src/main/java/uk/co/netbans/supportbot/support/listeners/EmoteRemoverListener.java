@@ -32,7 +32,7 @@ public class EmoteRemoverListener extends ListenerAdapter {
         }
     }
 
-    public List<String> getEmotes() {
+    private List<String> getEmotes() {
         List<String> replyArray = new ArrayList<>();
         JsonArray replies = bot.getConfig().getConfigValue("emotes");
         for (Object obj : replies) {
