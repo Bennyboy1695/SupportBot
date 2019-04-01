@@ -1,2 +1,2 @@
-# netbans-discord-bot
-A discord bot for the official NetBans discord server.
+# Network Sync
+A Discord bot for the official NetworkSync discord server.
