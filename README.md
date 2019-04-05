@@ -2,17 +2,9 @@
 
 SupportBot is the multi-purpose, user friendly Discord bot for the [NetworkSync](https://networksync.co.uk/) public 
 
-## Main Authors
-* [Bennyboy1695](https://github.com/Bennyboy1695)
-* [bhopahk](https://github.com/bhopahk)
-
-### Contributors
-* [YourMCGeek](https://github.com/YourMCGeek)
-
 ## Usage
 
 To use, download the source and compile it using gradle, and create the following script and run it in the same directory as the jar file. 
-
 
 ```bat
 @echo off
@@ -50,7 +42,7 @@ Follow the format in order to add more words that the bot will respond to with t
 
 |      Placeholder 	    |                                    Value                                    |
 |    :------------:	    |  :-----------------------------------------------------------------------:  |
-|    `<githubissues>`   	|                          https://github.com/NetBans/NetBans/issues/new      |
+|    `<githubissues>`   	|                          https://github.com/NetworkSync/NetBans/issues/new      |
 |   ` <prefix> `         |                         Prefix from config                        	      |
 |    `<github>	 `   |                     https://github.com/NetworkSync                     	      |
 |    `<tag> `    	        |                              Tags the user                                  |
@@ -61,7 +53,6 @@ The bot is built on the public Discord API known as [JDA](https://github.com/DV8
 
 ### Related Links
 * [NetworkSync Github Repo](https://github.com/networksync)
-* [NetBans Github Repo](https://github.com/netbans)
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
