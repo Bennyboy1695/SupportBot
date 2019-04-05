@@ -50,10 +50,10 @@ Follow the format in order to add more words that the bot will respond to with t
 
 |      Placeholder 	    |                                    Value                                    |
 |    :------------:	    |  :-----------------------------------------------------------------------:  |
-|    <githubissues>   	|                          https://github.com/NetBans/NetBans/issues/new      |
-|    <prefix>           |                         Prefix from config                        	      |
-|    <github>    	    |                     https://github.com/NetBans                    	      |
-|    <tag>     	        |                              Tags the user                                  |
+|    `<githubissues>`   	|                          https://github.com/NetBans/NetBans/issues/new      |
+|   ` <prefix> `         |                         Prefix from config                        	      |
+|    `<github>	 `   |                     https://github.com/NetBans                    	      |
+|    `<tag> `    	        |                              Tags the user                                  |
 
 ### Credit
 
