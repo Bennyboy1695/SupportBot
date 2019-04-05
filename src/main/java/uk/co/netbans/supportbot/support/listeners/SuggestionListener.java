@@ -49,7 +49,7 @@ public class SuggestionListener extends ListenerAdapter {
                                 .replaceAll("<tag>", event.getAuthor().getAsMention())
                                 .replaceAll("<prefix>", bot.getCommandPrefix())
                                 .replaceAll("<githubissues>", "https://github.com/NetBans/NetBans/issues/new")
-                                .replaceAll("<github>", "https://github.com/NetBans")
+                                .replaceAll("<github>", "https://github.com/NetworkSync")
                                 .replaceAll("<download>", "TODO") //TODO: download link!
                                 .replaceAll("<sponge>", "TODO")
                                 .replaceAll("<spigot>", "TODO")
