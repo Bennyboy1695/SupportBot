@@ -8,7 +8,7 @@ To use, download the source and compile it using gradle, and create the followin
 
 ```bat
 @echo off
-java -jar discordbot-1.0.0.jar
+java -jar discordbot-1.0.0.jar configDirectory={insert config directory}
 pause
 ```
 ## Setup
