@@ -9,7 +9,7 @@ import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
-import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.SupportBot;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class Tips {
 
 
     @Execute
-    public CommandResult onTips(Member member, TextChannel channel, Message message, String label, List<String> args, NetBansBot bot) {
+    public CommandResult onTips(Member member, TextChannel channel, Message message, String label, List<String> args, SupportBot bot) {
         List<String[]> tips = new ArrayList<>();
         try {
             tips = bot.getTips();

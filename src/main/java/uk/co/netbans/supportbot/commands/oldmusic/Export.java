@@ -6,7 +6,7 @@ public class Export {
 
 //    @Command(name = "export", displayName = "export", category = CommandCategory.MUSIC)
 //    public CommandResult onExport(CommandArgs commandArgs) {
-//        NetBansBot bot = commandArgs.getBot();
+//        SupportBot bot = commandArgs.getBot();
 //        Member member = commandArgs.getMember();
 //        TextChannel channel = (TextChannel) commandArgs.getChannel();
 //        MusicManager musicPlayer = bot.getMusicManager();

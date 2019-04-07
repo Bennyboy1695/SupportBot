@@ -1,6 +1,6 @@
 package uk.co.netbans.supportbot.task;
 
-import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.SupportBot;
 
 import java.util.TimerTask;
 
@@ -8,9 +8,9 @@ import static uk.co.netbans.supportbot.utils.Util.doExpiryCheck;
 
 public class ExpiryCheckTask extends TimerTask {
 
-    private NetBansBot bot;
+    private SupportBot bot;
 
-    public ExpiryCheckTask(NetBansBot bot) {
+    public ExpiryCheckTask(SupportBot bot) {
      this.bot = bot;
     }
 

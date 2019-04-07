@@ -2,11 +2,8 @@ package uk.co.netbans.supportbot;
 
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-import java.io.File;
-import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -14,7 +11,7 @@ import java.util.concurrent.Executors;
 public class Main extends ListenerAdapter {
     public static void main(String[] args) throws Exception {
         final ExecutorService console = Executors.newSingleThreadExecutor();
-        final NetBansBot bot = new NetBansBot();
+        final SupportBot bot = new SupportBot();
         Path mainDirectory = Paths.get(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent();
         Path configDirectory = Paths.get(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent();
 

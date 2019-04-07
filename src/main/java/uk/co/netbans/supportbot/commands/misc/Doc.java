@@ -11,7 +11,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import uk.co.netbans.supportbot.EmbedTemplates;
-import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.SupportBot;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,7 +21,7 @@ import java.util.List;
 public class Doc {
 
     @Execute
-    public CommandResult onDoc(Member member, TextChannel channel, Message message, String label, List<String> args, NetBansBot bot) {
+    public CommandResult onDoc(Member member, TextChannel channel, Message message, String label, List<String> args, SupportBot bot) {
         String search = args.get(0);
         try {
             EmbedBuilder embedBuilder = EmbedTemplates.PRETTY_SUCCESSFULL.getEmbed();

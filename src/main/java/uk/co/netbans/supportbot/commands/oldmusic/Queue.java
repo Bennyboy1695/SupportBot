@@ -6,7 +6,7 @@ public class Queue {
 
 //    @Command(name = "queue", displayName = "queue", category = CommandCategory.MUSIC)
 //    public CommandResult onQueue(CommandArgs commandArgs) {
-//        NetBansBot bot = commandArgs.getBot();
+//        SupportBot bot = commandArgs.getBot();
 //        Member member = commandArgs.getMember();
 //        TextChannel channel = (TextChannel) commandArgs.getChannel();
 //        MusicManager musicPlayer = bot.getMusicManager();

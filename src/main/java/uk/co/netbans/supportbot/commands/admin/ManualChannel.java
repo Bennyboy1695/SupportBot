@@ -11,7 +11,7 @@ import net.dv8tion.jda.core.entities.Category;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
-import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.SupportBot;
 
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
@@ -21,7 +21,7 @@ import java.util.List;
 public class ManualChannel {
 
     @Execute
-    public CommandResult onManualChannel(Member member, TextChannel channel, Message message, String label, List<String> args, NetBansBot bot) {
+    public CommandResult onManualChannel(Member member, TextChannel channel, Message message, String label, List<String> args, SupportBot bot) {
         if (args.size() >= 2) {
             if (args.get(0).equals("create")) {
                 DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/YY");
@@ -30,7 +30,7 @@ public class ManualChannel {
 
                 Member member2 = bot.getJDA().getGuildById(bot.getGuildID()).getMemberById(args.get(1).replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", ""));
                 if (args.size() != 3) {
-                    supportChannel = (TextChannel) bot.getJDA().getCategoryById(Long.valueOf(bot.getConfig().getConfigValue("category").getAsString()))
+                    supportChannel = (TextChannel) bot.getJDA().getCategoryById(Long.valueOf(bot.getMainConfig().getConfigValue("category").getAsString()))
                             .createTextChannel(member2.getEffectiveName() + "-" + "manual").complete();
                 } else {
                     supportChannel = (TextChannel) bot.getJDA().getTextChannelById(args.get(2).replaceAll("<", "").replaceAll("#", "").replaceAll(">", "")).getParent().createTextChannel(member2.getEffectiveName() + "-" + "manual").complete();

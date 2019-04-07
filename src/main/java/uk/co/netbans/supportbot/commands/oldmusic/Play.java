@@ -5,7 +5,7 @@ public class Play {
 
 //    @Command(name = "play", displayName = "play", category = CommandCategory.MUSIC)
 //    public CommandResult onPlay(CommandArgs commandArgs) {
-//        NetBansBot bot = commandArgs.getBot();
+//        SupportBot bot = commandArgs.getBot();
 //        Member member = commandArgs.getMember();
 //        TextChannel channel = (TextChannel) commandArgs.getChannel();
 //        MusicManager musicPlayer = bot.getMusicManager();

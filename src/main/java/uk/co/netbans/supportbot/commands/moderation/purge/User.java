@@ -9,7 +9,7 @@ import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 import uk.co.netbans.supportbot.EmbedTemplates;
-import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.SupportBot;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
 public class User {
 
     @Execute
-    public CommandResult onPurgeUser(Member member, TextChannel channel, Message message, String label, List<String> args, NetBansBot bot) {
+    public CommandResult onPurgeUser(Member member, TextChannel channel, Message message, String label, List<String> args, SupportBot bot) {
         System.out.println("Purge user");
         String[] arguments = args.toArray(new String[0]);
         int amount = Integer.parseInt(arguments[2]);

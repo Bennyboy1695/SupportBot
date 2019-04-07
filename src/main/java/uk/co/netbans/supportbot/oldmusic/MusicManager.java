@@ -14,8 +14,8 @@ import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import uk.co.netbans.supportbot.SupportBot;
 import uk.co.netbans.supportbot.music.AudioPlayerSendHandler;
-import uk.co.netbans.supportbot.NetBansBot;
 import uk.co.netbans.supportbot.utils.Util;
 
 import java.util.*;
@@ -32,9 +32,9 @@ public class MusicManager extends ListenerAdapter {
 
     private final AudioPlayerManager myManager = new DefaultAudioPlayerManager();
     private final Map<String, Map.Entry<AudioPlayer, TrackManager>> players = new HashMap<>();
-    private NetBansBot bot;
+    private SupportBot bot;
 
-    public MusicManager(NetBansBot bot) {
+    public MusicManager(SupportBot bot) {
         this.bot = bot;
         AudioSourceManagers.registerRemoteSources(myManager);
     }
@@ -83,7 +83,7 @@ public class MusicManager extends ListenerAdapter {
         return nPlayer;
     }
 
-    public boolean canBotPlayMusic(Member sender, TextChannel channel, NetBansBot bot) {
+    public boolean canBotPlayMusic(Member sender, TextChannel channel, SupportBot bot) {
         if (sender.getVoiceState().getChannel() == null) {
             //bot.getMessenger().sendEmbed(channel, Messenger.NOT_VOICE, 10);
             return false;

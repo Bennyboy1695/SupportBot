@@ -3,7 +3,7 @@ package uk.co.netbans.supportbot.support.listeners;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.SupportBot;
 import uk.co.netbans.supportbot.utils.Util;
 
 import java.awt.*;
@@ -17,10 +17,10 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class SuggestionListener extends ListenerAdapter {
 
-    private NetBansBot bot;
+    private SupportBot bot;
     private final ScheduledExecutorService executorService;
     final AtomicBoolean hasSent = new AtomicBoolean(false);
-    public SuggestionListener(NetBansBot bot) {
+    public SuggestionListener(SupportBot bot) {
         this.bot = bot;
         this.executorService = Executors.newScheduledThreadPool(2);
     }

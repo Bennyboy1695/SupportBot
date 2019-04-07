@@ -7,7 +7,7 @@ public class Shuffle {
 
 //    @Command(name = "shuffle", displayName = "shuffle", category = CommandCategory.MUSIC)
 //    public CommandResult onShuffle(CommandArgs commandArgs) {
-//        NetBansBot bot = commandArgs.getBot();
+//        SupportBot bot = commandArgs.getBot();
 //        Member member = commandArgs.getMember();
 //        TextChannel channel = (TextChannel) commandArgs.getChannel();
 //        MusicManager musicPlayer = bot.getMusicManager();

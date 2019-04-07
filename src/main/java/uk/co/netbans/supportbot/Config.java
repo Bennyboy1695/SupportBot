@@ -11,29 +11,35 @@ import java.util.Map;
 
 public class Config {
 
-    private NetBansBot bot;
+    private SupportBot bot;
     private Path configDirectory;
-    private JsonElement conf;
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private JsonObject conf;
 
-    Config(NetBansBot bot, Path configDirectory) {
+    Config(SupportBot bot, Path configDirectory) {
         this.bot = bot;
         this.configDirectory = configDirectory;
-        Path config = configDirectory.resolve("config.json");
+    }
+
+    JsonObject newConfig(String configName, JsonObject configOptions) {
+        JsonObject conf = null;
+        Path config = configDirectory.resolve(configName + ".json");
         try {
             if (!Files.exists(config)) {
                 Files.createFile(config);
-                write(config, writeDefaults());
+                write(config, configOptions);
             }
-            if (hasAllEntries(read(config).getAsJsonObject())) {
-                this.conf = read(config);
+            if (hasAllEntries(read(config).getAsJsonObject(), configOptions)) {
+                conf = read(config).getAsJsonObject();
             } else {
-                write(config, writeNotFoundDefaults(read(config).getAsJsonObject()));
-                this.conf = read(config);
+                write(config, writeNotFoundDefaults(read(config).getAsJsonObject(), configOptions));
+                conf = read(config).getAsJsonObject();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        this.conf = conf;
+        return conf;
     }
 
     private JsonElement read(Path config) {
@@ -56,36 +62,38 @@ public class Config {
         }
     }
 
-    public void saveConfig() {
-        try (BufferedWriter writer = Files.newBufferedWriter(configDirectory.resolve("config.json"))) {
+    public void saveConfig(String configName, JsonElement conf) {
+        try (BufferedWriter writer = Files.newBufferedWriter(configDirectory.resolve(configName + ".json"))) {
             writer.write(gson.toJson(conf));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public JsonObject writeDefaults() {
-        JsonObject jo = new JsonObject();
-        jo.addProperty("token", "add_me");
-        jo.addProperty("category","add_me");
-        jo.addProperty("logChannelID", "add_me");
-        jo.addProperty("guildID", "add_me");
-        jo.addProperty("commandPrefix", "!");
-        jo.add("timezones", new JsonArray());
-        jo.add("tips", new JsonArray());
-        jo.add("replies", new JsonArray());
+    public static JsonObject mainConfigDefaults() {
+        JsonObject main = new JsonObject();
+        JsonObject required = new JsonObject();
+        required.addProperty("token", "add_me");
+        required.addProperty("category","add_me");
+        required.addProperty("logChannelID", "add_me");
+        required.addProperty("guildID", "add_me");
+        required.addProperty("commandPrefix", "!");
+        required.addProperty("mention_channel", "add_me");
+        main.add("required", required);
+        main.add("timezones", new JsonArray());
+        main.add("tips", new JsonArray());
+        main.add("replies", new JsonArray());
         JsonObject mentions = new JsonObject();
         mentions.add("roles", new JsonArray());
         mentions.add("users", new JsonArray());
-        jo.add("mentions", mentions);
-        jo.addProperty("mention_channel", "add_me");
-        jo.add("emotes", new JsonArray());
-        return jo;
+        main.add("mentions", mentions);
+        main.add("emotes", new JsonArray());
+        return main;
     }
 
-    public JsonObject writeNotFoundDefaults(JsonObject config) {
+    public JsonObject writeNotFoundDefaults(JsonObject config, JsonObject configOptions) {
         JsonObject finished = new JsonObject();
-        for (Map.Entry<String, JsonElement> entrySet : writeDefaults().entrySet()) {
+        for (Map.Entry<String, JsonElement> entrySet : configOptions.entrySet()) {
             if (!config.has(entrySet.getKey())) {
                 finished.add(entrySet.getKey(), entrySet.getValue());
             } else {
@@ -95,24 +103,34 @@ public class Config {
         return finished;
     }
 
-    public boolean hasAllEntries(JsonObject config) {
+    public boolean hasAllEntries(JsonObject config, JsonObject configOptions) {
         int count = 0;
-        for (Map.Entry<String, JsonElement> entrySet : writeDefaults().entrySet()) {
+        for (Map.Entry<String, JsonElement> entrySet : configOptions.entrySet()) {
             if (config.has(entrySet.getKey())) {
                 count++;
             }
         }
-        return (count == writeDefaults().size());
+        return (count == configOptions.size());
     }
 
-    public <T extends JsonElement> T getConfigValue(String key) {
-        JsonObject object = (JsonObject) conf;
-        if (object.get(key).isJsonObject()) {
-            return (T) object.get(key).getAsJsonObject();
+    public <T extends JsonElement> T getConfigValue(String... keys) {
+        JsonObject parent = (JsonObject) conf;
+        JsonElement temp = parent.get(keys[0]);
+        if (temp.isJsonArray())
+            return (T) temp.getAsJsonArray();
+        JsonObject object = temp.getAsJsonObject();
+        try {
+            for (int i = 1; i < keys.length; i++) {
+                temp = object.get(keys[i]);
+                if (temp.isJsonArray())
+                    return (T) temp.getAsJsonArray();
+                if (temp.isJsonPrimitive())
+                    return (T) temp.getAsJsonPrimitive();
+                object = temp.getAsJsonObject();
+            }
+        } catch (NullPointerException e) {
+            return (T) object;
         }
-        if (object.get(key).isJsonArray()) {
-            return (T) object.get(key).getAsJsonArray();
-        }
-        return (T) object.get(key);
+        return (T) object;
     }
 }

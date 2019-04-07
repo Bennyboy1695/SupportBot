@@ -3,7 +3,7 @@ package uk.co.netbans.supportbot.support.listeners;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.SupportBot;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,17 +13,17 @@ import java.time.format.DateTimeFormatter;
 
 public class SupportCategoryListener extends ListenerAdapter {
 
-    private NetBansBot bot;
+    private SupportBot bot;
 
-    public SupportCategoryListener(NetBansBot bot) {
+    public SupportCategoryListener(SupportBot bot) {
         this.bot = bot;
     }
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("[dd/MM/YY HH:mm]");
-        if (event.getChannel().getParent().getIdLong() == Long.valueOf((String) bot.getConfig().getConfigValue("category").getAsString()) || event.getChannel().getName().contains("manual")) {
-            if (event.getChannel().getIdLong() != Long.valueOf((String) bot.getConfig().getConfigValue("logChannelID").getAsString())) {
+        if (event.getChannel().getParent().getIdLong() == Long.valueOf((String) bot.getMainConfig().getConfigValue("category").getAsString()) || event.getChannel().getName().contains("manual")) {
+            if (event.getChannel().getIdLong() != Long.valueOf((String) bot.getMainConfig().getConfigValue("logChannelID").getAsString())) {
                 try {
                     if (!Files.exists(bot.getLogDirectory().resolve(event.getChannel().getName() + ".log"))) {
                         Files.createFile(bot.getLogDirectory().resolve(event.getChannel().getName() + ".log"));

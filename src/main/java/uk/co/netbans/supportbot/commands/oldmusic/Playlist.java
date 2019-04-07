@@ -7,7 +7,7 @@ public class Playlist {
 //    @Command(name = "playlist", displayName = "playlist", category = CommandCategory.MUSIC, usage = "playlist ncs|proximity|monstercat")
 //    public CommandResult onPlaylist(CommandArgs args) {
 //        if (args.getArgs().length <= 1) {
-//            NetBansBot bot = args.getBot();
+//            SupportBot bot = args.getBot();
 //            Member member = args.getMember();
 //            TextChannel channel = (TextChannel) args.getChannel();
 //            MusicManager musicPlayer = bot.getMusicManager();

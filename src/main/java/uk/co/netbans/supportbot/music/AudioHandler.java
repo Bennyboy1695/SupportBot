@@ -16,23 +16,22 @@ import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import uk.co.netbans.supportbot.EmbedTemplates;
-import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.SupportBot;
 import uk.co.netbans.supportbot.utils.Pair;
 import uk.co.netbans.supportbot.utils.Util;
 
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class AudioHandler extends ListenerAdapter {
-    private final NetBansBot bot;
+    private final SupportBot bot;
     private final AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
     private final Map<Long, Pair<AudioPlayer, TrackHandler>> players = new HashMap<>();
 
     private ReactionMenu nowPlaying;
 
-    public AudioHandler(NetBansBot bot) {
+    public AudioHandler(SupportBot bot) {
         this.bot = bot;
         AudioSourceManagers.registerRemoteSources(playerManager);
     }

@@ -11,8 +11,9 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
+import uk.co.netbans.supportbot.Config;
 import uk.co.netbans.supportbot.EmbedTemplates;
-import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.SupportBot;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -25,8 +26,8 @@ import java.util.List;
 public class Timezones {
 
     @Execute
-    public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args, NetBansBot bot) {
-        JsonArray arr = bot.getConfig().getConfigValue("timezones");
+    public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args, SupportBot bot) {
+        JsonArray arr = bot.getMainConfig().getConfigValue("timezones");
         String[] arguments = args.toArray(new String[0]);
 
         EmbedBuilder embed = EmbedTemplates.PRETTY_SUCCESSFULL.getEmbed();
@@ -69,7 +70,7 @@ public class Timezones {
                         embed.setDescription("The target was not enabled previously.");
                     break;
             }
-            bot.getConfig().saveConfig();
+            bot.getMainConfig().saveConfig("config", Config.mainConfigDefaults());
             bot.reloadConfig();
         }
 

@@ -8,7 +8,7 @@ import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
-import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.SupportBot;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
 public class Purge {
 
     @Execute
-    public CommandResult onPurge(Member member, TextChannel channel, Message message, String label, List<String> args, NetBansBot bot) {
+    public CommandResult onPurge(Member member, TextChannel channel, Message message, String label, List<String> args, SupportBot bot) {
         System.out.println("Purge parent");
         return CommandResult.success();
     }

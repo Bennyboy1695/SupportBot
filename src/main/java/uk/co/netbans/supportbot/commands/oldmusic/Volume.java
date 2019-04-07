@@ -4,7 +4,7 @@ public class Volume {
 
 //    @Command(name = "volume", displayName = "volume", category = CommandCategory.MUSIC)
 //    public CommandResult onVolume(CommandArgs commandArgs) {
-//        NetBansBot bot = commandArgs.getBot();
+//        SupportBot bot = commandArgs.getBot();
 //        Member member = commandArgs.getMember();
 //        TextChannel channel = (TextChannel) commandArgs.getChannel();
 //        MusicManager musicPlayer = bot.getMusicManager();

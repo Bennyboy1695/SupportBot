@@ -40,7 +40,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class NetBansBot {
+public class SupportBot {
     private JDA jda;
     private Messenger messenger;
     private MusicManager music;
@@ -48,10 +48,11 @@ public class NetBansBot {
     private Path directory;
     private Path logDirectory;
     private Path musicDirectory;
-    private Config config;
+    private Config mainConfig;
+    private JsonObject mainConf;
     private SQLManager sqlManager;
     private CommandHandler commandHandler;
-    private NetBansBot bot = this;
+    private SupportBot bot = this;
     private Path configDirectory;
     private Logger logger;
 
@@ -96,13 +97,13 @@ public class NetBansBot {
             e.printStackTrace();
         }
 
-        if (config.getConfigValue("token").getAsString().equals("add_me")) {
+        if (mainConfig.getConfigValue("required","token").getAsString().equals("add_me")) {
             logger.error("Found unedited config. Please add the token.");
             System.exit(1);
         }
 
         this.jda = new JDABuilder(AccountType.BOT)
-                .setToken(config.getConfigValue("token").getAsString())
+                .setToken(mainConfig.getConfigValue("required","token").getAsString())
                 .setBulkDeleteSplittingEnabled(false)
                 .setEventManager(new ThreadedEventManager())
                 .build();
@@ -113,12 +114,12 @@ public class NetBansBot {
 
         logger.info("Registering Commands...");
         // old
-        commandHandler = new CommandHandler.Builder(jda).addCustomParameter(bot).setPrefix(getCommandPrefix())
+        commandHandler = new CommandHandler.Builder(jda).addCustomParameter(bot).setPrefix(getCommandPrefix()).setInstanziatingClass(this.getClass())
                 .autoRegisterPackage("uk.co.netbans.supportbot.commands").setDeleteCommandTime(10).setGenerateHelp(true).setSendTyping(true).setEntriesPerHelpPage(6).build();
 
         // Admin
 //        commandHandler.register(new ConfigReload());
-        commandHandler.register(new Embedify());
+        /*commandHandler.register(new Embedify());
 //        commandHandler.register(new Faq());
         commandHandler.register(new ManualChannel());
         commandHandler.register(new Say());
@@ -143,8 +144,10 @@ public class NetBansBot {
 
         // Support
         commandHandler.register(new Ticket());
+        */
 
         commandHandler.getCommand(Remind.class).ifPresent(cmd -> cmd.addCustomParam(commandHandler));
+
 
         //registerCommands();
 
@@ -203,7 +206,7 @@ public class NetBansBot {
     }
 
     public List<String[]> getTips(){
-        JsonArray tips = config.getConfigValue("tips");
+        JsonArray tips = mainConfig.getConfigValue("tips");
         List<String[]> tipArray = new ArrayList<>();
         for (Object obj : tips) {
             JsonObject jsonObject = (JsonObject) obj;
@@ -217,7 +220,7 @@ public class NetBansBot {
 
     public List<String> getReplies() {
         List<String> replyArray = new ArrayList<>();
-            JsonArray replies = config.getConfigValue("replies");
+            JsonArray replies = mainConfig.getConfigValue("replies");
             for (Object obj : replies) {
                 JsonObject jsonObject = (JsonObject) obj;
                 String word = jsonObject.get("reply").getAsString();
@@ -256,14 +259,15 @@ public class NetBansBot {
 
     private void initConfig(Path configDirectory){
         try {
-            config = new Config(this, configDirectory);
+            mainConfig = new Config(this, configDirectory);
+            mainConf = mainConfig.newConfig("config", Config.mainConfigDefaults());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public Config getConfig() {
-        return config;
+    public Config getMainConfig() {
+        return mainConfig;
     }
 
     public Logger getLogger() {
@@ -271,15 +275,15 @@ public class NetBansBot {
     }
 
     public long getGuildID() {
-        return Long.valueOf(config.getConfigValue("guildID").getAsString());
+        return Long.valueOf(mainConfig.getConfigValue("required","guildID").getAsString());
     }
 
     public long getSupportCategoryID() {
-        return Long.valueOf(config.getConfigValue("category").getAsString());
+        return Long.valueOf(mainConfig.getConfigValue("required","category").getAsString());
     }
 
     public String getCommandPrefix() {
-        return config.getConfigValue("commandPrefix").getAsString();
+        return mainConfig.getConfigValue("required","commandPrefix").getAsString();
     }
 
     public void reloadConfig() {
@@ -312,25 +316,4 @@ public class NetBansBot {
         }
     }
 
-    //private void registerCommands() {
-    //    Set<Class<?>> methods = new HashSet<>();
-    //    try {
-    //        Reflections reflections = new Reflections("uk.co.netbans.supportbot.Commands", new TypeAnnotationsScanner());
-    //        methods = reflections.getTypesAnnotatedWith(Command.class, true);
-    //    } catch (Exception e) {
-    //        e.printStackTrace();
-    //    }
-//
-    //    StringBuilder builder = new StringBuilder();
-    //    builder.append("Registered Commands: ");
-    //    for (Class<?> method : methods) {
-    //        try {
-    //            commandHandler.register(method.newInstance());
-    //            builder.append(method.getSimpleName() + ", ");
-    //        } catch (InstantiationException | IllegalAccessException e) {
-    //            e.printStackTrace();
-    //        }
-    //    }
-    //    logger.info(builder.toString().substring(0, builder.length() - 2));
-    //}
 }

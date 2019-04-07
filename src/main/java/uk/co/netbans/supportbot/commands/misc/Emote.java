@@ -8,7 +8,7 @@ import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
-import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.SupportBot;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
 public class Emote {
 
     @Execute
-    public CommandResult onEmote(Member member, TextChannel channel, Message message, String label, List<String> args, NetBansBot bot) {
+    public CommandResult onEmote(Member member, TextChannel channel, Message message, String label, List<String> args, SupportBot bot) {
         String str = args.get(0);
         StringBuilder builder = new StringBuilder("Emoji/Character info:");
         str.codePoints().forEachOrdered(code -> {

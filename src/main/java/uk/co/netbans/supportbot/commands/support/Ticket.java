@@ -10,7 +10,7 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.entities.TextChannel;
 import uk.co.netbans.supportbot.EmbedTemplates;
-import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.SupportBot;
 
 import java.awt.*;
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
 @Command(label = {"ticket", "report"}, usage = "ticket")
 public class Ticket {
     @Execute
-    public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args, NetBansBot bot) {
+    public CommandResult onExecute(Member member, TextChannel channel, Message message, String label, List<String> args, SupportBot bot) {
         PrivateChannel pmChannel = member.getUser().openPrivateChannel().complete();
         bot.getMessenger().sendEmbed(channel, EmbedTemplates.BASE.getEmbed()
                 .setColor(new Color(127, 255, 212))

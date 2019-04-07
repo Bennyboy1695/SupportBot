@@ -11,9 +11,7 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import uk.co.netbans.supportbot.NetBansBot;
-
-import java.io.IOException;
+import uk.co.netbans.supportbot.SupportBot;
 
 @Command("bdoc")
 public class bDoc {
@@ -22,7 +20,7 @@ public class bDoc {
 
 
     @Execute
-    public CommandResult onList(Member member, TextChannel channel, Message message, String label, java.util.List<String> args, NetBansBot bot) {
+    public CommandResult onList(Member member, TextChannel channel, Message message, String label, java.util.List<String> args, SupportBot bot) {
         String className = args.get(0).split("#")[0];
         String methodName = args.get(0).split("#")[1];
 

@@ -6,7 +6,7 @@ public class Search {
 
 //    @Command(name = "search", displayName = "search", category = CommandCategory.MUSIC)
 //    public CommandResult onSearch(CommandArgs commandArgs) {
-//        NetBansBot bot = commandArgs.getBot();
+//        SupportBot bot = commandArgs.getBot();
 //        Member member = commandArgs.getMember();
 //        TextChannel channel = (TextChannel) commandArgs.getChannel();
 //        MusicManager musicPlayer = bot.getMusicManager();

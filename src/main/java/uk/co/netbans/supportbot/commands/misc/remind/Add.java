@@ -9,7 +9,7 @@ import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 import uk.co.netbans.supportbot.EmbedTemplates;
-import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.SupportBot;
 import uk.co.netbans.supportbot.utils.Util;
 
 import java.time.Instant;
@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class Add {
 
     @Execute
-    public CommandResult onAdd(Member member, TextChannel channel, Message message, String label, List<String> args, NetBansBot bot) {
+    public CommandResult onAdd(Member member, TextChannel channel, Message message, String label, List<String> args, SupportBot bot) {
         String length = args.get(0);
         if (length.toLowerCase().matches("([0-9]+w)?([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?")) {
             List<String> mine = args;

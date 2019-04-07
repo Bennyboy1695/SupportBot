@@ -6,7 +6,7 @@ public class Panic {
 
 //    @Command(name = "panic", displayName = "panic!", category = CommandCategory.MUSIC, aliases = "panic!")
 //    public CommandResult onPanic(CommandArgs args) {
-//        NetBansBot bot = args.getBot();
+//        SupportBot bot = args.getBot();
 //        Member member = args.getMember();
 //        TextChannel channel = (TextChannel) args.getChannel();
 //        MusicManager musicPlayer = bot.getMusicManager();

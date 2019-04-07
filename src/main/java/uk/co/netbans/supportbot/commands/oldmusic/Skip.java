@@ -6,7 +6,7 @@ public class Skip {
 
 //    @Command(name = "skip", displayName = "skip", category = CommandCategory.MUSIC)
 //    public CommandResult onSkip(CommandArgs commandArgs) {
-//        NetBansBot bot = commandArgs.getBot();
+//        SupportBot bot = commandArgs.getBot();
 //        Member member = commandArgs.getMember();
 //        TextChannel channel = (TextChannel) commandArgs.getChannel();
 //        MusicManager musicPlayer = bot.getMusicManager();

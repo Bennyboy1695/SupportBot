@@ -4,7 +4,7 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.*;
-import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.SupportBot;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ public class Util {
                 seconds.length() < 2 ? "0" + seconds : seconds);
     }
 
-    public static Member randomMember(NetBansBot bot) {
+    public static Member randomMember(SupportBot bot) {
         List<Member> members = new ArrayList<>();
         for (Role role : bot.getJDA().getGuildById(bot.getGuildID()).getRoles()) {
             if (role.getName().toLowerCase().contains("leader") || role.getName().toLowerCase().contains("cont") || role.getName().toLowerCase().contains("dev") || role.getName().toLowerCase().contains("admin")) {
@@ -86,7 +86,7 @@ public class Util {
         return members.get(ThreadLocalRandom.current().nextInt(members.size()));
     }
 
-    public static ArrayList<TextChannel> getSupportChannels(NetBansBot bot) {
+    public static ArrayList<TextChannel> getSupportChannels(SupportBot bot) {
         ArrayList<TextChannel> channels = new ArrayList<>();
         for (TextChannel channel : bot.getJDA().getGuildById(bot.getGuildID()).getCategoryById(bot.getSupportCategoryID()).getTextChannels()) {
             channels.add(channel);
@@ -97,7 +97,7 @@ public class Util {
         return channels;
     }
 
-    public static void doExpiryCheck(NetBansBot bot) {
+    public static void doExpiryCheck(SupportBot bot) {
         int expiryCount = 0;
         for (TextChannel channel : getSupportChannels(bot)) {
             for (Message message : channel.getHistory().retrievePast(5).complete()) {
@@ -115,7 +115,7 @@ public class Util {
         }
     }
 
-    private static void expireChannel(NetBansBot bot, TextChannel channel) {
+    private static void expireChannel(SupportBot bot, TextChannel channel) {
         for (Message message : channel.getPinnedMessages().complete()) {
             if (message.getAuthor().isBot()) {
                 for (Member member : message.getMentionedMembers()) {
@@ -129,7 +129,7 @@ public class Util {
                     member.getUser().openPrivateChannel().complete()
                             .sendFile(bot.getLogDirectory().resolve(channel.getName() + ".log").toFile())
                             .complete();
-                    bot.getJDA().getGuildById(bot.getGuildID()).getTextChannelById(Long.valueOf(bot.getConfig().getConfigValue("logChannelID").getAsString()))
+                    bot.getJDA().getGuildById(bot.getGuildID()).getTextChannelById(Long.valueOf(bot.getMainConfig().getConfigValue("logChannelID").getAsString()))
                             .sendFile(bot.getLogDirectory().resolve(channel.getName() + ".log").toFile(), new MessageBuilder()
                                     .append(reason)
                                     .build())

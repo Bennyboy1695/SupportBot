@@ -5,15 +5,15 @@ import com.google.gson.JsonObject;
 import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.SupportBot;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EmoteRemoverListener extends ListenerAdapter {
 
-    private NetBansBot bot;
-    public EmoteRemoverListener(NetBansBot bot) {
+    private SupportBot bot;
+    public EmoteRemoverListener(SupportBot bot) {
         this.bot = bot;
     }
 
@@ -34,7 +34,7 @@ public class EmoteRemoverListener extends ListenerAdapter {
 
     private List<String> getEmotes() {
         List<String> replyArray = new ArrayList<>();
-        JsonArray replies = bot.getConfig().getConfigValue("emotes");
+        JsonArray replies = bot.getMainConfig().getConfigValue("emotes");
         for (Object obj : replies) {
             JsonObject jsonObject = (JsonObject) obj;
             String word = jsonObject.get("unicode").getAsString();

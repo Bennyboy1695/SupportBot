@@ -6,7 +6,7 @@ public class Reset {
 
 //    @Command(name = "stop", displayName = "stop", category = CommandCategory.MUSIC)
 //    public CommandResult onStop(CommandArgs commandArgs) {
-//        NetBansBot bot = commandArgs.getBot();
+//        SupportBot bot = commandArgs.getBot();
 //        Member member = commandArgs.getMember();
 //        TextChannel channel = (TextChannel) commandArgs.getChannel();
 //        MusicManager musicPlayer = bot.getMusicManager();

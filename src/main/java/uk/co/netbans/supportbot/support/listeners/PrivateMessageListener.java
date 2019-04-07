@@ -5,7 +5,7 @@ import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.SupportBot;
 
 import java.awt.*;
 import java.io.File;
@@ -14,10 +14,10 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class PrivateMessageListener extends ListenerAdapter {
 
-    private NetBansBot bot;
+    private SupportBot bot;
     private int userCount;
 
-    public PrivateMessageListener(NetBansBot bot) {
+    public PrivateMessageListener(SupportBot bot) {
         this.bot = bot;
     }
 
@@ -31,7 +31,7 @@ public class PrivateMessageListener extends ListenerAdapter {
 
         Member member = bot.getJDA().getGuildById(bot.getGuildID()).getMember(event.getAuthor());
 
-        if (member.getRoles().contains(bot.getJDA().getGuildById(bot.getGuildID()).getRoleById(bot.getConfig().getConfigValue("noHelpRoleID").getAsString()))) {
+        if (member.getRoles().contains(bot.getJDA().getGuildById(bot.getGuildID()).getRoleById(bot.getMainConfig().getConfigValue("noHelpRoleID").getAsString()))) {
             member.getUser().openPrivateChannel().complete().sendMessage("No channel has been created because you have the anti-support role!").complete();
             return;
         }
@@ -40,7 +40,7 @@ public class PrivateMessageListener extends ListenerAdapter {
                 return;
         }
 
-        for (TextChannel channel : bot.getJDA().getCategoryById(Long.valueOf(bot.getConfig().getConfigValue("category").getAsString())).getTextChannels()) {
+        for (TextChannel channel : bot.getJDA().getCategoryById(Long.valueOf(bot.getMainConfig().getConfigValue("category").getAsString())).getTextChannels()) {
             if (channel.getName().startsWith(event.getAuthor().getName())) {
                 userCount++;
                 if (userCount >= 3) {
@@ -50,7 +50,7 @@ public class PrivateMessageListener extends ListenerAdapter {
             }
         }
 
-        TextChannel supportChannel = (TextChannel) bot.getJDA().getCategoryById(Long.valueOf(bot.getConfig().getConfigValue("category").getAsString()))
+        TextChannel supportChannel = (TextChannel) bot.getJDA().getCategoryById(Long.valueOf(bot.getMainConfig().getConfigValue("category").getAsString()))
                 .createTextChannel(event.getAuthor().getName() + "-" + ThreadLocalRandom.current().nextInt(99999)).complete();
 
         supportChannel.createPermissionOverride(member).setAllow(101440).complete();

@@ -9,7 +9,7 @@ import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 import uk.co.netbans.supportbot.EmbedTemplates;
-import uk.co.netbans.supportbot.NetBansBot;
+import uk.co.netbans.supportbot.SupportBot;
 
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class List {
 
     @Execute
-    public CommandResult onList(Member member, TextChannel channel, Message message, String label, java.util.List<String> args, NetBansBot bot) {
+    public CommandResult onList(Member member, TextChannel channel, Message message, String label, java.util.List<String> args, SupportBot bot) {
         EmbedBuilder embed = EmbedTemplates.PRETTY_SUCCESSFULL.getEmbed();
         embed.setTitle("Reminders for: " + member.getEffectiveName());
         for (Reminder reminder : bot.getSqlManager().getRemindersForUser(member.getUser().getIdLong())) {
