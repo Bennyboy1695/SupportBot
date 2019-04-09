@@ -20,7 +20,7 @@ public class Mention {
     public CommandResult onMentionUser(Member member, TextChannel channel, Message message, String label, List<String> args, SupportBot bot) {
         String[] arguments = args.toArray(new String[0]);
         int amount = Integer.parseInt(arguments[1]);
-        int count = 0;;
+        int count = 0;
         if (amount > 100) {
             bot.getMessenger().sendEmbed(channel, EmbedTemplates.AMOUNT_TOO_HIGH.getEmbed(100).build(), 10);
             return CommandResult.invalidArguments();

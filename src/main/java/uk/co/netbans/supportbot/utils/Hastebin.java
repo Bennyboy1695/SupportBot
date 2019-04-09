@@ -6,79 +6,41 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONObject;
 
 import javax.annotation.Nonnull;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 
 public class Hastebin {
 
     @Nonnull
-    public static String post(String data) throws UnirestException {
-        HttpResponse response = Unirest.post("https://hastebin.com/documents").body(data).asString();
-        System.out.println(response.getBody().toString());
-        return "https://hastebin.com/" + new JSONObject(response.getBody().toString()).getString("key");
-    }
-
-    private static String pasteURL = "http://hastebin.com/";
-
-    public synchronized static String paste(String urlParameters) {
-        HttpURLConnection connection = null;
+    public static String post(String data) {
+        String link = "";
         try {
-            //Create connection
-            URL url = new URL(pasteURL + "documents");
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setDoInput(true);
-            connection.setDoOutput(true);
+            String pasteURL = "https://hastebin.com/";
+            HttpURLConnection conn = (HttpURLConnection) new URL(pasteURL + "documents").openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+            conn.setRequestProperty("Content-Type", "text/plain");
+            conn.setDoOutput(true);
 
-            //Send request
-            DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-            wr.writeBytes(urlParameters);
-            wr.flush();
-            wr.close();
-
-            //Get Response
-            BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            System.out.println(rd.lines());
-            return pasteURL + new JSONObject(rd.readLine()).getString("key");
-
-        } catch (IOException e) {
-            return null;
-        } finally {
-            if (connection == null) return null;
-            connection.disconnect();
-        }
-    }
-
-    public static String getPasteURL() {
-        return pasteURL;
-    }
-
-    public static void setPasteURL(String URL) {
-        pasteURL = URL;
-    }
-
-    public static synchronized String getPaste(String ID) {
-        String URLString = pasteURL + "raw/" + ID + "/";
-        try {
-            URL URL = new URL(URLString);
-            HttpURLConnection connection = (HttpURLConnection) URL.openConnection();
-            connection.setDoOutput(true);
-            connection.setConnectTimeout(10000);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String paste = "";
-            while (reader.ready()) {
-                String line = reader.readLine();
-                if (line.contains("package")) continue;
-                if (paste.equals("")) paste = line;
-                else paste = paste + "\n" + line;
+            conn.connect();
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(data.getBytes());
             }
-            return paste;
+
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+                String json = reader.readLine();
+                String real = json.substring(8, json.length() - 2);
+                link = pasteURL + real;
+            }
+        } catch (ProtocolException e) {
+            e.printStackTrace();
         } catch (IOException e) {
-            return "";
+            e.printStackTrace();
         }
+        return link;
     }
+
 }

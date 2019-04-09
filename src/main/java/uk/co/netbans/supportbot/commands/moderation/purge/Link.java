@@ -10,7 +10,7 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 import uk.co.netbans.supportbot.EmbedTemplates;
 import uk.co.netbans.supportbot.SupportBot;
-import uk.co.netbans.supportbot.utils.Util;
+import uk.co.netbans.supportbot.utils.Utils;
 
 import java.util.List;
 
@@ -32,10 +32,10 @@ public class Link {
             member2 = bot.getJDA().getGuildById(bot.getGuildID()).getMemberById(arguments[2].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", ""));
         }
         for (Message msg : channel.getHistory().retrievePast(100).complete()) {
-            if (member2 != null && Util.containsLink(msg.getContentRaw()) && count < amount) {
+            if (member2 != null && Utils.containsLink(msg.getContentRaw()) && count < amount) {
                 msg.delete().reason("purge requested by " + member.getEffectiveName()).complete();
                 count++;
-            } else if (Util.containsLink(msg.getContentRaw()) && count < amount) {
+            } else if (Utils.containsLink(msg.getContentRaw()) && count < amount) {
                 msg.delete().reason("purge requested by " + member.getEffectiveName()).complete();
                 count++;
             }

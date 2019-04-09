@@ -72,22 +72,14 @@ public class Config {
 
     public static JsonObject mainConfigDefaults() {
         JsonObject main = new JsonObject();
-        JsonObject required = new JsonObject();
-        required.addProperty("token", "add_me");
-        required.addProperty("category","add_me");
-        required.addProperty("logChannelID", "add_me");
-        required.addProperty("guildID", "add_me");
-        required.addProperty("commandPrefix", "!");
-        required.addProperty("mention_channel", "add_me");
-        main.add("required", required);
-        main.add("timezones", new JsonArray());
-        main.add("tips", new JsonArray());
-        main.add("replies", new JsonArray());
-        JsonObject mentions = new JsonObject();
-        mentions.add("roles", new JsonArray());
-        mentions.add("users", new JsonArray());
-        main.add("mentions", mentions);
-        main.add("emotes", new JsonArray());
+        JsonObject mongo = new JsonObject();
+        mongo.addProperty("hostname", "add_me");
+        mongo.addProperty("port", 33333);
+        mongo.addProperty("username", "add_me");
+        mongo.addProperty("password", "add_me");
+        mongo.addProperty("database", "add_me");
+        mongo.addProperty("authDb", "add_me");
+        main.add("mongo", mongo);
         return main;
     }
 

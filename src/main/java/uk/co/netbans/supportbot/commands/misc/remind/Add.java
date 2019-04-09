@@ -5,12 +5,13 @@ import me.bhop.bjdautilities.command.result.CommandResult;
 import me.bhop.bjdautilities.command.annotation.Command;
 import me.bhop.bjdautilities.command.annotation.Execute;
 import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 import uk.co.netbans.supportbot.EmbedTemplates;
 import uk.co.netbans.supportbot.SupportBot;
-import uk.co.netbans.supportbot.utils.Util;
+import uk.co.netbans.supportbot.utils.Utils;
 
 import java.time.Instant;
 import java.util.List;
@@ -24,10 +25,11 @@ public class Add {
     public CommandResult onAdd(Member member, TextChannel channel, Message message, String label, List<String> args, SupportBot bot) {
         String length = args.get(0);
         if (length.toLowerCase().matches("([0-9]+w)?([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?")) {
+            Guild guild = member.getGuild();
             List<String> mine = args;
             mine.remove(0);
             String msg = String.join(",", mine).replaceAll(",", " ");
-            long expiry = Util.stringToMillisConverter(length);
+            long expiry = Utils.stringToMillisConverter(length);
             long finalExpiry = Instant.now().plusMillis(expiry).toEpochMilli();
 
             Reminder reminder = new Reminder(member.getUser().getIdLong(), channel.getIdLong(), Instant.now().toEpochMilli(), finalExpiry, msg);
@@ -44,9 +46,9 @@ public class Add {
                         .setEmbed(EmbedTemplates.PRETTY_SUCCESSFULL.getEmbed().setTitle("Reminder").setDescription(msg).setFooter("To delete this message react with a \u274C!", bot.getJDA().getSelfUser().getAvatarUrl()).build())
                         .setRemoveReactions(true)
                         .onClick("\u274C", (reactionMenu, reactor) -> {
-                            if (reactor.equals(member)) {
+                            if (guild.getMember(reactor).equals(member)) {
                                 reactionMenu.destroy();
-                            } else if (reactor.hasPermission(Permission.MESSAGE_MANAGE)) {
+                            } else if (member.hasPermission(Permission.MESSAGE_MANAGE)) {
                                 reactionMenu.destroy();
                             }
                         })

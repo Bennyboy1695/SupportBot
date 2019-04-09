@@ -13,12 +13,16 @@ public enum EmbedTemplates {
     PRETTY_SUCCESSFULL(BASE.getEmbed().setColor(Color.CYAN)),
 
     // General
-    UNKNOWN_TARGET(ERROR.getEmbed().setDescription("Target not found! also prob should edit this message i didnt know what to put here.")),
+    UNKNOWN_TARGET(ERROR.getEmbed().setDescription("Target not found! also prob should edit this message i didn't know what to put here.")),
+    PM_ERROR(EmbedTemplates.ERROR.getEmbed().setDescription("We are unable to start the ticket creation process because the bot cannot message you. This is most likely because you have got 'Allow direct messages from members of this server' set to false.")),
+    INVALID_PERMISSION(ERROR.getEmbed().setDescription("You do not have the required permission: `{0}` to {1}")),
 
     // Support Channel
     CHANNEL_LOCKED(SUCCESS.getEmbed().setDescription("\uD83D\uDD12 Channel has been locked to just Project Leaders and the Ticket Creator!")),
     CHANNEL_UNLOCKED(SUCCESS.getEmbed().setDescription("\uD83D\uDD13 Channel has been unlocked, it is now back to default ticket perms!")),
     CHANNEL_UNLOCKED_FULL(SUCCESS.getEmbed().setDescription("\uD83D\uDD13 Channel has been unlocked, it is now open to all!")),
+    CHANNEL_LOCK_RESET(SUCCESS.getEmbed().setDescription("\uD83D\uDD12 The channel's lock has been reset to the default for the ticket!")),
+    TICKET_COMPLETED(SUCCESS.getEmbed().setDescription("Because of this we have sent you a log file containing the history, so that you may look at it incase you encounter the issue again!")),
 
     // Moderation
     AMOUNT_TOO_HIGH(ERROR.getEmbed().setDescription("The max number allowed is {0}!")),

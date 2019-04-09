@@ -19,7 +19,7 @@ public class Current {
 //            musicPlayer.sendEmbed(channel, "Track Info", String.format(musicPlayer.QUEUE_DESCRIPTION, musicPlayer.CD, musicPlayer.getOrNull(track.getInfo().title),
 //                    "\n\u23F1 **|>** `[ " + musicPlayer.getTimestamp(track.getPosition()) + " / " + musicPlayer.getTimestamp(track.getInfo().length) + " ]`",
 //                    "\n" + musicPlayer.MIC, musicPlayer.getOrNull(track.getInfo().author),
-//                    "\n\uD83C\uDFA7 **|>**  " + Util.userDiscrimSet(musicPlayer.getTrackManager(channel.getGuild()).getTrackInfo(track).getAuthor().getUser())));
+//                    "\n\uD83C\uDFA7 **|>**  " + Utils.userDiscrimSet(musicPlayer.getTrackManager(channel.getGuild()).getTrackInfo(track).getAuthor().getUser())));
 //        }
 //        return CommandResult.SUCCESS;
 //    }

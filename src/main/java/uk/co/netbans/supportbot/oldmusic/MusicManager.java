@@ -16,7 +16,7 @@ import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import uk.co.netbans.supportbot.SupportBot;
 import uk.co.netbans.supportbot.music.AudioPlayerSendHandler;
-import uk.co.netbans.supportbot.utils.Util;
+import uk.co.netbans.supportbot.utils.Utils;
 
 import java.util.*;
 
@@ -118,7 +118,7 @@ public class MusicManager extends ListenerAdapter {
 
             @Override
             public void trackLoaded(AudioTrack track) {
-                sendEmbed(channel, String.format(QUEUE_TITLE, Util.userDiscrimSet(author.getUser()), 1, ""),
+                sendEmbed(channel, String.format(QUEUE_TITLE, Utils.userDiscrimSet(author.getUser()), 1, ""),
                         String.format(QUEUE_DESCRIPTION, CD, getOrNull(track.getInfo().title), "", MIC, getOrNull(track.getInfo().author), ""));
                 getTrackManager(guild).queue(track, author);
                 getTrackManager(guild).setShuffle(shuffle);
@@ -131,7 +131,7 @@ public class MusicManager extends ListenerAdapter {
                 } else if (playlist.isSearchResult()) {
                     trackLoaded(playlist.getTracks().get(0));
                 } else {
-                    sendEmbed(channel, String.format(QUEUE_TITLE, Util.userDiscrimSet(author.getUser()), Math.min(playlist.getTracks().size(), 1000), "s"),
+                    sendEmbed(channel, String.format(QUEUE_TITLE, Utils.userDiscrimSet(author.getUser()), Math.min(playlist.getTracks().size(), 1000), "s"),
                             String.format(QUEUE_DESCRIPTION, DVD, getOrNull(playlist.getName()), "", "", "", ""));
                     for (int i = 0; i < Math.min(playlist.getTracks().size(), 1000); i++) {
                         getTrackManager(guild).queue(playlist.getTracks().get(i), author);

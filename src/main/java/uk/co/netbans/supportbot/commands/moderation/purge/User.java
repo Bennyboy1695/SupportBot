@@ -20,14 +20,14 @@ public class User {
     public CommandResult onPurgeUser(Member member, TextChannel channel, Message message, String label, List<String> args, SupportBot bot) {
         System.out.println("Purge user");
         String[] arguments = args.toArray(new String[0]);
-        int amount = Integer.parseInt(arguments[2]);
+        int amount = Integer.parseInt(arguments[1]);
         int count = 0;
         if (amount > 100) {
             bot.getMessenger().sendEmbed(channel, EmbedTemplates.AMOUNT_TOO_HIGH.getEmbed(100).build(), 10);
             return CommandResult.invalidArguments();
         }
 
-        Member member2 = bot.getJDA().getGuildById(bot.getGuildID()).getMemberById(arguments[1].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", ""));
+        Member member2 = bot.getJDA().getGuildById(bot.getGuildID()).getMemberById(arguments[0].replaceAll("<", "").replaceAll("@", "").replaceAll("!", "").replaceAll(">", ""));
         for (Message msg : channel.getHistory().retrievePast(amount).complete()) {
                 if (msg.getAuthor() == member2.getUser()) {
                     msg.delete().reason("purge requested by " + member.getEffectiveName()).complete();

@@ -4,7 +4,7 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import uk.co.netbans.supportbot.SupportBot;
-import uk.co.netbans.supportbot.utils.Util;
+import uk.co.netbans.supportbot.utils.Utils;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class SuggestionListener extends ListenerAdapter {
 
         List<String[]> tips = new ArrayList<>();
         try {
-            tips = bot.getTips();
+            //tips = bot.getTips();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -41,7 +41,7 @@ public class SuggestionListener extends ListenerAdapter {
             if (event.getMessage().getContentRaw().toLowerCase().contains(sugg[0])) {
                 if (hasSent.get())
                     return;
-                if (Util.containsLink(event.getMessage().getContentRaw()))
+                if (Utils.containsLink(event.getMessage().getContentRaw()))
                     return;
                 event.getChannel().sendMessage(new EmbedBuilder()
                         .setColor(Color.CYAN)

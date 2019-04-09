@@ -18,7 +18,7 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import uk.co.netbans.supportbot.EmbedTemplates;
 import uk.co.netbans.supportbot.SupportBot;
 import uk.co.netbans.supportbot.utils.Pair;
-import uk.co.netbans.supportbot.utils.Util;
+import uk.co.netbans.supportbot.utils.Utils;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -188,7 +188,7 @@ public class AudioHandler extends ListenerAdapter {
             int loc = (int) Math.round(bar.length() * ((double) current.getTrack().getPosition()/current.getTrack().getDuration()));
             desc.append(bar, 0, loc).append("\uD83D\uDD35").append(bar.substring(loc)).append("\n");
 
-            desc.append("``").append(Util.msToTimeString(current.getTrack().getPosition())).append(" / ").append(Util.msToTimeString(current.getTrack().getDuration())).append("``\n");
+            desc.append("``").append(Utils.msToTimeString(current.getTrack().getPosition())).append(" / ").append(Utils.msToTimeString(current.getTrack().getDuration())).append("``\n");
 
             embed.setDescription(desc.toString().trim());
             embed.setTimestamp(Instant.now());

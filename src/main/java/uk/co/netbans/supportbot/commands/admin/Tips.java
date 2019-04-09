@@ -23,7 +23,7 @@ public class Tips {
     public CommandResult onTips(Member member, TextChannel channel, Message message, String label, List<String> args, SupportBot bot) {
         List<String[]> tips = new ArrayList<>();
         try {
-            tips = bot.getTips();
+            //tips = bot.getTips();
         } catch (Exception e) {
             e.printStackTrace();
         }

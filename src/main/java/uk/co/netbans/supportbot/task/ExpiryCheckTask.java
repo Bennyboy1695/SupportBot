@@ -4,7 +4,7 @@ import uk.co.netbans.supportbot.SupportBot;
 
 import java.util.TimerTask;
 
-import static uk.co.netbans.supportbot.utils.Util.doExpiryCheck;
+import static uk.co.netbans.supportbot.utils.Utils.TicketUtils.doExpiryCheck;
 
 public class ExpiryCheckTask extends TimerTask {
 
