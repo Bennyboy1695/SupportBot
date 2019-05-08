@@ -14,8 +14,7 @@ pause
 ## Setup
 After running it for the first time, edit the config file with the needed information. All fields are required in order for the bot to run successfully. To get your token, create a Discord application [here](https://discordapp.com/developers/applications).  After creating the application, turn it into a bot account by clicking in the following locations.
 
-![Bot Settings](https://i.yourmcgeek.ga/p9w9w.png 'Bot Settings Location')
-![alt text](https://i.yourmcgeek.ga/xn56n.png 'Build a bot')
+![Bot Settings](https://i.imgur.com/o4pjQ5F.png 'Bot Settings Location')
 
 From there, copy your token and add it to the config. Be mindful never to share your token with anyone! You'll need to invite the bot to your guild(s) of choice. To do so, copy the client id found under `General Information` in the Settings panel, and replace it in the following URL.
 ```
