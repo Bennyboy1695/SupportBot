@@ -1,4 +1,4 @@
-# SupportBot [![Discord](https://img.shields.io/discord/398215838668161024.svg?style=for-the-badge)](https://discord.gg/Pf9Xn9C)
+# SupportBot [![Discord](https://img.shields.io/discord/504710901815967745.svg?style=for-the-badge)](https://discord.gg/hAXsne2)
 
 SupportBot is the multi-purpose, user friendly Discord bot. Originally made for the NetworkSync Orginization! 
 
