@@ -1,6 +1,6 @@
 # SupportBot [![Discord](https://img.shields.io/discord/398215838668161024.svg?style=for-the-badge)](https://discord.gg/Pf9Xn9C)
 
-SupportBot is the multi-purpose, user friendly Discord bot for the [NetworkSync](https://networksync.co.uk/) public 
+SupportBot is the multi-purpose, user friendly Discord bot. Originally made for the NetworkSync Orginization! 
 
 ## Usage
 
@@ -36,16 +36,6 @@ If you would like the bot to provide insights based on peoples chat, you'll need
    ]
 ```
 Follow the format in order to add more words that the bot will respond to with the corresponding message. 
-
-### Placeholders
-
-|      Placeholder 	    |                                    Value                                    |
-|    :------------:	    |  :-----------------------------------------------------------------------:  |
-|    `<githubissues>`   	|                          https://github.com/NetworkSync/NetBans/issues/new      |
-|   ` <prefix> `         |                         Prefix from config                        	      |
-|    `<github>	 `   |                     https://github.com/NetworkSync                     	      |
-|    `<tag> `    	        |                              Tags the user                                  |
-
 ### Credit
 
 The bot is built on the public Discord API known as [JDA](https://github.com/DV8FromTheWorld/JDA) with the 3rd party library of [bJdaUtilities](https://github.com/bhopahk/bJdaUtilities/)
